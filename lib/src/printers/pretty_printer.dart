@@ -7,9 +7,9 @@ class PrettyPrinter extends LogPrinter {
   void onLog(LogRecord record) {
     final _time = record.time.toIso8601String().split('T')[1];
     final _callerFrame = record.callerFrame == null ? '-' : '(${record.callerFrame.location})';
-    final _logLevel = record.level.toString().replaceAll('Level.', '').toUpperCase().padRight(10);
+    final _logLevel = record.level.toString().replaceAll('Level.', '').toUpperCase().padRight(8);
 
-    print('${_levelPrefix(record.level)}$_logLevel $_time ${record.loggerName} $_callerFrame ${record.message}');
+    print('${_levelPrefix(record.level)}$_time $_logLevel ${record.loggerName} $_callerFrame ${record.message}');
 
     // if (record.callerFrame != null) {
     //   print('${record.callerFrame.location} Here?');

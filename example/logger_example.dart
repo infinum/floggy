@@ -1,11 +1,21 @@
 import 'package:logger/logger.dart';
 
+mixin BlacklistedLogger implements LoggerType {
+  @override
+  Logger<BlacklistedLogger> get log => Logger<BlacklistedLogger>('Blacklisted Logger - ${runtimeType.toString()}');
+}
+
+mixin ExampleLogger implements LoggerType {
+  @override
+  Logger<ExampleLogger> get log => Logger<ExampleLogger>('Example');
+}
+
 void main() {
   Logger.initLogger(
     logPrinter: const PrettyPrinter(),
     logLevel: const LogLevel(
       Level.all,
-      includeCallerInfo: true,
+      // includeCallerInfo: true,
     ),
     blacklist: [BlacklistedLogger],
   );
