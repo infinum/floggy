@@ -40,7 +40,7 @@ class Logger<T extends LoggerType> {
     String thisName;
     if (dot == -1) {
       if (name != '') {
-        _parent = Logger<RootLogger>('');
+        _parent = Logger('');
       }
 
       thisName = name;
@@ -252,7 +252,7 @@ class Logger<T extends LoggerType> {
     }
   }
 
-  static final Logger<RootLogger> root = Logger<RootLogger>('');
+  static final Logger root = Logger('');
   static final Map<String, Logger> _loggers = <String, Logger>{};
 
   static void initLogger({

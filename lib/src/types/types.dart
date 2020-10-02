@@ -1,7 +1,5 @@
 part of logger;
 
-mixin RootLogger implements LoggerType {}
-
 mixin NetworkLogger implements LoggerType {
   @override
   Logger<NetworkLogger> get log => Logger<NetworkLogger>('NetworkLogger - ${runtimeType.toString()}');
