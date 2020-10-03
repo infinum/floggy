@@ -16,3 +16,5 @@ part 'src/printers/logger_printer.dart';
 part 'src/printers/pretty_printer.dart';
 part 'src/types/logger_type.dart';
 part 'src/types/types.dart';
+part 'src/util/ansi_color.dart';
+part 'src/util/log_level.dart';

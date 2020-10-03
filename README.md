@@ -38,7 +38,7 @@ Logger.initLogger(
 ```
 
 ## Custom loggers
-To make custom logger you just need to make new mixin that implements LoggerType and
+To make custom logger you just need to make new mixin that implements `LoggerType` and
 returns new logger with mixin type:
 
 ```dart
@@ -47,6 +47,10 @@ mixin CustomLogger implements LoggerType {
   Logger<CustomLogger> get log => Logger<CustomLogger>('CustomLoggerName');
 }
 ```
+
+You can have as many custom loggers as you want, by default you are provided with 2 types:
+`NetworkLogger` and `UiLogger`
+
 
 Then to use it just add `with CustomLogger` to class where you want to use it, and then call it with:
 
@@ -57,7 +61,7 @@ log.warning('WarningMessage');
 log.error('ErrorMessage');
 ```
 
-If you init the Logger with `PrettyPrinter` and with default `LogLevel` then your log should look like this:
+If you have initialized the Logger just with `PrettyPrinter` then your log should look something like this:
 ```bash
 👾 15:52:16.186827 DEBUG    CustomLogger - CustomLoggerName - DebugMessage
 👻 15:52:16.194803 INFO     CustomLogger - CustomLoggerName - InfoMessage
