@@ -63,7 +63,7 @@ log.error('ErrorMessage');
 
 If you have initialized the Logger just with `PrettyPrinter` then your log should look something like this:
 ```bash
-👾 15:52:16.186827 DEBUG    CustomLogger - CustomLoggerName - DebugMessage
+🐛 15:52:16.186827 DEBUG    CustomLogger - CustomLoggerName - DebugMessage
 👻 15:52:16.194803 INFO     CustomLogger - CustomLoggerName - InfoMessage
 ⚠️ 15:52:16.194970 WARNING  CustomLogger - CustomLoggerName - WarningMessage
 ‼️ 15:52:16.195113 ERROR    CustomLogger - CustomLoggerName - ErrorMessage

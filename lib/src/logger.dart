@@ -257,11 +257,11 @@ class Logger<T extends LoggerType> {
 
   static void initLogger({
     LogPrinter logPrinter = const DefaultPrinter(),
-    LogOptions logLevel = defaultLevel,
+    LogOptions logOptions = defaultLevel,
     List<Type> whitelist = const [],
     List<Type> blacklist = const [],
   }) {
-    Logger.root.level = logLevel;
+    Logger.root.level = logOptions;
     Logger.root.whitelist = whitelist;
     Logger.root.blacklist = blacklist;
     Logger.root.onRecord.listen(logPrinter.onLog);

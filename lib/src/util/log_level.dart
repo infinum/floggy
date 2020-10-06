@@ -11,11 +11,12 @@ class Level {
   const Level._(this.name, this.priority);
 
   static const Level all = Level._('All', 0);
+  static const Level off = Level._('Off', 100);
+
   static const Level debug = Level('Debug', 2);
   static const Level info = Level('Info', 4);
   static const Level warning = Level('Warning', 8);
   static const Level error = Level('Error', 16);
-  static const Level off = Level._('Off', 100);
 
   final int priority;
   final String name;
@@ -48,6 +49,7 @@ class LogOptions {
   final bool includeCallerInfo;
 }
 
+/// This is sent to the [LogPrinter] and there printer can choose what and how to show it
 class LogRecord {
   LogRecord(this.level, this.message, this.loggerName,
       [this.error, this.stackTrace, this.zone, this.object, this.callerFrame])
