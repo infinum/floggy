@@ -6,7 +6,7 @@ import 'wtf_level.dart';
 void main() {
   Logger.initLogger(
     logPrinter: const PrettyWtfPrinter(),
-    logOptions: const LogOptions(Level.all),
+    logOptions: const LogOptions(LogLevel.all),
     blacklist: [BlacklistedLogger],
   );
 
@@ -14,6 +14,14 @@ void main() {
   ExampleUiLogger();
   ExampleBlackListedLogger();
   ExampleWhatLoggersCanDo();
+
+  SmallClassWithoutLogger();
+}
+
+class SmallClassWithoutLogger {
+  SmallClassWithoutLogger() {
+    Logger.root.info('You can log like this! But no class name :(');
+  }
 }
 
 class ExampleNetworkLogger with NetworkLogger {
@@ -58,6 +66,14 @@ class ExampleWhatLoggersCanDo with ExampleLogger {
       return [1, 2, 3, 4, 5].map((e) => e * 4).join('-');
     });
 
+    log.info(() {
+      /// You can do what you want here!
+      const _s = 0 / 0;
+      return List.generate(10, (_) => _s)
+              .fold<String>('', (previousValue, element) => previousValue += element.toString()) +
+          ' Batman';
+    });
+
     void _insideLogger() {
       final _logger = logger('Test');
 
@@ -69,7 +85,7 @@ class ExampleWhatLoggersCanDo with ExampleLogger {
 
     void _detachedLogger() {
       final _logger = detachedLogger('Detached logger');
-      _logger.level = const LogOptions(Level.all);
+      _logger.level = const LogOptions(LogLevel.all);
       _logger.onRecord.listen((event) {
         print(event);
       });

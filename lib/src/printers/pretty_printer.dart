@@ -19,17 +19,17 @@ class PrettyPrinter extends LogPrinter {
   bool get _colorize => showColors ?? false;
 
   static final _levelColors = {
-    Level.debug: AnsiColor(foregroundColor: AnsiColor.grey(0.5), italic: true),
-    Level.info: AnsiColor(foregroundColor: 35),
-    Level.warning: AnsiColor(foregroundColor: 214),
-    Level.error: AnsiColor(foregroundColor: 196),
+    LogLevel.debug: AnsiColor(foregroundColor: AnsiColor.grey(0.5), italic: true),
+    LogLevel.info: AnsiColor(foregroundColor: 35),
+    LogLevel.warning: AnsiColor(foregroundColor: 214),
+    LogLevel.error: AnsiColor(foregroundColor: 196),
   };
 
   static final _levelPrefixes = {
-    Level.debug: '🐛 ',
-    Level.info: '👻 ',
-    Level.warning: '⚠️ ',
-    Level.error: '‼️ ',
+    LogLevel.debug: '🐛 ',
+    LogLevel.info: '👻 ',
+    LogLevel.warning: '⚠️ ',
+    LogLevel.error: '‼️ ',
   };
 
   static const _defaultPrefix = '🤔 ';
@@ -50,11 +50,11 @@ class PrettyPrinter extends LogPrinter {
     }
   }
 
-  String levelPrefix(Level level) {
+  String levelPrefix(LogLevel level) {
     return _levelPrefixes[level];
   }
 
-  AnsiColor levelColor(Level level) {
+  AnsiColor levelColor(LogLevel level) {
     return _levelColors[level];
   }
 }

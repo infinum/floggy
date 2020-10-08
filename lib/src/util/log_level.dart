@@ -3,20 +3,24 @@ part of logger;
 /// Level class.
 /// Name is used printed out to console, and priority is used as level to
 /// find out severity of the log.
-class Level {
-  const Level(this.name, this.priority)
+///
+/// [priority] can go from 1 - 99 inclusive. 0 is reserved for `All` and 100 is reserved for `Off`
+class LogLevel {
+  const LogLevel(this.name, this.priority)
       : assert(name != null),
         assert(priority > 0 && priority < 100, 'Priority level cannot be less than 1 or greater than 99');
 
-  const Level._(this.name, this.priority);
+  const LogLevel._(this.name, this.priority);
 
-  static const Level all = Level._('All', 0);
-  static const Level off = Level._('Off', 100);
+  /// Reserved levels
+  static const LogLevel all = LogLevel._('All', 0);
+  static const LogLevel off = LogLevel._('Off', 100);
 
-  static const Level debug = Level('Debug', 2);
-  static const Level info = Level('Info', 4);
-  static const Level warning = Level('Warning', 8);
-  static const Level error = Level('Error', 16);
+  /// Default levels
+  static const LogLevel debug = LogLevel('Debug', 2);
+  static const LogLevel info = LogLevel('Info', 4);
+  static const LogLevel warning = LogLevel('Warning', 8);
+  static const LogLevel error = LogLevel('Error', 16);
 
   final int priority;
   final String name;
@@ -39,12 +43,12 @@ class Level {
 class LogOptions {
   const LogOptions(
     this.logLevel, {
-    this.stackTraceLevel = Level.off,
+    this.stackTraceLevel = LogLevel.off,
     this.includeCallerInfo = false,
   });
 
-  final Level logLevel;
-  final Level stackTraceLevel;
+  final LogLevel logLevel;
+  final LogLevel stackTraceLevel;
 
   final bool includeCallerInfo;
 }
@@ -56,7 +60,7 @@ class LogRecord {
       : time = DateTime.now(),
         sequenceNumber = LogRecord._nextNumber++;
 
-  final Level level;
+  final LogLevel level;
   final String message;
   final Object object;
   final String loggerName;

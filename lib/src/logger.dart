@@ -6,8 +6,8 @@ part of logger;
 /// When false, all hierarchical logging instead is merged in the root logger.
 bool hierarchicalLoggingEnabled = false;
 
-/// The default [Level].
-const defaultLevel = LogOptions(Level.all);
+/// The default [LogLevel].
+const defaultLevel = LogOptions(LogLevel.all);
 
 /// Use a [Logger] to log debug messages.
 ///
@@ -70,7 +70,7 @@ class Logger<T extends LoggerType> {
   /// Parent of this logger in the hierarchy of loggers.
   final Logger _parent;
 
-  /// Logging [Level] used for entries generated on this logger.
+  /// Logging [LogLevel] used for entries generated on this logger.
   LogOptions _level;
 
   /// List of [Type] types that are whitelisted.
@@ -153,7 +153,7 @@ class Logger<T extends LoggerType> {
     }
   }
 
-  bool _isLoggable(Level value) {
+  bool _isLoggable(LogLevel value) {
     if (value.priority >= level.logLevel.priority) {
       if ((root._whitelist.isEmpty || root._whitelist.contains(T)) &&
           (root._blacklist.isEmpty || !root._blacklist.contains(T))) {
@@ -168,7 +168,7 @@ class Logger<T extends LoggerType> {
   /// `isLoggable(logLevel)` is true.
   ///
   /// Use this method to create log entries for user-defined levels. To record a
-  /// message at a predefined level (e.g. [Level.info], [Level.warning], etc)
+  /// message at a predefined level (e.g. [LogLevel.info], [LogLevel.warning], etc)
   /// you can use their specialized methods instead (e.g. [info], [warning],
   /// etc).
   ///
@@ -181,7 +181,7 @@ class Logger<T extends LoggerType> {
   /// was made. This can be advantageous if a log listener wants to handler
   /// records of different zones differently (e.g. group log records by HTTP
   /// request if each HTTP request handler runs in it's own zone).
-  void log(Level logLevel, dynamic message, [Object error, StackTrace stackTrace, Zone zone, Frame callerFrame]) {
+  void log(LogLevel logLevel, dynamic message, [Object error, StackTrace stackTrace, Zone zone, Frame callerFrame]) {
     Object object;
     if (_isLoggable(logLevel)) {
       if (message is Function) {
@@ -231,11 +231,11 @@ class Logger<T extends LoggerType> {
     return frames.isEmpty ? null : frames.first;
   }
 
-  void debug(dynamic message, [Object error, StackTrace stackTrace]) => log(Level.debug, message, error, stackTrace);
-  void info(dynamic message, [Object error, StackTrace stackTrace]) => log(Level.info, message, error, stackTrace);
+  void debug(dynamic message, [Object error, StackTrace stackTrace]) => log(LogLevel.debug, message, error, stackTrace);
+  void info(dynamic message, [Object error, StackTrace stackTrace]) => log(LogLevel.info, message, error, stackTrace);
   void warning(dynamic message, [Object error, StackTrace stackTrace]) =>
-      log(Level.warning, message, error, stackTrace);
-  void error(dynamic message, [Object error, StackTrace stackTrace]) => log(Level.error, message, error, stackTrace);
+      log(LogLevel.warning, message, error, stackTrace);
+  void error(dynamic message, [Object error, StackTrace stackTrace]) => log(LogLevel.error, message, error, stackTrace);
 
   Stream<LogRecord> _getStream() {
     if (hierarchicalLoggingEnabled || _parent == null) {
@@ -261,6 +261,8 @@ class Logger<T extends LoggerType> {
     List<Type> whitelist = const [],
     List<Type> blacklist = const [],
   }) {
+    assert(whitelist.isEmpty || blacklist.isEmpty, 'You can\'t pass blacklist and whitelist');
+
     Logger.root.level = logOptions;
     Logger.root.whitelist = whitelist;
     Logger.root.blacklist = blacklist;

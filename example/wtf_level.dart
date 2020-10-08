@@ -1,13 +1,13 @@
 import 'package:logger/logger.dart';
 
-/// We can also add new [Level] to the Logger that is not in the lib.
+/// We can also add new [LogLevel] to the Logger that is not in the lib.
 /// Here we add new [WtfLevel] with priority of 32 (2^5), meaning it's has more
 /// priority than error (16 (2^4)).
-extension WtfLevel on Level {
-  static const Level wtf = Level('WTF', 32);
+extension WtfLevel on LogLevel {
+  static const LogLevel wtf = LogLevel('WTF', 32);
 }
 
-/// We can also add short version of log for our newly created [Level]
+/// We can also add short version of log for our newly created [LogLevel]
 extension WtfLogger on Logger {
   void wtf(dynamic message, [Object error, StackTrace stackTrace]) => log(WtfLevel.wtf, message, error, stackTrace);
 }
@@ -18,7 +18,7 @@ class PrettyWtfPrinter extends PrettyPrinter {
   const PrettyWtfPrinter({bool showColors}) : super(showColors: showColors);
 
   @override
-  AnsiColor levelColor(Level level) {
+  AnsiColor levelColor(LogLevel level) {
     if (level == WtfLevel.wtf) {
       return AnsiColor(foregroundColor: 141);
     }
@@ -26,7 +26,7 @@ class PrettyWtfPrinter extends PrettyPrinter {
   }
 
   @override
-  String levelPrefix(Level level) {
+  String levelPrefix(LogLevel level) {
     if (level == WtfLevel.wtf) {
       return '👾 ';
     }

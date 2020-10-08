@@ -2,7 +2,7 @@ part of logger;
 
 mixin NetworkLogger implements LoggerType {
   @override
-  Logger<NetworkLogger> get log => Logger<NetworkLogger>('NetworkLogger - ${runtimeType.toString()}');
+  Logger<NetworkLogger> get log => Logger<NetworkLogger>('Network Logger - ${runtimeType.toString()}');
 }
 
 mixin UiLogger implements LoggerType {
