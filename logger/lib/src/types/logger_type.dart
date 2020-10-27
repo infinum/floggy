@@ -4,10 +4,10 @@ part of logger;
 /// This will make sure that each mixin is using it's own [Logger] and that will be usefull
 /// when dictating what we want to show
 abstract class LoggerType {
-  Logger get log;
+  Logger get logger;
 }
 
 extension LoggerConstructor on LoggerType {
-  Logger logger(String name) => Logger('${log.fullName}.$name');
+  Logger newLogger(String name) => Logger('${logger.fullName}.$name');
   Logger detachedLogger(String name) => Logger.detached(name);
 }

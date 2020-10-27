@@ -10,9 +10,9 @@ void main() {
     });
 
     test('First Test', () {
-      awesome.log.info('Test log');
+      awesome.logger.info('Test log');
 
-      expect(awesome.log.name != null, isTrue);
+      expect(awesome.logger.name != null, isTrue);
     });
   });
 }

@@ -26,47 +26,47 @@ class SmallClassWithoutLogger {
 
 class ExampleNetworkLogger with NetworkLogger {
   ExampleNetworkLogger() {
-    log.debug('This is log from Network logger');
-    log.info('This is log from Network logger');
-    log.warning('This is log from Network logger');
-    log.error('This is log from Network logger');
+    logger.debug('This is log from Network logger');
+    logger.info('This is log from Network logger');
+    logger.warning('This is log from Network logger');
+    logger.error('This is log from Network logger');
 
-    log.wtf('This is log with custom log level in Network logger');
+    logger.wtf('This is log with custom log level in Network logger');
   }
 }
 
 class ExampleUiLogger with UiLogger {
   ExampleUiLogger() {
-    log.warning('This is log from UI logger');
-    log.warning('This is log from UI logger');
-    log.warning('This is log from UI logger');
-    log.warning('This is log from UI logger');
+    logger.warning('This is log from UI logger');
+    logger.warning('This is log from UI logger');
+    logger.warning('This is log from UI logger');
+    logger.warning('This is log from UI logger');
 
-    log.wtf('This is log with custom log level in UI logger');
+    logger.wtf('This is log with custom log level in UI logger');
   }
 }
 
 class ExampleBlackListedLogger with BlacklistedLogger {
   ExampleBlackListedLogger() {
-    log.info('This log is from Blacklisted logger and should not be visible!');
-    log.warning('This log is from Blacklisted logger and should not be visible!');
+    logger.info('This log is from Blacklisted logger and should not be visible!');
+    logger.warning('This log is from Blacklisted logger and should not be visible!');
   }
 }
 
 class ExampleWhatLoggersCanDo with ExampleLogger {
   ExampleWhatLoggersCanDo() {
     /// This will evaluate only if line is actually logged
-    log.info('Loggers can do some stuff:');
-    log.info('You can pass function to the logger, it will evaluate only if log gets shown');
-    log.debug(() {
+    logger.info('Loggers can do some stuff:');
+    logger.info('You can pass function to the logger, it will evaluate only if log gets shown');
+    logger.debug(() {
       /// You can log in log
-      log.warning('Using logger inside of the logger #WeNeedToGoDeeper');
+      logger.warning('Using logger inside of the logger #WeNeedToGoDeeper');
 
       /// Do something here maybe?
       return [1, 2, 3, 4, 5].map((e) => e * 4).join('-');
     });
 
-    log.info(() {
+    logger.info(() {
       /// You can do what you want here!
       const _s = 0 / 0;
       return List.generate(10, (_) => _s)
@@ -75,7 +75,7 @@ class ExampleWhatLoggersCanDo with ExampleLogger {
     });
 
     void _insideLogger() {
-      final _logger = logger('Test');
+      final _logger = newLogger('Test');
 
       /// This only works if [Logger.hierarchicalLoggingEnabled] is set to true
       // _logger.level = LogLevel(Level.all);

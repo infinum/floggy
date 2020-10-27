@@ -6,11 +6,11 @@ import 'package:logger/logger.dart';
 /// if used added [runtimeType] to Logger's name.
 mixin BlacklistedLogger implements LoggerType {
   @override
-  Logger<BlacklistedLogger> get log => Logger<BlacklistedLogger>('Blacklisted Logger - ${runtimeType.toString()}');
+  Logger<BlacklistedLogger> get logger => Logger<BlacklistedLogger>('Blacklisted Logger - ${runtimeType.toString()}');
 }
 
 /// Custom logger type can have any name
 mixin ExampleLogger implements LoggerType {
   @override
-  Logger<ExampleLogger> get log => Logger<ExampleLogger>('Example');
+  Logger<ExampleLogger> get logger => Logger<ExampleLogger>('Example');
 }
