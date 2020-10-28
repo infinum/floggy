@@ -1,4 +1,6 @@
-Customizable logger for dart and flutter applications.
+# Logger
+
+Customizable logger for dart
 
 
 ## Usage
@@ -115,4 +117,4 @@ This can be helpful if you have small part of code you want to log but don't wan
 ## Features and bugs
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[tracker]: http://example.com/issues/replaceme
+[tracker]: https://github.com/infinum/flutter-logger/issues
