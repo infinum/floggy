@@ -1,7 +1,7 @@
 Customizable logger for dart and flutter applications.
 
 
-## Logger
+## Loggy
 
 This library has been made to make it easier to control logs and see from where do they originate.
 It consists from main part [Loggy](loggy/README.md) and extensions that work in Flutter [Flutter loggy](flutter_loggy/README.md) and with Dio [Dio loggy](flutter_loggy_dio/README.md) 

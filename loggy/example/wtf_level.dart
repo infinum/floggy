@@ -1,6 +1,6 @@
 import 'package:loggy/loggy.dart';
 
-/// We can also add new [LogLevel] to the Logger that is not in the lib.
+/// We can also add new [LogLevel] to the Loggy that is not in the lib.
 /// Here we add new [WtfLevel] with priority of 32 (2^5), meaning it's has more
 /// priority than error (16 (2^4)).
 extension WtfLevel on LogLevel {
@@ -8,7 +8,7 @@ extension WtfLevel on LogLevel {
 }
 
 /// We can also add short version of log for our newly created [LogLevel]
-extension WtfLogger on Loggy {
+extension WtfLoggy on Loggy {
   void wtf(dynamic message, [Object error, StackTrace stackTrace]) =>
       log(WtfLevel.wtf, message, error, stackTrace);
 }

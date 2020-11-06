@@ -2,24 +2,24 @@ import 'package:loggy/loggy.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Logger test', () {
+  group('Loggy test', () {
     LoggyType awesome;
 
     setUp(() {
-      Loggy.initLogger();
-      awesome = TestBlocLogger();
+      Loggy.initLoggy();
+      awesome = TestBlocLoggy();
     });
 
-    test('Logger has name', () {
+    test('Loggy has name', () {
       awesome.logger.info('Test log');
 
       expect(awesome.logger.name != null, isTrue);
     });
 
     test('New logger', () {
-      final _extraLogger = awesome.newLoggy('extra');
+      final _extraLoggy = awesome.newLoggy('extra');
 
-      expect(_extraLogger.fullName.contains(awesome.logger.fullName), isTrue);
+      expect(_extraLoggy.fullName.contains(awesome.logger.fullName), isTrue);
     });
 
     test('Detached logger', () {
@@ -30,4 +30,4 @@ void main() {
   });
 }
 
-class TestBlocLogger with UiLogger {}
+class TestBlocLoggy with UiLoggy {}

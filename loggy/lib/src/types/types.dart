@@ -1,13 +1,13 @@
 part of loggy;
 
-mixin NetworkLogger implements LoggyType {
+mixin NetworkLoggy implements LoggyType {
   @override
-  Loggy<NetworkLogger> get logger =>
-      Loggy<NetworkLogger>('Network Logger - ${runtimeType.toString()}');
+  Loggy<NetworkLoggy> get logger =>
+      Loggy<NetworkLoggy>('Network Loggy - ${runtimeType.toString()}');
 }
 
-mixin UiLogger implements LoggyType {
+mixin UiLoggy implements LoggyType {
   @override
-  Loggy<UiLogger> get logger =>
-      Loggy<UiLogger>('UI Logger - ${runtimeType.toString()}');
+  Loggy<UiLoggy> get logger =>
+      Loggy<UiLoggy>('UI Loggy - ${runtimeType.toString()}');
 }

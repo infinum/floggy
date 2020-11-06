@@ -34,7 +34,7 @@ class LogLevel {
 
 /// Choose what and how it gets logged
 ///
-/// Log level for the logger is set up in [Loggy.initLogger] and it's used
+/// Log level for the logger is set up in [Loggy.initLoggy] and it's used
 /// for all new [Loggy].
 /// Unless they are [Loggy.detached] or [hierarchicalLoggingEnabled]
 /// is enabled. Then those loggers can choose and change [LogOptions] how/when they need it.

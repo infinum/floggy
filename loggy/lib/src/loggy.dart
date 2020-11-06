@@ -13,17 +13,17 @@ const defaultLevel = LogOptions(LogLevel.all);
 ///
 /// [Loggy]s are named using a hierarchical dot-separated name convention,
 /// and their types are used to [_whitelist] or [_blacklist] specific logger types.
-/// Logger can be any type so end user can have as many or as little different [Loggy]
+/// Loggy can be any type so end user can have as many or as little different [Loggy]
 /// types as they want.
 class Loggy<T extends LoggyType> {
-  /// Singleton constructor. Calling `new Logger(name)` will return the same
+  /// Singleton constructor. Calling `new Loggy(name)` will return the same
   /// actual instance whenever it is called with the same string name.
   factory Loggy(String name) =>
       _loggers.putIfAbsent(name, () => Loggy<T>._named(name)) as Loggy<T>;
 
   /// Creates a new detached [Loggy].
   ///
-  /// Returns a new [Loggy] instance (unlike `new Logger`, which returns a
+  /// Returns a new [Loggy] instance (unlike `new Loggy`, which returns a
   /// [Loggy] singleton), which doesn't have any parent or children,
   /// and is not a part of the global hierarchical loggers structure.
   ///
@@ -266,7 +266,7 @@ class Loggy<T extends LoggyType> {
   static final Loggy root = Loggy('');
   static final Map<String, Loggy> _loggers = <String, Loggy>{};
 
-  static void initLogger({
+  static void initLoggy({
     LogPrinter logPrinter = const DefaultPrinter(),
     LogOptions logOptions = defaultLevel,
     List<Type> whitelist = const [],

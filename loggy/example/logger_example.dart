@@ -4,28 +4,28 @@ import 'extra_loggers.dart';
 import 'wtf_level.dart';
 
 void main() {
-  Loggy.initLogger(
+  Loggy.initLoggy(
     logPrinter: const PrettyWtfPrinter(),
     logOptions: const LogOptions(LogLevel.all),
-    blacklist: [BlacklistedLogger],
+    blacklist: [BlacklistedLoggy],
   );
 
-  ExampleNetworkLogger();
-  ExampleUiLogger();
-  ExampleBlackListedLogger();
-  ExampleWhatLoggersCanDo();
+  ExampleNetworkLoggy();
+  ExampleUiLoggy();
+  ExampleBlackListedLoggy();
+  ExampleWhatLoggysCanDo();
 
-  SmallClassWithoutLogger();
+  SmallClassWithoutLoggy();
 }
 
-class SmallClassWithoutLogger {
-  SmallClassWithoutLogger() {
+class SmallClassWithoutLoggy {
+  SmallClassWithoutLoggy() {
     Loggy.root.info('You can log like this! But no class name :(');
   }
 }
 
-class ExampleNetworkLogger with NetworkLogger {
-  ExampleNetworkLogger() {
+class ExampleNetworkLoggy with NetworkLoggy {
+  ExampleNetworkLoggy() {
     logger.debug('This is log from Network logger');
     logger.info('This is log from Network logger');
     logger.warning('This is log from Network logger');
@@ -35,8 +35,8 @@ class ExampleNetworkLogger with NetworkLogger {
   }
 }
 
-class ExampleUiLogger with UiLogger {
-  ExampleUiLogger() {
+class ExampleUiLoggy with UiLoggy {
+  ExampleUiLoggy() {
     logger.warning('This is log from UI logger');
     logger.warning('This is log from UI logger');
     logger.warning('This is log from UI logger');
@@ -46,8 +46,8 @@ class ExampleUiLogger with UiLogger {
   }
 }
 
-class ExampleBlackListedLogger with BlacklistedLogger {
-  ExampleBlackListedLogger() {
+class ExampleBlackListedLoggy with BlacklistedLoggy {
+  ExampleBlackListedLoggy() {
     logger
         .info('This log is from Blacklisted logger and should not be visible!');
     logger.warning(
@@ -55,10 +55,10 @@ class ExampleBlackListedLogger with BlacklistedLogger {
   }
 }
 
-class ExampleWhatLoggersCanDo with ExampleLogger {
-  ExampleWhatLoggersCanDo() {
+class ExampleWhatLoggysCanDo with ExampleLoggy {
+  ExampleWhatLoggysCanDo() {
     /// This will evaluate only if line is actually logged
-    logger.info('Loggers can do some stuff:');
+    logger.info('Loggys can do some stuff:');
     logger.info(
         'You can pass function to the logger, it will evaluate only if log gets shown');
     logger.debug(() {
@@ -77,10 +77,10 @@ class ExampleWhatLoggersCanDo with ExampleLogger {
           ' Batman';
     });
 
-    void _insideLogger() {
+    void _insideLoggy() {
       final _logger = newLoggy('Test');
 
-      /// This only works if [Logger.hierarchicalLoggingEnabled] is set to true
+      /// This only works if [Loggy.hierarchicalLoggingEnabled] is set to true
       // _logger.level = LogLevel(Level.all);
       _logger.debug(
           'I\'m new logger called "${_logger.name}" and my parent logger name is "${_logger.parent.name}"');
@@ -88,7 +88,7 @@ class ExampleWhatLoggersCanDo with ExampleLogger {
           'Even if I\'m a new logger, I still share everything with my parent');
     }
 
-    void _detachedLogger() {
+    void _detachedLoggy() {
       final _logger = detachedLoggy('Detached logger');
       _logger.level = const LogOptions(LogLevel.all);
       _logger.onRecord.listen((event) {
@@ -98,7 +98,7 @@ class ExampleWhatLoggersCanDo with ExampleLogger {
           'I\'m a detached logger. I don\'t have a parent and I have no connection or shared info with root logger!');
     }
 
-    _insideLogger();
-    _detachedLogger();
+    _insideLoggy();
+    _detachedLoggy();
   }
 }
