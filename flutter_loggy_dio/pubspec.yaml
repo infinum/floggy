@@ -12,5 +12,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  loggy: ^0.1.0
+  loggy:
+    path: ../loggy
   dio: ^3.0.10

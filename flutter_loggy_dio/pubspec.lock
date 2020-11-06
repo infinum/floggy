@@ -44,11 +44,9 @@ packages:
   loggy:
     dependency: "direct main"
     description:
-      path: loggy
-      ref: "7b51df6"
-      resolved-ref: "7b51df6a36014ca6d57cf4fe425d77e5f7df8de2"
-      url: "git@github.com:infinum/flutter-logger.git"
-    source: git
+      path: "../loggy"
+      relative: true
+    source: path
     version: "0.1.0"
   meta:
     dependency: transitive
