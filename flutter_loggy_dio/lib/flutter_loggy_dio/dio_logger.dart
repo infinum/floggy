@@ -6,7 +6,7 @@ import 'package:loggy/loggy.dart';
 
 import 'custom_loggers.dart';
 
-class LoggerDioInterceptor extends Interceptor with DioLogger {
+class LoggyDioInterceptor extends Interceptor with DioLoggy {
   /// Print request header [Options.headers]
   final bool requestHeader;
 
@@ -25,7 +25,7 @@ class LoggerDioInterceptor extends Interceptor with DioLogger {
   /// Width size per logPrint
   final int maxWidth;
 
-  LoggerDioInterceptor({
+  LoggyDioInterceptor({
     this.requestHeader = false,
     this.requestBody = false,
     this.responseHeader = false,

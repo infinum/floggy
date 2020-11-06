@@ -1,6 +1,6 @@
 import 'package:loggy/loggy.dart';
 
-mixin DioLogger implements LoggyType {
+mixin DioLoggy implements LoggyType {
   @override
-  Loggy<DioLogger> get logger => Loggy<DioLogger>('DioLogger');
+  Loggy<DioLoggy> get logger => Loggy<DioLoggy>('DioLogger');
 }
