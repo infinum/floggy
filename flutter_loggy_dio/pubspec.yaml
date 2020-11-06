@@ -13,5 +13,9 @@ dependencies:
     sdk: flutter
 
   loggy:
-    path: ../loggy
+    git:
+      url: git@github.com:infinum/flutter-logger.git
+      ref: 7b51df6
+      path: loggy
+
   dio: ^3.0.10
