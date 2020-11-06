@@ -1,4 +1,4 @@
-part of logger;
+part of loggy;
 
 class DefaultPrinter extends LogPrinter {
   const DefaultPrinter() : super();

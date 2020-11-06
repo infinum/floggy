@@ -8,13 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0-nullsafety.3"
-  charcode:
-    dependency: transitive
-    description:
-      name: charcode
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.3"
   collection:
     dependency: transitive
     description:
@@ -22,25 +15,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0-nullsafety.3"
-  dio:
-    dependency: "direct main"
-    description:
-      name: dio
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.10"
   flutter:
     dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
-  http_parser:
-    dependency: transitive
-    description:
-      name: http_parser
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.1.4"
   loggy:
     dependency: "direct main"
     description:
@@ -55,39 +34,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0-nullsafety.3"
-  path:
-    dependency: transitive
-    description:
-      name: path
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.7.0"
   sky_engine:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.99"
-  source_span:
-    dependency: transitive
-    description:
-      name: source_span
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.7.0"
-  string_scanner:
-    dependency: transitive
-    description:
-      name: string_scanner
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.5"
-  term_glyph:
-    dependency: transitive
-    description:
-      name: term_glyph
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
   typed_data:
     dependency: transitive
     description:

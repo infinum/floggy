@@ -1,4 +1,4 @@
-part of logger;
+part of loggy;
 
 /// Whether to allow fine-grain logging and configuration of loggers in a
 /// hierarchy.
@@ -15,7 +15,7 @@ const defaultLevel = LogOptions(LogLevel.all);
 /// and their types are used to [_whitelist] or [_blacklist] specific logger types.
 /// Logger can be any type so end user can have as many or as little different [Loggy]
 /// types as they want.
-class Loggy<T extends LoggerType> {
+class Loggy<T extends LoggyType> {
   /// Singleton constructor. Calling `new Logger(name)` will return the same
   /// actual instance whenever it is called with the same string name.
   factory Loggy(String name) =>

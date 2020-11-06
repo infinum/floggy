@@ -1,4 +1,4 @@
-part of logger;
+part of loggy;
 
 /// This class handles colorizing of terminal output.
 class AnsiColor {

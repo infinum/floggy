@@ -1,4 +1,4 @@
-import 'package:logger/logger.dart';
+import 'package:loggy/loggy.dart';
 
 import 'extra_loggers.dart';
 import 'wtf_level.dart';
@@ -78,7 +78,7 @@ class ExampleWhatLoggersCanDo with ExampleLogger {
     });
 
     void _insideLogger() {
-      final _logger = newLogger('Test');
+      final _logger = newLoggy('Test');
 
       /// This only works if [Logger.hierarchicalLoggingEnabled] is set to true
       // _logger.level = LogLevel(Level.all);
@@ -89,7 +89,7 @@ class ExampleWhatLoggersCanDo with ExampleLogger {
     }
 
     void _detachedLogger() {
-      final _logger = detachedLogger('Detached logger');
+      final _logger = detachedLoggy('Detached logger');
       _logger.level = const LogOptions(LogLevel.all);
       _logger.onRecord.listen((event) {
         print(event);

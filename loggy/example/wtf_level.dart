@@ -1,4 +1,4 @@
-import 'package:logger/logger.dart';
+import 'package:loggy/loggy.dart';
 
 /// We can also add new [LogLevel] to the Logger that is not in the lib.
 /// Here we add new [WtfLevel] with priority of 32 (2^5), meaning it's has more

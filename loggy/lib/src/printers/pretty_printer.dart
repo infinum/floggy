@@ -1,4 +1,4 @@
-part of logger;
+part of loggy;
 
 /// Format log and add emoji to represent the color.
 ///
@@ -19,7 +19,8 @@ class PrettyPrinter extends LogPrinter {
   bool get _colorize => showColors ?? false;
 
   static final _levelColors = {
-    LogLevel.debug: AnsiColor(foregroundColor: AnsiColor.grey(0.5), italic: true),
+    LogLevel.debug:
+        AnsiColor(foregroundColor: AnsiColor.grey(0.5), italic: true),
     LogLevel.info: AnsiColor(foregroundColor: 35),
     LogLevel.warning: AnsiColor(foregroundColor: 214),
     LogLevel.error: AnsiColor(foregroundColor: 196),
@@ -37,13 +38,20 @@ class PrettyPrinter extends LogPrinter {
   @override
   void onLog(LogRecord record) {
     final _time = record.time.toIso8601String().split('T')[1];
-    final _callerFrame = record.callerFrame == null ? '-' : '(${record.callerFrame.location})';
-    final _logLevel = record.level.toString().replaceAll('Level.', '').toUpperCase().padRight(8);
+    final _callerFrame =
+        record.callerFrame == null ? '-' : '(${record.callerFrame.location})';
+    final _logLevel = record.level
+        .toString()
+        .replaceAll('Level.', '')
+        .toUpperCase()
+        .padRight(8);
 
-    final _color = _colorize ? levelColor(record.level) ?? AnsiColor() : AnsiColor();
+    final _color =
+        _colorize ? levelColor(record.level) ?? AnsiColor() : AnsiColor();
     final _prefix = levelPrefix(record.level) ?? _defaultPrefix;
 
-    print(_color('$_prefix$_time $_logLevel ${record.loggerName} $_callerFrame ${record.message}'));
+    print(_color(
+        '$_prefix$_time $_logLevel ${record.loggerName} $_callerFrame ${record.message}'));
 
     if (record.stackTrace != null) {
       print(record.stackTrace);

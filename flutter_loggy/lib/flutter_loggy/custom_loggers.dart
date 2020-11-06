@@ -5,8 +5,3 @@ mixin ProviderLogger implements LoggyType {
   Loggy<ProviderLogger> get logger =>
       Loggy<ProviderLogger>('Provider: $runtimeType');
 }
-
-mixin DioLogger implements LoggyType {
-  @override
-  Loggy<DioLogger> get logger => Loggy<DioLogger>('DioLogger');
-}
