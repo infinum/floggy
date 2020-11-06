@@ -26,31 +26,31 @@ class SmallClassWithoutLoggy {
 
 class ExampleNetworkLoggy with NetworkLoggy {
   ExampleNetworkLoggy() {
-    logger.debug('This is log from Network logger');
-    logger.info('This is log from Network logger');
-    logger.warning('This is log from Network logger');
-    logger.error('This is log from Network logger');
+    loggy.debug('This is log from Network logger');
+    loggy.info('This is log from Network logger');
+    loggy.warning('This is log from Network logger');
+    loggy.error('This is log from Network logger');
 
-    logger.wtf('This is log with custom log level in Network logger');
+    loggy.wtf('This is log with custom log level in Network logger');
   }
 }
 
 class ExampleUiLoggy with UiLoggy {
   ExampleUiLoggy() {
-    logger.warning('This is log from UI logger');
-    logger.warning('This is log from UI logger');
-    logger.warning('This is log from UI logger');
-    logger.warning('This is log from UI logger');
+    loggy.warning('This is log from UI logger');
+    loggy.warning('This is log from UI logger');
+    loggy.warning('This is log from UI logger');
+    loggy.warning('This is log from UI logger');
 
-    logger.wtf('This is log with custom log level in UI logger');
+    loggy.wtf('This is log with custom log level in UI logger');
   }
 }
 
 class ExampleBlackListedLoggy with BlacklistedLoggy {
   ExampleBlackListedLoggy() {
-    logger
+    loggy
         .info('This log is from Blacklisted logger and should not be visible!');
-    logger.warning(
+    loggy.warning(
         'This log is from Blacklisted logger and should not be visible!');
   }
 }
@@ -58,18 +58,18 @@ class ExampleBlackListedLoggy with BlacklistedLoggy {
 class ExampleWhatLoggysCanDo with ExampleLoggy {
   ExampleWhatLoggysCanDo() {
     /// This will evaluate only if line is actually logged
-    logger.info('Loggys can do some stuff:');
-    logger.info(
+    loggy.info('Loggys can do some stuff:');
+    loggy.info(
         'You can pass function to the logger, it will evaluate only if log gets shown');
-    logger.debug(() {
+    loggy.debug(() {
       /// You can log in log
-      logger.warning('Using logger inside of the logger #WeNeedToGoDeeper');
+      loggy.warning('Using logger inside of the logger #WeNeedToGoDeeper');
 
       /// Do something here maybe?
       return [1, 2, 3, 4, 5].map((e) => e * 4).join('-');
     });
 
-    logger.info(() {
+    loggy.info(() {
       /// You can do what you want here!
       const _s = 0 / 0;
       return List.generate(10, (_) => _s).fold<String>('',
