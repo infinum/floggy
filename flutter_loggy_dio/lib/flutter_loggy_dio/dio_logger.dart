@@ -149,8 +149,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     if (_value.isEmpty) {
       _value.write(value);
     } else {
-      _value.write('\n');
-      _value.write(value);
+      _value.write('\n$value');
     }
   }
 
@@ -159,9 +158,9 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
       final _valueError = _value.toString();
       final _errorTitle = _valueError.substring(0, _valueError.indexOf('\n'));
       final _errorBody = _valueError.substring(_errorTitle.length);
-      logger.log(level, _errorTitle, _errorBody);
+      loggy.log(level, _errorTitle, _errorBody);
     } else {
-      logger.log(level, _value.toString());
+      loggy.log(level, _value.toString());
     }
     _value.clear();
   }

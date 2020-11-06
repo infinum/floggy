@@ -4,10 +4,10 @@ part of loggy;
 /// This will make sure that each mixin is using it's own [Loggy] and that will be usefull
 /// when dictating what we want to show
 abstract class LoggyType {
-  Loggy get logger;
+  Loggy get loggy;
 }
 
 extension LoggyConstructor on LoggyType {
-  Loggy newLoggy(String name) => Loggy('${logger.fullName}.$name');
+  Loggy newLoggy(String name) => Loggy('${loggy.fullName}.$name');
   Loggy detachedLoggy(String name) => Loggy.detached(name);
 }

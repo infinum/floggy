@@ -11,21 +11,21 @@ void main() {
     });
 
     test('Loggy has name', () {
-      awesome.logger.info('Test log');
+      awesome.loggy.info('Test log');
 
-      expect(awesome.logger.name != null, isTrue);
+      expect(awesome.loggy.name != null, isTrue);
     });
 
     test('New logger', () {
       final _extraLoggy = awesome.newLoggy('extra');
 
-      expect(_extraLoggy.fullName.contains(awesome.logger.fullName), isTrue);
+      expect(_extraLoggy.fullName.contains(awesome.loggy.fullName), isTrue);
     });
 
     test('Detached logger', () {
       final _detached = awesome.detachedLoggy('detached');
 
-      expect(_detached.fullName.contains(awesome.logger.fullName), isFalse);
+      expect(_detached.fullName.contains(awesome.loggy.fullName), isFalse);
     });
   });
 }

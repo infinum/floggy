@@ -6,12 +6,12 @@ import 'package:loggy/loggy.dart';
 /// if used added [runtimeType] to Loggy name.
 mixin BlacklistedLoggy implements LoggyType {
   @override
-  Loggy<BlacklistedLoggy> get logger =>
+  Loggy<BlacklistedLoggy> get loggy =>
       Loggy<BlacklistedLoggy>('Blacklisted Loggy - ${runtimeType.toString()}');
 }
 
 /// Custom logger type can have any name
 mixin ExampleLoggy implements LoggyType {
   @override
-  Loggy<ExampleLoggy> get logger => Loggy<ExampleLoggy>('Example');
+  Loggy<ExampleLoggy> get loggy => Loggy<ExampleLoggy>('Example');
 }

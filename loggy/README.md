@@ -1,6 +1,5 @@
 # Loggy
-
-Customizable logger for dart
+Customizable logger for dart.
 
 
 ## Usage
