@@ -1,8 +1,8 @@
 name: flutter_loggy_dio
 description: A new Flutter project.
-version: 0.0.1
-author:
-homepage:
+version: 0.1.0
+repository: https://github.com/infinum/flutter-logger
+homepage: https://github.com/infinum/flutter-logger
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
