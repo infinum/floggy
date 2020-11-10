@@ -90,15 +90,15 @@ Then to use it just add `with CustomLoggy` to class where you want to use it.
 ## Custom log levels and expanding existing printers
 You can add new LogLevel to log like this:
 ```dart
-extension WtfLevel on LogLevel {
+extension SocketLevel on LogLevel {
   // LogLevel is just a class with `name` and `priority`. Priority can go from 1 - 99 inclusive.
-  static const LogLevel wtf = LogLevel('WTF', 32);
+  static const LogLevel socket = LogLevel('socket', 32);
 }
 ```
 When adding a new level it's also recommended extending the Loggy class as well to add quick function for that level.
 ```dart
-extension WtfLoggy on Loggy {
-  void wtf(dynamic message, [Object error, StackTrace stackTrace]) => log(WtfLevel.wtf, message, error, stackTrace);
+extension SocketLoggy on Loggy {
+  void socket(dynamic message, [Object error, StackTrace stackTrace]) => log(SocketLevel.socket, message, error, stackTrace);
 }
 ```
 
