@@ -43,10 +43,10 @@ also make custom one and use that instead.
 ```dart
 class MyAppScreen with UiLoggy{
   MyAppScreen(){
-    logger.debug('DebugMessage');
-    logger.info('InfoMessage');
-    logger.warning('WarningMessage');
-    logger.error('ErrorMessage');
+    loggy.debug('DebugMessage');
+    loggy.info('InfoMessage');
+    loggy.warning('WarningMessage');
+    loggy.error('ErrorMessage');
   }
 }
 ```
@@ -62,7 +62,7 @@ If you have initialized the Loggy just with `PrettyPrinter` then your log should
 You can pass closure to the Loggy as well, closure will get evaluated only if/when log gets
 called and should be shown.
 ```dart
-logger.info(() {
+loggy.info(() {
   /// You can do what you want here!
   const _s = 0 / 0;
   return List.generate(10, (_) => _s)
@@ -81,7 +81,7 @@ returns new logger with mixin type:
 ```dart
 mixin CustomLoggy implements LoggyType {
   @override
-  Loggy<CustomLoggy> get log => Loggy<CustomLoggy>('My Custom Loggy');
+  Loggy<CustomLoggy> get loggy => Loggy<CustomLoggy>('My Custom Loggy');
 }
 ```
 
@@ -116,4 +116,4 @@ This can be helpful if you have small part of code you want to log but don't wan
 ## Features and bugs
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[tracker]: https://github.com/infinum/flutter-logger/issues
+[tracker]: https://github.com/infinum/floggy/issues

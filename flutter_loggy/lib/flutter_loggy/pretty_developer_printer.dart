@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:loggy/loggy.dart';
 
+/// Pretty printer that uses developer.log to show log messages
 class PrettyDeveloperPrinter extends LogPrinter {
   static final _levelPrefixes = {
     LogLevel.debug: '🐛 ',
@@ -10,15 +11,14 @@ class PrettyDeveloperPrinter extends LogPrinter {
     LogLevel.error: '‼️ ',
   };
 
+  // For undefined log levels
   static const _defaultPrefix = '🤔 ';
 
   @override
   void onLog(LogRecord record) {
     final _time = record.time.toIso8601String().split('T')[1];
-    final _callerFrame =
-        record.callerFrame == null ? '-' : '(${record.callerFrame.location})';
-    final _logLevel =
-        record.level.toString().replaceAll('Level.', '').toUpperCase();
+    final _callerFrame = record.callerFrame == null ? '-' : '(${record.callerFrame.location})';
+    final _logLevel = record.level.toString().replaceAll('Level.', '').toUpperCase();
 
     final _prefix = levelPrefix(record.level) ?? _defaultPrefix;
 
@@ -34,6 +34,7 @@ class PrettyDeveloperPrinter extends LogPrinter {
     );
   }
 
+  /// Get prefix for level
   String levelPrefix(LogLevel level) {
     return _levelPrefixes[level];
   }

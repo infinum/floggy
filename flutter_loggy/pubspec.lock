@@ -23,10 +23,10 @@ packages:
   loggy:
     dependency: "direct main"
     description:
-      path: "../loggy"
-      relative: true
-    source: path
-    version: "0.1.0"
+      name: loggy
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   meta:
     dependency: transitive
     description:
@@ -34,11 +34,25 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0-nullsafety.3"
+  path:
+    dependency: transitive
+    description:
+      name: path
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.7.0"
   sky_engine:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.99"
+  stack_trace:
+    dependency: transitive
+    description:
+      name: stack_trace
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.9.6"
   typed_data:
     dependency: transitive
     description:
