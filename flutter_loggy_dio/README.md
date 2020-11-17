@@ -11,10 +11,11 @@ In IntelliJ/Studio you can collapse request/response body:
  
 All you need to do to setup this is go to Preferences -> Editor -> General -> Console and under `Fold console lines that contain` add these 3 rules: `║`, `╔` and `╚`.
 
-[add image here]
+![Settings][settings]
  
 ## How to use
 
 For documentation refer to [loggy](https://github.com/infinum/floggy/blob/master/loggy/README.md)
  
-[show_body]: https://github.com/infinum/floggy/raw/master/assets/2020-10-28%2010.38.39.gif
+[show_body]: https://github.com/infinum/floggy/raw/master/assets/2020-10-28%2010.38.39.gif 
+[settings]: https://github.com/infinum/floggy/raw/master/assets/screenshot_settings.png
