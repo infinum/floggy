@@ -3,14 +3,11 @@ import 'package:loggy/loggy.dart';
 /// We can also add new [LogLevel] to the Loggy that is not in the lib.
 /// Here we add new [WtfLevel] with priority of 32 (2^5), meaning it's has more
 /// priority than error (16 (2^4)).
-extension WtfLevel on LogLevel {
-  static const LogLevel wtf = LogLevel('WTF', 32);
-}
+const LogLevel socketLevel = LogLevel('Socket', 32);
 
 /// We can also add short version of log for our newly created [LogLevel]
-extension WtfLoggy on Loggy {
-  void wtf(dynamic message, [Object error, StackTrace stackTrace]) =>
-      log(WtfLevel.wtf, message, error, stackTrace);
+extension SocketLoggy on Loggy {
+  void socket(dynamic message, [Object error, StackTrace stackTrace]) => log(socketLevel, message, error, stackTrace);
 }
 
 /// We can also extend our [PrettyPrinter] and add our colors and prefix to
@@ -20,7 +17,7 @@ class PrettyWtfPrinter extends PrettyPrinter {
 
   @override
   AnsiColor levelColor(LogLevel level) {
-    if (level == WtfLevel.wtf) {
+    if (level == socketLevel) {
       return AnsiColor(foregroundColor: 141);
     }
     return super.levelColor(level);
@@ -28,7 +25,7 @@ class PrettyWtfPrinter extends PrettyPrinter {
 
   @override
   String levelPrefix(LogLevel level) {
-    if (level == WtfLevel.wtf) {
+    if (level == socketLevel) {
       return '👾 ';
     }
     return super.levelPrefix(level);

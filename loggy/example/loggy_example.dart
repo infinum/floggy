@@ -31,7 +31,7 @@ class ExampleNetworkLoggy with NetworkLoggy {
     loggy.warning('This is log from Network logger');
     loggy.error('This is log from Network logger');
 
-    loggy.wtf('This is log with custom log level in Network logger');
+    loggy.socket('This is log with custom log level in Network logger');
   }
 }
 
@@ -42,16 +42,14 @@ class ExampleUiLoggy with UiLoggy {
     loggy.warning('This is log from UI logger');
     loggy.warning('This is log from UI logger');
 
-    loggy.wtf('This is log with custom log level in UI logger');
+    loggy.socket('This is log with custom log level in UI logger');
   }
 }
 
 class ExampleBlackListedLoggy with BlacklistedLoggy {
   ExampleBlackListedLoggy() {
-    loggy
-        .info('This log is from Blacklisted logger and should not be visible!');
-    loggy.warning(
-        'This log is from Blacklisted logger and should not be visible!');
+    loggy.info('This log is from Blacklisted logger and should not be visible!');
+    loggy.warning('This log is from Blacklisted logger and should not be visible!');
   }
 }
 
@@ -59,8 +57,7 @@ class ExampleWhatLoggysCanDo with ExampleLoggy {
   ExampleWhatLoggysCanDo() {
     /// This will evaluate only if line is actually logged
     loggy.info('Loggys can do some stuff:');
-    loggy.info(
-        'You can pass function to the logger, it will evaluate only if log gets shown');
+    loggy.info('You can pass function to the logger, it will evaluate only if log gets shown');
     loggy.debug(() {
       /// You can log in log
       loggy.warning('Using logger inside of the logger #WeNeedToGoDeeper');
@@ -72,8 +69,8 @@ class ExampleWhatLoggysCanDo with ExampleLoggy {
     loggy.info(() {
       /// You can do what you want here!
       const _s = 0 / 0;
-      return List.generate(10, (_) => _s).fold<String>('',
-              (previousValue, element) => previousValue += element.toString()) +
+      return List.generate(10, (_) => _s)
+              .fold<String>('', (previousValue, element) => previousValue += element.toString()) +
           ' Batman';
     });
 
@@ -82,10 +79,8 @@ class ExampleWhatLoggysCanDo with ExampleLoggy {
 
       /// This only works if [Loggy.hierarchicalLoggingEnabled] is set to true
       // _logger.level = LogLevel(Level.all);
-      _logger.debug(
-          'I\'m new logger called "${_logger.name}" and my parent logger name is "${_logger.parent.name}"');
-      _logger.debug(
-          'Even if I\'m a new logger, I still share everything with my parent');
+      _logger.debug('I\'m new logger called "${_logger.name}" and my parent logger name is "${_logger.parent.name}"');
+      _logger.debug('Even if I\'m a new logger, I still share everything with my parent');
     }
 
     void _detachedLoggy() {
