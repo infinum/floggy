@@ -7,6 +7,22 @@ import 'package:loggy/loggy.dart';
 import 'custom_loggers.dart';
 
 class LoggyDioInterceptor extends Interceptor with DioLoggy {
+  LoggyDioInterceptor({
+    this.requestHeader = false,
+    this.requestBody = false,
+    this.responseHeader = false,
+    this.responseBody = true,
+    this.error = true,
+    this.maxWidth = 90,
+    this.requestLevel,
+    this.responseLevel,
+    this.errorLevel,
+  });
+
+  final LogLevel requestLevel;
+  final LogLevel responseLevel;
+  final LogLevel errorLevel;
+
   /// Print request header [Options.headers]
   final bool requestHeader;
 
@@ -24,15 +40,6 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
 
   /// Width size per logPrint
   final int maxWidth;
-
-  LoggyDioInterceptor({
-    this.requestHeader = false,
-    this.requestBody = false,
-    this.responseHeader = false,
-    this.responseBody = true,
-    this.error = true,
-    this.maxWidth = 90,
-  });
 
   @override
   Future onRequest(RequestOptions options) async {
@@ -64,7 +71,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
       }
     }
 
-    _commit(LogLevel.debug);
+    _commit(requestLevel ?? LogLevel.info);
     return options;
   }
 
@@ -84,7 +91,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
         _printLine(pre: '╚');
       }
     }
-    _commit(LogLevel.error);
+    _commit(errorLevel ?? LogLevel.error);
     return err;
   }
 
@@ -99,7 +106,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
       _printResponse(response);
     }
 
-    _commit(LogLevel.info);
+    _commit(responseLevel ?? LogLevel.info);
     return response;
   }
 
