@@ -1,7 +1,7 @@
 import 'package:loggy/loggy.dart';
 
 import 'extra_loggers.dart';
-import 'wtf_level.dart';
+import 'socket_level.dart';
 
 void main() {
   Loggy.initLoggy(
