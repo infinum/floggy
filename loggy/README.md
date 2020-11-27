@@ -30,11 +30,11 @@ Loggy.initLoggy(
       stackTraceLogLevel: LogLevel.warning
     ),
     
-    // You can also blacklist some logger types, blacklisted loggers are not shown
-    blacklist: [BlacklistedLoggy],
-
-    // You can also whitelist some logger types, whitelisted loggers are the ONLY ones being shown
-    whitelist: [NetworkLoggy],
+    // You can also add some filters or even make your own
+    // Here is how you can add BlacklistFilter for specified LoggyType
+    filters: [
+      BlacklistFilter([BlacklistedLoggy]),
+    ],
   );
 ```
 

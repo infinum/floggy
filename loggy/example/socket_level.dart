@@ -12,8 +12,8 @@ extension SocketLoggy on Loggy {
 
 /// We can also extend our [PrettyPrinter] and add our colors and prefix to
 /// new level, or even change the existing ones.
-class PrettyWtfPrinter extends PrettyPrinter {
-  const PrettyWtfPrinter({bool showColors}) : super(showColors: showColors);
+class PrettySocketPrinter extends PrettyPrinter {
+  const PrettySocketPrinter({bool showColors}) : super(showColors: showColors);
 
   @override
   AnsiColor levelColor(LogLevel level) {

@@ -1,9 +1,9 @@
-import 'dart:developer' as developer;
-
-import 'package:loggy/loggy.dart';
+part of flutter_loggy;
 
 /// Pretty printer that uses developer.log to show log messages
 class PrettyDeveloperPrinter extends LogPrinter {
+  const PrettyDeveloperPrinter();
+
   static final _levelPrefixes = {
     LogLevel.debug: '🐛 ',
     LogLevel.info: '👻 ',
