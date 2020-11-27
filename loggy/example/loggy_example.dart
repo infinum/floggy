@@ -8,15 +8,11 @@ void main() {
     logPrinter: const PrettyPrinter(),
     logOptions: const LogOptions(
       LogLevel.all,
-      // includeCallerInfo: false,
-      // stackTraceLevel: LogLevel.error,
     ),
     filters: [
       BlacklistFilter([BlacklistedLoggy]),
     ],
   );
-
-  MyApp();
 
   ExampleNetworkLoggy();
   ExampleUiLoggy();
@@ -51,15 +47,6 @@ class ExampleUiLoggy with UiLoggy {
     loggy.warning('This is log from UI logger');
 
     loggy.socket('This is log with custom log level in UI logger');
-  }
-}
-
-class MyApp with UiLoggy {
-  MyApp() {
-    loggy.debug('This is debug message');
-    loggy.info('This is info message');
-    loggy.warning('This is warning message');
-    loggy.error('This is error message');
   }
 }
 
