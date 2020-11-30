@@ -1,4 +1,4 @@
-part of loggy_flutter_dio;
+part of flutter_loggy_dio;
 
 mixin DioLoggy implements LoggyType {
   @override

@@ -28,6 +28,38 @@ void main() {
       expect(_detached.fullName.contains(awesome.loggy.fullName), isFalse);
     });
   });
+
+  group('Loggy filters test', () {
+    test('Whitelist empty filter', () async {
+      LoggyType awesome;
+      Loggy.initLoggy(filters: [WhitelistFilter([])]);
+
+      awesome = TestBlocLoggy();
+
+      final streamSize = <LogRecord>[];
+      awesome.loggy.onRecord.listen((event) => streamSize.add(event));
+
+      awesome.loggy.info('Test log');
+
+      // Nothing was whitelisted, we shouldn't see our log in the stream
+      expect(streamSize.length, equals(0));
+    });
+
+    test('Blacklist empty filter', () async {
+      LoggyType awesome;
+      Loggy.initLoggy(filters: [BlacklistFilter([])]);
+
+      awesome = TestBlocLoggy();
+
+      final streamSize = <LogRecord>[];
+      awesome.loggy.onRecord.listen((event) => streamSize.add(event));
+
+      awesome.loggy.info('Test log');
+
+      // Nothing was blacklisted, we should see our log in the stream
+      expect(streamSize.length, equals(1));
+    });
+  });
 }
 
 class TestBlocLoggy with UiLoggy {}

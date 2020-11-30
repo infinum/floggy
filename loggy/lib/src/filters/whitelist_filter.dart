@@ -9,6 +9,6 @@ class WhitelistFilter extends LoggyFilter {
 
   @override
   bool shouldLog(LogLevel level, Type type) {
-    return _types.isEmpty || _types.contains(type);
+    return _types == null || _types.contains(type);
   }
 }

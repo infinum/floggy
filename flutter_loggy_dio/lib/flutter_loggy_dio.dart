@@ -1,4 +1,4 @@
-library loggy_flutter_dio;
+library flutter_loggy_dio;
 
 import 'dart:async';
 import 'dart:convert';
