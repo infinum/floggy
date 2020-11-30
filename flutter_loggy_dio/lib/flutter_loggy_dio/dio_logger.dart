@@ -1,10 +1,4 @@
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
-import 'package:loggy/loggy.dart';
-
-import 'custom_loggers.dart';
+part of flutter_loggy_dio;
 
 class LoggyDioInterceptor extends Interceptor with DioLoggy {
   LoggyDioInterceptor({

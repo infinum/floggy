@@ -1,4 +1,4 @@
-import 'package:loggy/loggy.dart';
+part of flutter_loggy_dio;
 
 mixin DioLoggy implements LoggyType {
   @override

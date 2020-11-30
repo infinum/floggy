@@ -5,15 +5,19 @@ import 'socket_level.dart';
 
 void main() {
   Loggy.initLoggy(
-    logPrinter: const PrettyWtfPrinter(),
-    logOptions: const LogOptions(LogLevel.all),
-    blacklist: [BlacklistedLoggy],
+    logPrinter: const PrettyPrinter(),
+    logOptions: const LogOptions(
+      LogLevel.all,
+    ),
+    filters: [
+      BlacklistFilter([BlacklistedLoggy]),
+    ],
   );
 
   ExampleNetworkLoggy();
   ExampleUiLoggy();
   ExampleBlackListedLoggy();
-  ExampleWhatLoggysCanDo();
+  ExampleWhatLoggyCanDo();
 
   SmallClassWithoutLoggy();
 }
@@ -53,8 +57,8 @@ class ExampleBlackListedLoggy with BlacklistedLoggy {
   }
 }
 
-class ExampleWhatLoggysCanDo with ExampleLoggy {
-  ExampleWhatLoggysCanDo() {
+class ExampleWhatLoggyCanDo with ExampleLoggy {
+  ExampleWhatLoggyCanDo() {
     /// This will evaluate only if line is actually logged
     loggy.info('Loggys can do some stuff:');
     loggy.info('You can pass function to the logger, it will evaluate only if log gets shown');

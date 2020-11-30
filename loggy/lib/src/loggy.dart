@@ -18,8 +18,7 @@ const defaultLevel = LogOptions(LogLevel.all);
 class Loggy<T extends LoggyType> {
   /// Singleton constructor. Calling `new Loggy(name)` will return the same
   /// actual instance whenever it is called with the same string name.
-  factory Loggy(String name) =>
-      _loggers.putIfAbsent(name, () => Loggy<T>._named(name)) as Loggy<T>;
+  factory Loggy(String name) => _loggers.putIfAbsent(name, () => Loggy<T>._named(name)) as Loggy<T>;
 
   /// Creates a new detached [Loggy].
   ///
@@ -29,8 +28,7 @@ class Loggy<T extends LoggyType> {
   ///
   /// It can be useful when you just need a local short-living logger,
   /// which you'd like to be garbage-collected later.
-  factory Loggy.detached(String name) =>
-      Loggy<T>._internal(name, null, <String, Loggy>{});
+  factory Loggy.detached(String name) => Loggy<T>._internal(name, null, <String, Loggy>{});
 
   factory Loggy._named(String name) {
     if (name.startsWith('.')) {
@@ -67,9 +65,7 @@ class Loggy<T extends LoggyType> {
   final String name;
 
   /// The full name of this logger, which includes the parent's full name.
-  String get fullName => (_parent == null || _parent.name == '')
-      ? name
-      : '${_parent.fullName}.$name';
+  String get fullName => (_parent == null || _parent.name == '') ? name : '${_parent.fullName}.$name';
 
   /// Parent of this logger in the hierarchy of loggers.
   final Loggy _parent;
@@ -77,15 +73,8 @@ class Loggy<T extends LoggyType> {
   /// Logging [LogLevel] used for entries generated on this logger.
   LogOptions _level = defaultLevel;
 
-  /// List of [Type] types that are whitelisted.
-  ///
-  ///Only [Loggy] with type [Type] will be logged
-  List<Type> _whitelist = <Type>[];
-
-  /// List of [Type] types that are blacklisted.
-  ///
-  /// Only [Loggy] with type [Type] will NOT be logged
-  List<Type> _blacklist = <Type>[];
+  /// List of [LoggyFilters] to be used when determining what to log
+  List<LoggyFilter> _filters = <LoggyFilter>[];
 
   final Map<String, Loggy> _children;
 
@@ -106,27 +95,24 @@ class Loggy<T extends LoggyType> {
   /// Effective level considering the levels established in this logger's
   /// parents (when [hierarchicalLoggingEnabled] is true).
   LogOptions get level {
-    LogOptions effectiveLevel;
+    LogOptions _effectiveLevel;
 
     if (_parent == null) {
-      // We're either the root logger or a detached logger.  Return our own
-      // level.
-      effectiveLevel = _level;
+      _effectiveLevel = _level;
     } else if (!hierarchicalLoggingEnabled) {
-      effectiveLevel = root._level;
+      _effectiveLevel = root._level;
     } else {
-      effectiveLevel = _level ?? _parent.level;
+      _effectiveLevel = _level ?? _parent.level;
     }
 
-    assert(effectiveLevel != null);
-    return effectiveLevel;
+    assert(_effectiveLevel != null);
+    return _effectiveLevel;
   }
 
   /// Override the level for this particular [Loggy] and its children.
   set level(LogOptions value) {
     if (!hierarchicalLoggingEnabled && _parent != null) {
-      throw UnsupportedError(
-          'Please set "hierarchicalLoggingEnabled" to true if you want to '
+      throw UnsupportedError('Please set "hierarchicalLoggingEnabled" to true if you want to '
           'change the level on a non-root logger.');
     }
     _level = value;
@@ -134,14 +120,8 @@ class Loggy<T extends LoggyType> {
 
   /// Put logger types on whitelist.
   /// This will only send logs from passed types
-  set whitelist(List<Type> whitelist) {
-    _whitelist = whitelist;
-  }
-
-  /// Put logger types on blacklist.
-  /// This will send all logs except from passed types
-  set blacklist(List<Type> blacklist) {
-    _blacklist = blacklist;
+  set filters(List<LoggyFilter> filters) {
+    _filters = filters;
   }
 
   /// Connect to logger stream
@@ -160,10 +140,7 @@ class Loggy<T extends LoggyType> {
 
   bool _isLoggable(LogLevel value) {
     if (value.priority >= level.logLevel.priority) {
-      if ((root._whitelist.isEmpty || root._whitelist.contains(T)) &&
-          (root._blacklist.isEmpty || !root._blacklist.contains(T))) {
-        return true;
-      }
+      return root._filters.fold(true, (shouldLog, filter) => filter.shouldLog(value, T) && shouldLog);
     }
 
     return false;
@@ -186,8 +163,7 @@ class Loggy<T extends LoggyType> {
   /// was made. This can be advantageous if a log listener wants to handler
   /// records of different zones differently (e.g. group log records by HTTP
   /// request if each HTTP request handler runs in it's own zone).
-  void log(LogLevel logLevel, dynamic message,
-      [Object error, StackTrace stackTrace, Zone zone, Frame callerFrame]) {
+  void log(LogLevel logLevel, dynamic message, [Object error, StackTrace stackTrace, Zone zone, Frame callerFrame]) {
     Object object;
     if (_isLoggable(logLevel)) {
       if (message is Function) {
@@ -202,8 +178,7 @@ class Loggy<T extends LoggyType> {
         object = message;
       }
 
-      if (stackTrace == null &&
-          logLevel.priority >= level.stackTraceLevel.priority) {
+      if (stackTrace == null && logLevel.priority >= level.stackTraceLevel.priority) {
         stackTrace = StackTrace.current;
         error ??= 'autogenerated stack trace for $logLevel $msg';
       }
@@ -211,8 +186,7 @@ class Loggy<T extends LoggyType> {
       zone ??= Zone.current;
       callerFrame ??= _getCallerFrame();
 
-      final record = LogRecord(logLevel, msg, fullName, error, stackTrace, zone,
-          object, callerFrame);
+      final record = LogRecord(logLevel, msg, fullName, error, stackTrace, zone, object, callerFrame);
 
       if (_parent == null) {
         _publish(record);
@@ -239,14 +213,11 @@ class Loggy<T extends LoggyType> {
     return frames.isEmpty ? null : frames.first;
   }
 
-  void debug(dynamic message, [Object error, StackTrace stackTrace]) =>
-      log(LogLevel.debug, message, error, stackTrace);
-  void info(dynamic message, [Object error, StackTrace stackTrace]) =>
-      log(LogLevel.info, message, error, stackTrace);
+  void debug(dynamic message, [Object error, StackTrace stackTrace]) => log(LogLevel.debug, message, error, stackTrace);
+  void info(dynamic message, [Object error, StackTrace stackTrace]) => log(LogLevel.info, message, error, stackTrace);
   void warning(dynamic message, [Object error, StackTrace stackTrace]) =>
       log(LogLevel.warning, message, error, stackTrace);
-  void error(dynamic message, [Object error, StackTrace stackTrace]) =>
-      log(LogLevel.error, message, error, stackTrace);
+  void error(dynamic message, [Object error, StackTrace stackTrace]) => log(LogLevel.error, message, error, stackTrace);
 
   Stream<LogRecord> _getStream() {
     if (hierarchicalLoggingEnabled || _parent == null) {
@@ -269,15 +240,12 @@ class Loggy<T extends LoggyType> {
   static void initLoggy({
     LogPrinter logPrinter = const DefaultPrinter(),
     LogOptions logOptions = defaultLevel,
-    List<Type> whitelist = const [],
-    List<Type> blacklist = const [],
+    List<LoggyFilter> filters = const [],
+    bool hierarchicalLogging = false,
   }) {
-    assert(whitelist.isEmpty || blacklist.isEmpty,
-        'You can\'t pass blacklist and whitelist');
-
     Loggy.root.level = logOptions;
-    Loggy.root.whitelist = whitelist;
-    Loggy.root.blacklist = blacklist;
+    Loggy.root.filters = filters;
     Loggy.root.onRecord.listen(logPrinter.onLog);
+    hierarchicalLoggingEnabled = hierarchicalLogging;
   }
 }
