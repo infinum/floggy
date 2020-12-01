@@ -6,7 +6,10 @@ import 'socket_level.dart';
 void main() {
   Loggy.initLoggy(
     logPrinter: const PrettyPrinter(),
-    logOptions: const LogOptions(LogLevel.all, stackTraceLevel: LogLevel.error),
+    logOptions: const LogOptions(
+      LogLevel.all,
+      stackTraceLevel: LogLevel.error,
+    ),
     filters: [
       BlacklistFilter([BlacklistedLoggy]),
     ],
@@ -18,16 +21,6 @@ void main() {
   ExampleWhatLoggyCanDo();
 
   SmallClassWithoutLoggy();
-  DoSomeWork();
-}
-
-class DoSomeWork with UiLoggy {
-  DoSomeWork() {
-    loggy.debug('This is debug message');
-    loggy.info('This is info message');
-    loggy.warning('This is warning message');
-    loggy.error('This is error message');
-  }
 }
 
 class SmallClassWithoutLoggy {
