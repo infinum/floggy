@@ -20,7 +20,7 @@ main() {
 }
 ```
 
-Once loggy is initialized you can start using it through the app. Loggy will come with two logger types by default, NetworkLoggy and UiLoggy. For now I will show you how to use default types and start logging. Later in the customizing loggy part I will show you how you can easily add more types depending on the specific use case.
+Once loggy is initialized you can start using it through the app. Loggy is using mixins to access our logger, for now I will show you how to use default types (**UiLoggy**, **NetworkLoggy**) and start logging. Later in the customizing loggy part I will show you how you can easily add more types depending on the specific use case.
 ```dart
 import 'package:loggy/loggy.dart';
 
@@ -98,9 +98,9 @@ Setting `stackTraceLevel` to `LogLevel.error`:
 
 ### Custom loggers
 You can have as many custom loggers as you want, by default you are provided with 2 types:
-`NetworkLoggy` and `UiLoggy`
+**NetworkLoggy** and **UiLoggy**
 
-To make custom logger you just need to make new mixin that implements `LoggyType` and
+To make custom logger you just need to make new mixin that implements **LoggyType** and
 returns new logger with mixin type:
 
 ```dart
@@ -158,7 +158,7 @@ _logger.printer = DefaultPrinter();
 ```
 
 ## Loggy 💙 Flutter
-Extensions that we can use in Flutter to make logs prettier.
+Extensions that we can use in Flutter to make our logs look nicer.
 ### Pretty developer printer
 ```
 Loggy.initLoggy(
@@ -167,10 +167,8 @@ Loggy.initLoggy(
 ```
 This printer uses `dart:developer` and can write error messages in red, and it gives us more flexibility. This way we can modify this log a bit more and remove log prefixes (ex. `[        ] I/flutter (21157)`) 
 
-## Loggy 💙 Dio as well
-
-Extension for loggy. Includes interceptor and pretty printer for Dio.
-
+## Loggy 💙 Dio as well!
+Extension for loggy. Includes the interceptor and pretty printer to use with Dio.
 ### Usage
 For Dio we included special `DioLoggy` that can be filtered, and `LoggyDioInterceptor` that will connect to Dio and print out requests and responses.
 ```dart
