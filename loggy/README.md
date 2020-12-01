@@ -140,10 +140,11 @@ Whitelisting some logger types will make sure only logs from that specific type 
 
 ### More loggers?
 Do you need more loggers? No problem!
-When you include `with LoggyA` you can make new loggers with `newLoggy(name)` or `detachedLoggy(name)`.
+Any class using Loggy mixin can make new loggers with `newLoggy(name)` or `detachedLoggy(name)`.
 
 #### Child logger
 `newLoggy(name)` will create new child logger that will be connected to parent logger and share the same options.
+Child loggy will have parent name included as prefix on a child's name, divided by `.`.
 
 #### Detached logger
 `detachedLoggy(name)` is logger that has nothing to do with our `RootLoggy` and all options will be ignored.
