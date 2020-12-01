@@ -178,7 +178,6 @@ dio.interceptors.add(LoggyDioInterceptor());
 That will use Loggy options and levels, you can change default `LogLevel` for request, response and error.
 
 ### Setup
-
 In IntelliJ/Studio you can collapse request/response body:
 ![Gif showing collapsible body][show_body]
  
