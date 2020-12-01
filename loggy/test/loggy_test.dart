@@ -31,66 +31,102 @@ void main() {
 
   group('Loggy filters test', () {
     test('Whitelist empty filter', () async {
-      Loggy.initLoggy(filters: [WhitelistFilter([])]);
-      final awesome = TestBlocLoggy();
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _testPrinter, filters: [WhitelistFilter([])]);
+      final whitelistEmpty = TestBlocLoggy();
 
-      final streamSize = <LogRecord>[];
-      Loggy.root.onRecord.listen((event) => streamSize.add(event));
-
-      awesome.loggy.info('Test log');
+      whitelistEmpty.loggy.info('Test log');
 
       // Nothing was whitelisted, we shouldn't see our log in the stream
-      expect(streamSize.length, equals(0));
+      expect(_testPrinter.recordCalls, equals(0));
     });
 
     test('Whitelist filter', () async {
-      Loggy.initLoggy(filters: [
+      final _testPrinter = TestPrinter();
+
+      Loggy.initLoggy(logPrinter: _testPrinter, filters: [
         WhitelistFilter([WhitelistLoggy])
       ]);
 
       final testLoggy = TestBlocLoggy();
       final whiteListLoggy = WhitelistTestBlocLoggy();
 
-      final streamSize = <LogRecord>[];
-      Loggy.root.onRecord.listen((event) => streamSize.add(event));
-
       testLoggy.loggy.info('Test log');
       whiteListLoggy.loggy.info('Whitelist log');
 
       // Only whitelist loggy should be shown
-      expect(streamSize.length, equals(1));
+      expect(_testPrinter.recordCalls, equals(1));
     });
 
     test('Blacklist empty filter', () async {
-      Loggy.initLoggy(filters: [BlacklistFilter([])]);
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _testPrinter, filters: [BlacklistFilter([])]);
+      final blacklistEmpty = TestBlocLoggy();
 
-      final awesome = TestBlocLoggy();
-
-      final streamSize = <LogRecord>[];
-      Loggy.root.onRecord.listen((event) => streamSize.add(event));
-
-      awesome.loggy.info('Test log');
+      blacklistEmpty.loggy.info('Test log');
 
       // Nothing was blacklisted, we should see our log in the stream
-      expect(streamSize.length, equals(1));
+      expect(_testPrinter.recordCalls, equals(1));
     });
 
     test('Blacklist filter', () async {
-      Loggy.initLoggy(filters: [
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _testPrinter, filters: [
         WhitelistFilter([BlacklistLoggy])
       ]);
 
       final testLoggy = TestBlocLoggy();
       final blacklistLoggy = BlacklistTestBlocLoggy();
 
-      final streamSize = <LogRecord>[];
-      Loggy.root.onRecord.listen((event) => streamSize.add(event));
-
       testLoggy.loggy.info('Test log');
       blacklistLoggy.loggy.info('Blacklist log');
 
       // Only log not in blacklist should be shown
-      expect(streamSize.length, equals(1));
+      expect(_testPrinter.recordCalls, equals(1));
+    });
+  });
+
+  group('Detached Loggy test', () {
+    test('Detached loggy', () {
+      Loggy.initLoggy();
+      final _log = TestBlocLoggy();
+
+      final _detached = _log.detachedLoggy('detached');
+
+      final _testPrinter = TestPrinter();
+      _detached.printer = _testPrinter;
+
+      _detached.info('Detached message');
+
+      expect(_testPrinter.recordCalls, 1);
+    });
+
+    test('Detached loggy is not following root filters', () {
+      Loggy.initLoggy(filters: [WhitelistFilter([])]);
+      final _log = TestBlocLoggy();
+
+      final _detached = _log.detachedLoggy('detached');
+
+      final _testPrinter = TestPrinter();
+      _detached.printer = _testPrinter;
+
+      _detached.info('Detached message');
+
+      expect(_testPrinter.recordCalls, 1);
+    });
+
+    test('Detached loggy is not following root levels', () {
+      Loggy.initLoggy(logOptions: LogOptions(LogLevel.off));
+      final _log = TestBlocLoggy();
+
+      final _detached = _log.detachedLoggy('detached');
+
+      final _testPrinter = TestPrinter();
+      _detached.printer = _testPrinter;
+
+      _detached.info('Detached message');
+
+      expect(_testPrinter.recordCalls, 1);
     });
   });
 }
@@ -109,4 +145,15 @@ mixin WhitelistLoggy implements LoggyType {
 mixin BlacklistLoggy implements LoggyType {
   @override
   Loggy<BlacklistLoggy> get loggy => Loggy<BlacklistLoggy>('BlacklistLoggy');
+}
+
+class TestPrinter extends LogPrinter {
+  final List<LogRecord> _records = <LogRecord>[];
+
+  @override
+  void onLog(LogRecord record) {
+    _records.add(record);
+  }
+
+  int get recordCalls => _records.length;
 }
