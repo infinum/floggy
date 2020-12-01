@@ -1,34 +1,31 @@
 import 'package:loggy/loggy.dart';
 import 'package:test/test.dart';
 
+import 'test_customizations.dart';
+
 void main() {
   group('Loggy test', () {
-    LoggyType awesome;
+    LoggyType loggy;
 
     setUp(() {
       Loggy.initLoggy();
-      awesome = TestBlocLoggy();
+      loggy = TestBlocLoggy();
     });
 
     test('Loggy has name', () {
-      awesome.loggy.info('Test log');
-
-      expect(awesome.loggy.name != null, isTrue);
+      expect(loggy.loggy.name != null, isTrue);
     });
 
-    test('New logger', () {
-      final _extraLoggy = awesome.newLoggy('extra');
-
-      expect(_extraLoggy.fullName.contains(awesome.loggy.fullName), isTrue);
+    test('New logger has parent name in title', () {
+      final _extraLoggy = loggy.newLoggy('extra');
+      expect(_extraLoggy.fullName.contains(loggy.loggy.fullName), isTrue);
     });
 
-    test('Detached logger', () {
-      final _detached = awesome.detachedLoggy('detached');
-
-      expect(_detached.fullName.contains(awesome.loggy.fullName), isFalse);
+    test('Detached logger has no parent', () {
+      final _detached = loggy.detachedLoggy('detached');
+      expect(_detached.fullName.contains(loggy.loggy.fullName), isFalse);
     });
   });
-
   group('Loggy filters test', () {
     test('Whitelist empty filter', () async {
       final _testPrinter = TestPrinter();
@@ -52,6 +49,7 @@ void main() {
       final whiteListLoggy = WhitelistTestBlocLoggy();
 
       testLoggy.loggy.info('Test log');
+      testLoggy.loggy.info('Test log');
       whiteListLoggy.loggy.info('Whitelist log');
 
       // Only whitelist loggy should be shown
@@ -72,7 +70,7 @@ void main() {
     test('Blacklist filter', () async {
       final _testPrinter = TestPrinter();
       Loggy.initLoggy(logPrinter: _testPrinter, filters: [
-        WhitelistFilter([BlacklistLoggy])
+        BlacklistFilter([BlacklistLoggy])
       ]);
 
       final testLoggy = TestBlocLoggy();
@@ -80,80 +78,105 @@ void main() {
 
       testLoggy.loggy.info('Test log');
       blacklistLoggy.loggy.info('Blacklist log');
+      blacklistLoggy.loggy.info('Blacklist log');
 
-      // Only log not in blacklist should be shown
+      // Only test loggy should be shown
       expect(_testPrinter.recordCalls, equals(1));
     });
   });
+  group('Detached Loggy', () {
+    test('Detached loggy has separate printer', () {
+      final _mainPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _mainPrinter);
 
-  group('Detached Loggy test', () {
-    test('Detached loggy', () {
-      Loggy.initLoggy();
       final _log = TestBlocLoggy();
 
       final _detached = _log.detachedLoggy('detached');
-
       final _testPrinter = TestPrinter();
+
       _detached.printer = _testPrinter;
 
       _detached.info('Detached message');
 
       expect(_testPrinter.recordCalls, 1);
+      expect(_mainPrinter.recordCalls, 0);
     });
 
-    test('Detached loggy is not following root filters', () {
-      Loggy.initLoggy(filters: [WhitelistFilter([])]);
+    test('Detached loggy is not following parent filters', () {
+      final _mainPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _mainPrinter, filters: [WhitelistFilter([])]);
+
       final _log = TestBlocLoggy();
-
       final _detached = _log.detachedLoggy('detached');
-
       final _testPrinter = TestPrinter();
+
       _detached.printer = _testPrinter;
 
       _detached.info('Detached message');
 
       expect(_testPrinter.recordCalls, 1);
+      expect(_mainPrinter.recordCalls, 0);
     });
 
-    test('Detached loggy is not following root levels', () {
-      Loggy.initLoggy(logOptions: LogOptions(LogLevel.off));
+    test('Detached loggy is not following parent levels', () {
+      final _mainPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _mainPrinter, logOptions: LogOptions(LogLevel.off));
+
       final _log = TestBlocLoggy();
-
       final _detached = _log.detachedLoggy('detached');
-
       final _testPrinter = TestPrinter();
+
       _detached.printer = _testPrinter;
 
       _detached.info('Detached message');
 
       expect(_testPrinter.recordCalls, 1);
+      expect(_mainPrinter.recordCalls, 0);
     });
   });
-}
+  group('Named Loggy test', () {
+    test('Named loggy uses same printer as parent', () {
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(
+        logPrinter: _testPrinter,
+      );
+      final _log = TestBlocLoggy();
+      final _named = _log.newLoggy('namedLoggy');
 
-class TestBlocLoggy with UiLoggy {}
+      _named.info('Named message');
+      _log.loggy.info('Named message');
 
-class WhitelistTestBlocLoggy with WhitelistLoggy {}
+      expect(_testPrinter.recordCalls, 2);
+    });
 
-class BlacklistTestBlocLoggy with BlacklistLoggy {}
+    test('Named loggy is following parent filters', () {
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(
+        logPrinter: _testPrinter,
+        filters: [
+          BlacklistFilter([UiLoggy])
+        ],
+      );
 
-mixin WhitelistLoggy implements LoggyType {
-  @override
-  Loggy<WhitelistLoggy> get loggy => Loggy<WhitelistLoggy>('WhitelistLoggy');
-}
+      final _log = TestBlocLoggy();
+      final _named = _log.newLoggy('namedLoggy');
 
-mixin BlacklistLoggy implements LoggyType {
-  @override
-  Loggy<BlacklistLoggy> get loggy => Loggy<BlacklistLoggy>('BlacklistLoggy');
-}
+      _named.info('Named message');
+      _log.loggy.info('Named message');
 
-class TestPrinter extends LogPrinter {
-  final List<LogRecord> _records = <LogRecord>[];
+      expect(_testPrinter.recordCalls, 0);
+    });
 
-  @override
-  void onLog(LogRecord record) {
-    _records.add(record);
-  }
+    test('Named loggy is following parent levels', () {
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _testPrinter, logOptions: LogOptions(LogLevel.off));
+      final _log = TestBlocLoggy();
+      final _named = _log.newLoggy('namedLoggy');
 
-  int get recordCalls => _records.length;
+      _named.info('Named message');
+      _log.loggy.info('Named message');
+
+      expect(_testPrinter.recordCalls, 0);
+    });
+  });
 }

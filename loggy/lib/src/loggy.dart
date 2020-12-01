@@ -156,14 +156,14 @@ class Loggy<T extends LoggyType> {
     return T;
   }
 
+  /// Return bool value whether this log should be shown or not
   bool _isLoggable(LogLevel value) {
-    if (value.priority >= level.logLevel.priority) {
-      if (_parent == null) {
-        // Loggy is detached, don't follow root rules!
-        return _filters.fold(true, (shouldLog, filter) => filter.shouldLog(value, _getRootType()) && shouldLog);
-      }
+    // Go through all filters passed and figure out if log should be shown
+    bool _foldFilters(List<LoggyFilter> filters) =>
+        filters.fold(true, (shouldLog, filter) => filter.shouldLog(value, _getRootType()) && shouldLog);
 
-      return root._filters.fold(true, (shouldLog, filter) => filter.shouldLog(value, _getRootType()) && shouldLog);
+    if (value.priority >= level.logLevel.priority) {
+      return _foldFilters(_parent == null ? _filters : root._filters);
     }
 
     return false;
@@ -186,6 +186,8 @@ class Loggy<T extends LoggyType> {
   /// was made. This can be advantageous if a log listener wants to handler
   /// records of different zones differently (e.g. group log records by HTTP
   /// request if each HTTP request handler runs in it's own zone).
+  ///
+  /// Caller frame will be null unless [LogOptions.includeCallerInfo] was set to true.
   void log(LogLevel logLevel, dynamic message, [Object error, StackTrace stackTrace, Zone zone, Frame callerFrame]) {
     Object object;
     if (_isLoggable(logLevel)) {

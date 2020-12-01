@@ -1,7 +1,7 @@
 # Loggy
 ![Loggy icon][loggy_image]
 
-Customizable logger for dart.
+Highly customizable logger for dart that uses mixins to show all the needed info.
 
 ## Setup
 Add logger package to your project:
@@ -17,7 +17,6 @@ import 'package:loggy/loggy.dart';
 
 main() {
   Loggy.initLoggy();
-  runApp(MyApp());
 }
 ```
 
@@ -43,6 +42,16 @@ As you can see with the magic of mixins we already know the class name from wher
 [E] UI Loggy - DoSomeWork: This is error message
 ```
 
+Loggy can take anything as it's log message, even closures (they are evaluated only if log has been shown)
+```dart
+loggy.info(() {
+  /// You can do what you want here!
+  const _s = 0 / 0;
+  return List.generate(10, (_) => _s)
+          .fold<String>('', (previousValue, element) => previousValue += element.toString()) +
+      ' Batman';
+});
+```
 
 ## Customization
 ### Printer
@@ -148,26 +157,13 @@ _logger.level = const LogOptions(LogLevel.all);
 _logger.printer = DefaultPrinter();
 ```
 
-## Extras
-Loggy can take anything as it's log message, even closures (they are evaluated only if log has been shown)
-```dart
-loggy.info(() {
-  /// You can do what you want here!
-  const _s = 0 / 0;
-  return List.generate(10, (_) => _s)
-          .fold<String>('', (previousValue, element) => previousValue += element.toString()) +
-      ' Batman';
-});
-```
-
 ## Loggy 💙 Flutter
 Extensions that we can use in Flutter to make logs prettier.
 ### Pretty developer printer
 ```
-  Loggy.initLoggy(
+Loggy.initLoggy(
     logPrinter: PrettyDeveloperPrinter(),
-    logOptions: LogOptions(minimumLogLevel),
-  );
+);
 ```
 This printer uses `dart:developer` and can write error messages in red, and it gives us more flexibility. This way we can modify this log a bit more and remove log prefixes (ex. `[        ] I/flutter (21157)`) 
 
