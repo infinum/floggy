@@ -1,112 +1,182 @@
 import 'package:loggy/loggy.dart';
 import 'package:test/test.dart';
 
+import 'test_customizations.dart';
+
 void main() {
   group('Loggy test', () {
-    LoggyType awesome;
+    LoggyType loggy;
 
     setUp(() {
       Loggy.initLoggy();
-      awesome = TestBlocLoggy();
+      loggy = TestBlocLoggy();
     });
 
     test('Loggy has name', () {
-      awesome.loggy.info('Test log');
-
-      expect(awesome.loggy.name != null, isTrue);
+      expect(loggy.loggy.name != null, isTrue);
     });
 
-    test('New logger', () {
-      final _extraLoggy = awesome.newLoggy('extra');
-
-      expect(_extraLoggy.fullName.contains(awesome.loggy.fullName), isTrue);
+    test('New logger has parent name in title', () {
+      final _extraLoggy = loggy.newLoggy('extra');
+      expect(_extraLoggy.fullName.contains(loggy.loggy.fullName), isTrue);
     });
 
-    test('Detached logger', () {
-      final _detached = awesome.detachedLoggy('detached');
-
-      expect(_detached.fullName.contains(awesome.loggy.fullName), isFalse);
+    test('Detached logger has no parent', () {
+      final _detached = loggy.detachedLoggy('detached');
+      expect(_detached.fullName.contains(loggy.loggy.fullName), isFalse);
     });
   });
-
   group('Loggy filters test', () {
     test('Whitelist empty filter', () async {
-      Loggy.initLoggy(filters: [WhitelistFilter([])]);
-      final awesome = TestBlocLoggy();
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _testPrinter, filters: [WhitelistFilter([])]);
+      final whitelistEmpty = TestBlocLoggy();
 
-      final streamSize = <LogRecord>[];
-      Loggy.root.onRecord.listen((event) => streamSize.add(event));
-
-      awesome.loggy.info('Test log');
+      whitelistEmpty.loggy.info('Test log');
 
       // Nothing was whitelisted, we shouldn't see our log in the stream
-      expect(streamSize.length, equals(0));
+      expect(_testPrinter.recordCalls, equals(0));
     });
 
     test('Whitelist filter', () async {
-      Loggy.initLoggy(filters: [
+      final _testPrinter = TestPrinter();
+
+      Loggy.initLoggy(logPrinter: _testPrinter, filters: [
         WhitelistFilter([WhitelistLoggy])
       ]);
 
       final testLoggy = TestBlocLoggy();
       final whiteListLoggy = WhitelistTestBlocLoggy();
 
-      final streamSize = <LogRecord>[];
-      Loggy.root.onRecord.listen((event) => streamSize.add(event));
-
+      testLoggy.loggy.info('Test log');
       testLoggy.loggy.info('Test log');
       whiteListLoggy.loggy.info('Whitelist log');
 
       // Only whitelist loggy should be shown
-      expect(streamSize.length, equals(1));
+      expect(_testPrinter.recordCalls, equals(1));
     });
 
     test('Blacklist empty filter', () async {
-      Loggy.initLoggy(filters: [BlacklistFilter([])]);
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _testPrinter, filters: [BlacklistFilter([])]);
+      final blacklistEmpty = TestBlocLoggy();
 
-      final awesome = TestBlocLoggy();
-
-      final streamSize = <LogRecord>[];
-      Loggy.root.onRecord.listen((event) => streamSize.add(event));
-
-      awesome.loggy.info('Test log');
+      blacklistEmpty.loggy.info('Test log');
 
       // Nothing was blacklisted, we should see our log in the stream
-      expect(streamSize.length, equals(1));
+      expect(_testPrinter.recordCalls, equals(1));
     });
 
     test('Blacklist filter', () async {
-      Loggy.initLoggy(filters: [
-        WhitelistFilter([BlacklistLoggy])
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _testPrinter, filters: [
+        BlacklistFilter([BlacklistLoggy])
       ]);
 
       final testLoggy = TestBlocLoggy();
       final blacklistLoggy = BlacklistTestBlocLoggy();
 
-      final streamSize = <LogRecord>[];
-      Loggy.root.onRecord.listen((event) => streamSize.add(event));
-
       testLoggy.loggy.info('Test log');
       blacklistLoggy.loggy.info('Blacklist log');
+      blacklistLoggy.loggy.info('Blacklist log');
 
-      // Only log not in blacklist should be shown
-      expect(streamSize.length, equals(1));
+      // Only test loggy should be shown
+      expect(_testPrinter.recordCalls, equals(1));
     });
   });
-}
+  group('Detached Loggy', () {
+    test('Detached loggy has separate printer', () {
+      final _mainPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _mainPrinter);
 
-class TestBlocLoggy with UiLoggy {}
+      final _log = TestBlocLoggy();
 
-class WhitelistTestBlocLoggy with WhitelistLoggy {}
+      final _detached = _log.detachedLoggy('detached');
+      final _testPrinter = TestPrinter();
 
-class BlacklistTestBlocLoggy with BlacklistLoggy {}
+      _detached.printer = _testPrinter;
 
-mixin WhitelistLoggy implements LoggyType {
-  @override
-  Loggy<WhitelistLoggy> get loggy => Loggy<WhitelistLoggy>('WhitelistLoggy');
-}
+      _detached.info('Detached message');
 
-mixin BlacklistLoggy implements LoggyType {
-  @override
-  Loggy<BlacklistLoggy> get loggy => Loggy<BlacklistLoggy>('BlacklistLoggy');
+      expect(_testPrinter.recordCalls, 1);
+      expect(_mainPrinter.recordCalls, 0);
+    });
+
+    test('Detached loggy is not following parent filters', () {
+      final _mainPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _mainPrinter, filters: [WhitelistFilter([])]);
+
+      final _log = TestBlocLoggy();
+      final _detached = _log.detachedLoggy('detached');
+      final _testPrinter = TestPrinter();
+
+      _detached.printer = _testPrinter;
+
+      _detached.info('Detached message');
+
+      expect(_testPrinter.recordCalls, 1);
+      expect(_mainPrinter.recordCalls, 0);
+    });
+
+    test('Detached loggy is not following parent levels', () {
+      final _mainPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _mainPrinter, logOptions: LogOptions(LogLevel.off));
+
+      final _log = TestBlocLoggy();
+      final _detached = _log.detachedLoggy('detached');
+      final _testPrinter = TestPrinter();
+
+      _detached.printer = _testPrinter;
+
+      _detached.info('Detached message');
+
+      expect(_testPrinter.recordCalls, 1);
+      expect(_mainPrinter.recordCalls, 0);
+    });
+  });
+  group('Named Loggy test', () {
+    test('Named loggy uses same printer as parent', () {
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(
+        logPrinter: _testPrinter,
+      );
+      final _log = TestBlocLoggy();
+      final _named = _log.newLoggy('namedLoggy');
+
+      _named.info('Named message');
+      _log.loggy.info('Named message');
+
+      expect(_testPrinter.recordCalls, 2);
+    });
+
+    test('Named loggy is following parent filters', () {
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(
+        logPrinter: _testPrinter,
+        filters: [
+          BlacklistFilter([UiLoggy])
+        ],
+      );
+
+      final _log = TestBlocLoggy();
+      final _named = _log.newLoggy('namedLoggy');
+
+      _named.info('Named message');
+      _log.loggy.info('Named message');
+
+      expect(_testPrinter.recordCalls, 0);
+    });
+
+    test('Named loggy is following parent levels', () {
+      final _testPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: _testPrinter, logOptions: LogOptions(LogLevel.off));
+      final _log = TestBlocLoggy();
+      final _named = _log.newLoggy('namedLoggy');
+
+      _named.info('Named message');
+      _log.loggy.info('Named message');
+
+      expect(_testPrinter.recordCalls, 0);
+    });
+  });
 }

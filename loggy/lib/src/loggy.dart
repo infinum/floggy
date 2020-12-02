@@ -92,6 +92,12 @@ class Loggy<T extends LoggyType> {
     return this;
   }
 
+  /// Set custom printer on logger.
+  set printer(LogPrinter printer) {
+    clearListeners();
+    parent._logStream.listen(printer.onLog);
+  }
+
   /// Effective level considering the levels established in this logger's
   /// parents (when [hierarchicalLoggingEnabled] is true).
   LogOptions get level {
@@ -125,7 +131,7 @@ class Loggy<T extends LoggyType> {
   }
 
   /// Connect to logger stream
-  Stream<LogRecord> get onRecord => _getStream();
+  Stream<LogRecord> get _logStream => _getStream();
 
   void clearListeners() {
     if (hierarchicalLoggingEnabled || _parent == null) {
@@ -138,9 +144,26 @@ class Loggy<T extends LoggyType> {
     }
   }
 
+  /// Gets logger root type, in case this is a named sub logger
+  /// it has to follow same filtering as it's parent logger.
+  ///
+  /// This does not include [root] as that logger doesn't have a Type
+  Type _getRootType() {
+    if (_parent != null && _parent != root) {
+      return _parent._getRootType();
+    }
+
+    return T;
+  }
+
+  /// Return bool value whether this log should be shown or not
   bool _isLoggable(LogLevel value) {
+    // Go through all filters passed and figure out if log should be shown
+    bool _foldFilters(List<LoggyFilter> filters) =>
+        filters.fold(true, (shouldLog, filter) => filter.shouldLog(value, _getRootType()) && shouldLog);
+
     if (value.priority >= level.logLevel.priority) {
-      return root._filters.fold(true, (shouldLog, filter) => filter.shouldLog(value, T) && shouldLog);
+      return _foldFilters(_parent == null ? _filters : root._filters);
     }
 
     return false;
@@ -163,6 +186,8 @@ class Loggy<T extends LoggyType> {
   /// was made. This can be advantageous if a log listener wants to handler
   /// records of different zones differently (e.g. group log records by HTTP
   /// request if each HTTP request handler runs in it's own zone).
+  ///
+  /// Caller frame will be null unless [LogOptions.includeCallerInfo] was set to true.
   void log(LogLevel logLevel, dynamic message, [Object error, StackTrace stackTrace, Zone zone, Frame callerFrame]) {
     Object object;
     if (_isLoggable(logLevel)) {
@@ -245,7 +270,7 @@ class Loggy<T extends LoggyType> {
   }) {
     Loggy.root.level = logOptions;
     Loggy.root.filters = filters;
-    Loggy.root.onRecord.listen(logPrinter.onLog);
+    Loggy.root.printer = logPrinter;
     hierarchicalLoggingEnabled = hierarchicalLogging;
   }
 }

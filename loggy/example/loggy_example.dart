@@ -8,6 +8,7 @@ void main() {
     logPrinter: const PrettyPrinter(),
     logOptions: const LogOptions(
       LogLevel.all,
+      stackTraceLevel: LogLevel.error,
     ),
     filters: [
       BlacklistFilter([BlacklistedLoggy]),
@@ -67,22 +68,21 @@ class ExampleWhatLoggyCanDo with ExampleLoggy {
       loggy.warning('Using logger inside of the logger #WeNeedToGoDeeper');
 
       /// Do something here maybe?
-      return [1, 2, 3, 4, 5].map((e) => e * 4).join('-');
+      /// or function returning something (list in this case)
+      return ['Function returned', 'this list', 'of strings!'];
     });
 
     loggy.info(() {
       /// You can do what you want here!
       const _s = 0 / 0;
-      return List.generate(10, (_) => _s)
-              .fold<String>('', (previousValue, element) => previousValue += element.toString()) +
-          ' Batman';
+      return List.generate(8, (_) => _s).fold<String>('', (value, element) => value += element.toString()) + ' Batman';
     });
 
     void _insideLoggy() {
       final _logger = newLoggy('Test');
 
       /// This only works if [Loggy.hierarchicalLoggingEnabled] is set to true
-      // _logger.level = LogLevel(Level.all);
+      // _logger.level = LogOptions(LogLevel.warning);
       _logger.debug('I\'m new logger called "${_logger.name}" and my parent logger name is "${_logger.parent.name}"');
       _logger.debug('Even if I\'m a new logger, I still share everything with my parent');
     }
@@ -90,9 +90,7 @@ class ExampleWhatLoggyCanDo with ExampleLoggy {
     void _detachedLoggy() {
       final _logger = detachedLoggy('Detached logger');
       _logger.level = const LogOptions(LogLevel.all);
-      _logger.onRecord.listen((event) {
-        print(event);
-      });
+      _logger.printer = DefaultPrinter();
       _logger.debug(
           'I\'m a detached logger. I don\'t have a parent and I have no connection or shared info with root logger!');
     }

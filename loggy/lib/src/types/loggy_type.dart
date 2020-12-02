@@ -7,7 +7,7 @@ abstract class LoggyType {
   Loggy get loggy;
 }
 
-extension LoggyConstructor on LoggyType {
+extension LoggySpawner on LoggyType {
   Loggy newLoggy(String name) => Loggy('${loggy.fullName}.$name');
   Loggy detachedLoggy(String name) => Loggy.detached(name);
 }
