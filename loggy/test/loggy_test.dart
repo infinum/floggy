@@ -33,10 +33,8 @@ void main() {
 
       final _log = TestBlocLoggy();
 
-      final _detached = _log.detachedLoggy('detached');
       final _testPrinter = TestPrinter();
-
-      _detached.printer = _testPrinter;
+      final _detached = _log.detachedLoggy('detached', logPrinter: _testPrinter);
 
       _detached.info('Detached message');
 
@@ -49,10 +47,8 @@ void main() {
       Loggy.initLoggy(logPrinter: _mainPrinter, filters: [WhitelistFilter([])]);
 
       final _log = TestBlocLoggy();
-      final _detached = _log.detachedLoggy('detached');
       final _testPrinter = TestPrinter();
-
-      _detached.printer = _testPrinter;
+      final _detached = _log.detachedLoggy('detached', logPrinter: _testPrinter);
 
       _detached.info('Detached message');
 
@@ -65,10 +61,8 @@ void main() {
       Loggy.initLoggy(logPrinter: _mainPrinter, logOptions: LogOptions(LogLevel.off));
 
       final _log = TestBlocLoggy();
-      final _detached = _log.detachedLoggy('detached');
       final _testPrinter = TestPrinter();
-
-      _detached.printer = _testPrinter;
+      final _detached = _log.detachedLoggy('detached', logPrinter: _testPrinter);
 
       _detached.info('Detached message');
 

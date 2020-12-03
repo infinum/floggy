@@ -72,7 +72,6 @@ void main() {
 
         customLevelFilter.loggy.info('Test log');
 
-        // Nothing was blacklisted, we should see our log in the stream
         expect(_testPrinter.recordCalls, equals(1));
       });
 
@@ -90,7 +89,6 @@ void main() {
         customLevel.loggy.warning('Custom level log');
         customLevel.loggy.info('Custom level log');
 
-        // Only test loggy should be shown
         expect(_testPrinter.recordCalls, equals(3));
       });
     });

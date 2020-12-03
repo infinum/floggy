@@ -150,10 +150,9 @@ Child loggy will have parent name included as the prefix on a child's name, divi
 `detachedLoggy(name)` is a logger that has nothing to do with the parent loggy and all options will be ignored.
 If you want to see those logs you need to attach a printer to it.
 ```dart
-final _logger = detachedLoggy('Detached logger');
+final _logger = detachedLoggy('Detached logger', logPrinter: DefaultPrinter());
 _logger.level = const LogOptions(LogLevel.all);
 // Add printer
-_logger.printer = DefaultPrinter();
 ```
 
 ## Loggy 💙 Flutter

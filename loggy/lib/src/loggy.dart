@@ -94,6 +94,10 @@ class Loggy<T extends LoggyType> {
 
   /// Set custom printer on logger.
   set printer(LogPrinter printer) {
+    if (printer == null) {
+      return;
+    }
+
     clearListeners();
     parent._logStream.listen(printer.onLog);
   }
