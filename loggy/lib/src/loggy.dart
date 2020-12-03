@@ -106,7 +106,7 @@ class Loggy<T extends LoggyType> {
     if (_parent == null) {
       _effectiveLevel = _level;
     } else if (!hierarchicalLoggingEnabled) {
-      _effectiveLevel = root._level;
+      _effectiveLevel = _root._level;
     } else {
       _effectiveLevel = _level ?? _parent.level;
     }
@@ -140,16 +140,16 @@ class Loggy<T extends LoggyType> {
         _controller = null;
       }
     } else {
-      root.clearListeners();
+      _root.clearListeners();
     }
   }
 
   /// Gets logger root type, in case this is a named sub logger
   /// it has to follow same filtering as it's parent logger.
   ///
-  /// This does not include [root] as that logger doesn't have a Type
+  /// This does not include [_root] as that logger doesn't have a Type
   Type _getRootType() {
-    if (_parent != null && _parent != root) {
+    if (_parent != null && _parent != _root) {
       return _parent._getRootType();
     }
 
@@ -163,7 +163,7 @@ class Loggy<T extends LoggyType> {
         filters.fold(true, (shouldLog, filter) => filter.shouldLog(value, _getRootType()) && shouldLog);
 
     if (value.priority >= level.logLevel.priority) {
-      return _foldFilters(_parent == null ? _filters : root._filters);
+      return _foldFilters(_parent == null ? _filters : _root._filters);
     }
 
     return false;
@@ -216,7 +216,7 @@ class Loggy<T extends LoggyType> {
       if (_parent == null) {
         _publish(record);
       } else if (!hierarchicalLoggingEnabled) {
-        root._publish(record);
+        _root._publish(record);
       } else {
         Loggy<dynamic> target = this;
         while (target != null) {
@@ -249,7 +249,7 @@ class Loggy<T extends LoggyType> {
       _controller ??= StreamController<LogRecord>.broadcast(sync: true);
       return _controller.stream;
     } else {
-      return root._getStream();
+      return _root._getStream();
     }
   }
 
@@ -259,7 +259,7 @@ class Loggy<T extends LoggyType> {
     }
   }
 
-  static final Loggy root = Loggy('');
+  static final Loggy _root = Loggy('');
   static final Map<String, Loggy> _loggers = <String, Loggy>{};
 
   static void initLoggy({
@@ -268,9 +268,9 @@ class Loggy<T extends LoggyType> {
     List<LoggyFilter> filters = const [],
     bool hierarchicalLogging = false,
   }) {
-    Loggy.root.level = logOptions;
-    Loggy.root.filters = filters;
-    Loggy.root.printer = logPrinter;
+    Loggy._root.level = logOptions;
+    Loggy._root.filters = filters;
+    Loggy._root.printer = logPrinter;
     hierarchicalLoggingEnabled = hierarchicalLogging;
   }
 }
