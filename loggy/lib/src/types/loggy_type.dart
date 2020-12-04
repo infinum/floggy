@@ -9,5 +9,5 @@ abstract class LoggyType {
 
 extension LoggySpawner on LoggyType {
   Loggy newLoggy(String name) => Loggy('${loggy.fullName}.$name');
-  Loggy detachedLoggy(String name) => Loggy.detached(name);
+  Loggy detachedLoggy(String name, {LogPrinter logPrinter}) => Loggy.detached(name)..printer = logPrinter;
 }

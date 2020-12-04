@@ -11,7 +11,7 @@ dependencies:
 ```
 
 ## Usage
-Now once you added loggy to your project you can start using it. First you need to initialize it:
+Now once you added loggy to your project you can start using it. First, you need to initialize it:
 ```dart
 import 'package:loggy/loggy.dart';
 
@@ -20,7 +20,7 @@ main() {
 }
 ```
 
-Once loggy is initialized you can start using it through the app. Loggy is using mixins to access our logger, for now I will show you how to use default types (**UiLoggy**, **NetworkLoggy**) and start logging. Later in the customizing loggy part I will show you how you can easily add more types depending on the specific use case.
+Once loggy is initialized you can start using it through the app. Loggy is using mixins to access our logger, now I will show you how to use default types (**UiLoggy**, **NetworkLoggy**) and start logging. Later in the customizing loggy part, I will show you how you can easily add more types depending on the specific use case.
 ```dart
 import 'package:loggy/loggy.dart';
 
@@ -34,7 +34,7 @@ class DoSomeWork with UiLoggy {
 }
 ```
 
-As you can see with the magic of mixins we already know the class name from where the log has been called as well as which logger made the call. Now we can use loggy through the app.
+As you can see with the magic of mixins you already know the class name from where the log has been called as well as which logger made the call. Now you can use loggy through the app.
 ```bash
 [D] UI Loggy - DoSomeWork: This is debug message
 [I] UI Loggy - DoSomeWork: This is info message
@@ -42,7 +42,7 @@ As you can see with the magic of mixins we already know the class name from wher
 [E] UI Loggy - DoSomeWork: This is error message
 ```
 
-Loggy can take anything as it's log message, even closures (they are evaluated only if log has been shown)
+Loggy can take anything as it's log message, even closures (they are evaluated only if the log has been shown)
 ```dart
 loggy.info(() {
   /// You can do what you want here!
@@ -55,9 +55,9 @@ loggy.info(() {
 
 ## Customization
 ### Printer
-Printer or how our log is displayed can be customized a lot, by default loggy will use **DefaultPrinter**, we can replace this by specifying different `logPrinter` on initialization, you can use **PrettyPrinter** that is already included in loggy. You can also easily make your own printer by extending the **LoggyPrinter** class.
+Printer or how our log is displayed can be customized a lot, by default loggy will use **DefaultPrinter**, you can replace this by specifying different `logPrinter` on initialization, you can use **PrettyPrinter** that is already included in loggy. You can also easily make your printer by extending the **LoggyPrinter** class.
 
-You can customize logger on init with following:
+You can customize logger on init with the following:
 ```dart
 import 'package:loggy/loggy.dart';
 
@@ -69,7 +69,6 @@ void main() {
 }
 
 ```
-
 Loggy with **PrettyPrinter**:
 ```bash
 🐛 12:22:49.712326 DEBUG    UI Loggy - DoSomeWork - This is debug message
@@ -80,7 +79,8 @@ Loggy with **PrettyPrinter**:
 
 ### Log options
 By providing **LogOptions** you need to specify **LogLevel** that will make sure only levels above what is specified will be shown.
-Here you can also control some logging options changing the `stackTraceLevel`, by specifying level will extract stack trace before the log has been invoked, for all **LogLevel** severities above the specified one.
+
+Here you can also control some logging options by changing the `stackTraceLevel`, by specifying level will extract stack trace before the log has been invoked, for all **LogLevel** severities above the specified one.
 
 Setting `stackTraceLevel` to `LogLevel.error`:
 ```shell
@@ -100,9 +100,8 @@ Setting `stackTraceLevel` to `LogLevel.error`:
 You can have as many custom loggers as you want, by default you are provided with 2 types:
 **NetworkLoggy** and **UiLoggy**
 
-To make custom logger you just need to make new mixin that implements **LoggyType** and
+To make a custom logger you just need to make a new mixin that implements **LoggyType** and
 returns new logger with mixin type:
-
 ```dart
 import 'package:loggy/loggy.dart';
 
@@ -112,7 +111,7 @@ mixin CustomLoggy implements LoggyType {
 }
 ```
 
-Then to use it just add `with CustomLoggy` to class where you want to use it.
+Then to use it just add `with CustomLoggy` to the class where you want to use it.
 
 ### Custom log levels
 You can add new LogLevel to log like this:
@@ -134,55 +133,54 @@ loggy.socket('This is log with socket log level');
 ```
 
 ### Filtering
-Now we have a lot of different types and levels how to find what you need? You may need to filter some of them. We have **WhitelistFilter**, **BlacklistFilter** and **CustomLevelFilter**. 
-Filtering is a way to limit log output without actually changing or removing existing loggers.
-Whitelisting some logger types will make sure only logs from that specific type are shown. Blacklisting will do the exact opposite of disabling only specified types.
+Now you have a lot of different types and levels how to find what you need? You may need to filter some of them. We have **WhitelistFilter**, **BlacklistFilter** and **CustomLevelFilter**. 
+
+Filtering is a way to limit log output without actually changing or removing existing loggers. Whitelisting some logger types will make sure only logs from that specific type are shown. Blacklisting will do the exact opposite of disabling only specified types.
 
 ### More loggers?
 Do you need more loggers? No problem!
-Any class using Loggy mixin can make new loggers with `newLoggy(name)` or `detachedLoggy(name)`.
+
+Any class using Loggy mixin can make new child loggers with `newLoggy(name)` or `detachedLoggy(name)`.
 
 #### Child logger
-`newLoggy(name)` will create new child logger that will be connected to parent logger and share the same options.
-Child loggy will have parent name included as prefix on a child's name, divided by `.`.
+`newLoggy(name)` will create a new child logger that will be connected to the parent logger and share the same options.
+Child loggy will have parent name included as the prefix on a child's name, divided by `.`.
 
 #### Detached logger
-`detachedLoggy(name)` is logger that has nothing to do with our `RootLoggy` and all options will be ignored.
-This can be helpful if you have small part of code you want to log but don't want to depend on root options.
-If you want to see those logs you need to attach some printer to it.
-
+`detachedLoggy(name)` is a logger that has nothing to do with the parent loggy and all options will be ignored.
+If you want to see those logs you need to attach a printer to it.
 ```dart
-final _logger = detachedLoggy('Detached logger');
+final _logger = detachedLoggy('Detached logger', logPrinter: DefaultPrinter());
 _logger.level = const LogOptions(LogLevel.all);
 // Add printer
-_logger.printer = DefaultPrinter();
 ```
 
 ## Loggy 💙 Flutter
-Extensions that we can use in Flutter to make our logs look nicer.
+Extensions that you can use in Flutter to make our logs look nicer.
 ### Pretty developer printer
 ```
 Loggy.initLoggy(
-    logPrinter: PrettyDeveloperPrinter(),
+  logPrinter: PrettyDeveloperPrinter(),
 );
 ```
-This printer uses `dart:developer` and can write error messages in red, and it gives us more flexibility. This way we can modify this log a bit more and remove log prefixes (ex. `[        ] I/flutter (21157)`) 
+This printer uses `dart:developer` and can write error messages in red, and it gives us more flexibility. This way you can modify this log a bit more and remove log prefixes (ex. `[        ] I/flutter (21157)`) 
 
 ## Loggy 💙 Dio as well!
 Extension for loggy. Includes the interceptor and pretty printer to use with Dio.
 ### Usage
-For Dio we included special `DioLoggy` that can be filtered, and `LoggyDioInterceptor` that will connect to Dio and print out requests and responses.
+For Dio you included special `DioLoggy` that can be filtered, and `LoggyDioInterceptor` that will connect to Dio and print out requests and responses.
 ```dart
 Dio dio = Dio();
 dio.interceptors.add(LoggyDioInterceptor());
 ```
-That will use Loggy options and levels, you can change default `LogLevel` for request, response and error.
+That will use Loggy options and levels, you can change the default `LogLevel` for request, response, and error.
 
 ### Setup
-In IntelliJ/Studio you can collapse request/response body:
+In IntelliJ/Studio you can collapse the request/response body:
 ![Gif showing collapsible body][show_body]
- 
-All you need to do to setup this is go to Preferences -> Editor -> General -> Console and under `Fold console lines that contain` add these 3 rules: `║`, `╔` and `╚`.
+
+
+Set up this is by going to `Preferences -> Editor -> General -> Console` and under `Fold console lines that contain` add these 3 rules: `║`, `╔` and `╚`.
 ![Settings][settings]
  
 ## Features and bugs
