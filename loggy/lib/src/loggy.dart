@@ -84,6 +84,8 @@ class Loggy<T extends LoggyType> {
   /// Controller used to notify when log entries are added to this logger.
   StreamController<LogRecord> _controller;
 
+  LogPrinter _printer;
+
   Loggy get parent {
     if (_parent != null) {
       return _parent;
@@ -92,6 +94,8 @@ class Loggy<T extends LoggyType> {
     return this;
   }
 
+  static LogPrinter get currentPrinter => _root._printer;
+
   /// Set custom printer on logger.
   set printer(LogPrinter printer) {
     if (printer == null) {
@@ -99,7 +103,9 @@ class Loggy<T extends LoggyType> {
     }
 
     clearListeners();
-    parent._logStream.listen(printer.onLog);
+
+    _printer = printer;
+    parent._logStream.listen(_printer.onLog);
   }
 
   /// Effective level considering the levels established in this logger's

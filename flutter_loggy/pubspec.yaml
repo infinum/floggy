@@ -12,4 +12,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  loggy: ^1.0.0
+  rxdart: ^0.24.1
+  loggy:
+    path: ../loggy
