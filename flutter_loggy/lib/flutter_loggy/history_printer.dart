@@ -9,7 +9,7 @@ class HistoryPrinter extends LogPrinter {
   @override
   void onLog(LogRecord record) {
     childPrinter.onLog(record);
-    logRecord.add([...logRecord.value, record]);
+    logRecord.add([record, ...logRecord.value]);
   }
 
   void dispose() {

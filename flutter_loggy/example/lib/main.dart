@@ -77,8 +77,8 @@ class _MyHomePageState extends State<MyHomePage> with UiLoggy {
       body: Column(
         children: [
           Container(
-            color: Colors.grey.shade800,
-            height: 400.0,
+            color: ThemeData.dark().scaffoldBackgroundColor,
+            height: MediaQuery.of(context).size.height * 0.6,
             child: LogHistoryWidget(),
           ),
           Expanded(
@@ -125,24 +125,33 @@ mixin LogicLoggy implements LoggyType {
 }
 
 class CounterLogic with LogicLoggy {
-  CounterLogic(this._counter);
+  CounterLogic(this._counter) {
+    loggy.debug('Started new counter! Start count value is: $_counter');
+  }
 
   int _counter;
 
   int get value => _counter;
 
   void increment() {
-    loggy.info('Incrementing counter: $_counter');
+    loggy.info('Incrementing counter!\nCurrent value: $_counter');
+
+    if (_counter > 2) {
+      loggy.debug(
+          'Counter is over 2! This is really long message: Lorem Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
+    }
+
     _counter++;
   }
 
   void decrement() {
-    loggy.warning('Decrementing counter: $_counter');
+    loggy.warning('Decrementing counter!\nCurrent value: $_counter');
 
     if (_counter == 0) {
-      loggy.error('Counter is at 0!');
+      loggy.error('Counter is at 0.\nCounter should never be below 0');
       return;
     }
+
     _counter--;
   }
 }

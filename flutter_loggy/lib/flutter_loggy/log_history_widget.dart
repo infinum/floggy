@@ -1,7 +1,12 @@
 part of flutter_loggy;
 
 class LogHistoryWidget extends StatelessWidget {
-  LogHistoryWidget({Key key}) : super(key: key);
+  LogHistoryWidget({
+    this.showFilters = true,
+    Key key,
+  }) : super(key: key);
+
+  bool showFilters;
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +33,28 @@ class LogHistoryWidget extends StatelessWidget {
     }
 
     return Container(
-      child: StreamBuilder<List<LogRecord>>(
-        stream: _printer.logRecord,
-        builder: (context, records) {
-          if (!records.hasData) {
-            return Container();
-          }
+      child: Column(
+        children: [
+          // if (showFilters)
+          //   Row(
+          //     children: [],
+          //   ),
+          Expanded(
+            child: StreamBuilder<List<LogRecord>>(
+              stream: _printer.logRecord,
+              builder: (context, records) {
+                if (!records.hasData) {
+                  return Container();
+                }
 
-          return ListView(
-            reverse: true,
-            children: records.data.reversed.map((e) => LogItem(e)).toList(),
-          );
-        },
+                return ListView(
+                  reverse: true,
+                  children: records.data.map((e) => LogItem(e)).toList(),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -54,58 +69,52 @@ class LogItem extends StatelessWidget {
   Widget build(BuildContext context) {
     Color logColor = _getLogColor();
     final _time = record.time.toIso8601String().split('T')[1];
+    Color _dividerColor = ThemeData.dark().dividerColor;
 
     return Container(
+      color: Colors.transparent,
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                _time,
-                style: Theme.of(context).textTheme.bodyText2.copyWith(
-                      color: logColor,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16.0,
-                    ),
-              ),
-              SizedBox(
-                width: 8.0,
-              ),
-              Text(
-                record.message,
-                style: Theme.of(context).textTheme.bodyText2.copyWith(
-                      color: logColor,
-                      fontWeight: _getTextWeight(),
-                      fontSize: 16.0,
-                    ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text(
-                record.level.name,
-                style: Theme.of(context).textTheme.bodyText2.copyWith(
-                      color: logColor,
-                      fontWeight: FontWeight.w300,
-                      fontSize: 12.0,
-                    ),
-              ),
-              SizedBox(
-                width: 8.0,
+              Flexible(
+                child: Text(
+                  '$_time - ${record.level.name.toUpperCase()}',
+                  style: Theme.of(context).textTheme.bodyText2.copyWith(
+                        color: logColor,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12.0,
+                      ),
+                ),
               ),
               Text(
                 record.loggerName,
                 style: Theme.of(context).textTheme.bodyText2.copyWith(
                       color: logColor,
-                      fontWeight: FontWeight.w300,
+                      fontWeight: FontWeight.w400,
                       fontSize: 12.0,
                     ),
               ),
             ],
           ),
-          _ShowStack(record)
+          SizedBox(
+            height: 12.0,
+          ),
+          Text(
+            record.message,
+            style: Theme.of(context).textTheme.bodyText2.copyWith(
+                  color: logColor,
+                  fontWeight: _getTextWeight(),
+                  fontSize: 16.0,
+                ),
+          ),
+          _LogItemStackWidget(record),
+          Divider(
+            color: _dividerColor,
+          ),
         ],
       ),
     );
@@ -139,104 +148,5 @@ class LogItem extends StatelessWidget {
     }
 
     return Colors.white;
-  }
-}
-
-final List<LogRecord> _shownRecords = <LogRecord>[];
-
-class _ShowStack extends StatefulWidget {
-  _ShowStack(this.record, {Key key}) : super(key: key);
-
-  final LogRecord record;
-
-  @override
-  __ShowStackState createState() => __ShowStackState();
-}
-
-class __ShowStackState extends State<_ShowStack> {
-  @override
-  Widget build(BuildContext context) {
-    if (widget.record.stackTrace == null) {
-      return SizedBox.shrink();
-    }
-
-    final _stackString = widget.record.stackTrace.toString().split('\n');
-
-    return Container(
-      padding: const EdgeInsets.only(top: 12.0),
-      child: GestureDetector(
-        key: ValueKey(widget.record.time),
-        onTap: () {
-          setState(() {
-            if (_shownRecords.contains(widget.record)) {
-              _shownRecords.remove(widget.record);
-            } else {
-              _shownRecords.add(widget.record);
-            }
-          });
-        },
-        child: Column(
-          children: [
-            AnimatedCrossFade(
-              firstChild: Container(
-                height: 40.0,
-                child: Center(
-                  child: Text(
-                    '▼ EXPAND ▼',
-                    style: Theme.of(context).textTheme.bodyText2.copyWith(
-                          color: Colors.redAccent,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 16.0,
-                        ),
-                  ),
-                ),
-              ),
-              secondChild: Container(
-                height: 40.0,
-                child: Center(
-                  child: Text(
-                    '▲ COLLAPSE ▲',
-                    style: Theme.of(context).textTheme.bodyText2.copyWith(
-                          color: Colors.redAccent,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 16.0,
-                        ),
-                  ),
-                ),
-              ),
-              duration: Duration(milliseconds: 250),
-              crossFadeState:
-                  _shownRecords.contains(widget.record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-            ),
-            AnimatedCrossFade(
-              firstChild: SizedBox(
-                width: MediaQuery.of(context).size.width,
-              ),
-              secondChild: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _stackString
-                      .map(
-                        (e) => Text(
-                          e.replaceAll(RegExp(' +'), '  '),
-                          textAlign: TextAlign.start,
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(
-                                color: Colors.redAccent.withOpacity(0.6),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16.0,
-                              ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-              duration: Duration(milliseconds: 250),
-              crossFadeState:
-                  _shownRecords.contains(widget.record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
