@@ -134,7 +134,7 @@ class CounterLogic with LogicLoggy {
   int get value => _counter;
 
   void increment() {
-    loggy.info('Incrementing counter!\nCurrent value: $_counter');
+    loggy.info('Incrementing counter! Current value: $_counter');
 
     if (_counter > 2) {
       loggy.debug(
@@ -145,10 +145,10 @@ class CounterLogic with LogicLoggy {
   }
 
   void decrement() {
-    loggy.warning('Decrementing counter!\nCurrent value: $_counter');
+    loggy.warning('Decrementing counter! Current value: $_counter');
 
     if (_counter == 0) {
-      loggy.error('Counter is at 0.\nCounter should never be below 0');
+      loggy.error('Counter is at 0. Counter should never be below 0');
       return;
     }
 

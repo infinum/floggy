@@ -82,7 +82,7 @@ class LogItem extends StatelessWidget {
             children: [
               Flexible(
                 child: Text(
-                  '$_time - ${record.level.name.toUpperCase()}',
+                  '${record.level.name.toUpperCase()} - $_time',
                   style: Theme.of(context).textTheme.bodyText2.copyWith(
                         color: logColor,
                         fontWeight: FontWeight.w700,

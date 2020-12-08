@@ -31,20 +31,23 @@ class _LogItemStackWidgetState extends State<_LogItemStackWidget> {
             }
           });
         },
-        child: Column(
-          children: [
-            Divider(color: Colors.grey.shade600),
-            _CollapsableButton(widget.record),
-            AnimatedCrossFade(
-              firstChild: SizedBox(
-                width: MediaQuery.of(context).size.width,
+        child: Container(
+          color: Colors.transparent,
+          child: Column(
+            children: [
+              Divider(color: Colors.grey.shade600),
+              _CollapsableButton(widget.record),
+              AnimatedCrossFade(
+                firstChild: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                ),
+                secondChild: _StackList(widget.record),
+                duration: Duration(milliseconds: 250),
+                crossFadeState:
+                    _shownRecords.contains(widget.record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
               ),
-              secondChild: _StackList(widget.record),
-              duration: Duration(milliseconds: 250),
-              crossFadeState:
-                  _shownRecords.contains(widget.record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
