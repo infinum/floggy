@@ -1,6 +1,6 @@
 name: loggy
 description: Logger for Dart applications, use mixin for easier separation when needed
-version: 1.0.2
+version: 1.0.3
 repository: https://github.com/infinum/flutter-logger
 homepage: https://github.com/infinum/flutter-logger
 
@@ -8,7 +8,7 @@ environment:
   sdk: '>=2.8.1 <3.0.0'
 
 dependencies:
-  stack_trace: ^1.9.6
+  stack_trace: '>1.9.0 <2.0.0'
 
 dev_dependencies:
-  test: ^1.15.4
+  test: '>1.1.0 <2.0.0'

@@ -1,3 +1,9 @@
+## [1.0.3] - ##.##.####.
+
+- Added `printer` setter and getter to loggy
+- Removed root loggy
+- Make it easier to add printer to detached loggy 
+
 ## [1.0.2] - 10.11.2020.
 
 - Update README

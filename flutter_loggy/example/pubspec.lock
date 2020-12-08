@@ -68,7 +68,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.1"
+    version: "1.0.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -77,9 +77,9 @@ packages:
   loggy:
     dependency: transitive
     description:
-      path: "../../loggy"
-      relative: true
-    source: path
+      name: loggy
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.0.2"
   matcher:
     dependency: transitive
@@ -108,7 +108,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.24.1"
+    version: "0.25.0"
   sky_engine:
     dependency: transitive
     description: flutter

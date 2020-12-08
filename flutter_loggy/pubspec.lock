@@ -23,9 +23,9 @@ packages:
   loggy:
     dependency: "direct main"
     description:
-      path: "../loggy"
-      relative: true
-    source: path
+      name: loggy
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.0.2"
   meta:
     dependency: transitive
@@ -47,7 +47,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.24.1"
+    version: "0.25.0"
   sky_engine:
     dependency: transitive
     description: flutter
