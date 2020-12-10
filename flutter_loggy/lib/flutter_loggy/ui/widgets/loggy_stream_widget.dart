@@ -1,5 +1,14 @@
 part of flutter_loggy;
 
+class WrongPrinterException implements Exception {
+  WrongPrinterException();
+
+  @override
+  String toString() {
+    return 'ERROR: Loggy printer is not set as StreamPrinter!\n\n';
+  }
+}
+
 /// This widget will display log from Loggy in a widget.
 /// Widget needs [StreamPrinter] set as printer on loggy.
 ///
@@ -21,23 +30,7 @@ class LoggyStreamWidget extends StatelessWidget {
     final StreamPrinter _printer = Loggy.currentPrinter is StreamPrinter ? Loggy.currentPrinter : null;
 
     if (_printer == null) {
-      return Container(
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Icon(Icons.warning),
-              const SizedBox(
-                width: 12.0,
-              ),
-              Text(
-                'ERROR: Loggy printer is not set as StreamPrinter!',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-            ],
-          ),
-        ),
-      );
+      throw WrongPrinterException();
     }
 
     return Container(
