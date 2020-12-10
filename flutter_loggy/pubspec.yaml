@@ -12,7 +12,5 @@ dependencies:
   flutter:
     sdk: flutter
 
-#  loggy: ^1.0.3
-  loggy:
-    path: ../loggy
+  loggy: ^1.0.3
   rxdart: ">0.1.0 <1.0.0"
