@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
 import 'package:loggy/loggy.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   Loggy.initLoggy(
-    logPrinter: HistoryPrinter(
+    logPrinter: StreamPrinter(
       PrettyDeveloperPrinter(),
     ),
     logOptions: LogOptions(
@@ -76,10 +79,15 @@ class _MyHomePageState extends State<MyHomePage> with UiLoggy {
       ),
       body: Column(
         children: [
-          Container(
-            color: ThemeData.dark().scaffoldBackgroundColor,
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: LogHistoryWidget(),
+          GestureDetector(
+            onTap: () {
+              Navigator.push<void>(context, MaterialPageRoute(builder: (_) => LoggyStreamScreen()));
+            },
+            child: Container(
+              color: ThemeData.dark().scaffoldBackgroundColor,
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: LoggyStreamWidget(),
+            ),
           ),
           Expanded(
             child: Column(
@@ -102,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> with UiLoggy {
         children: [
           FloatingActionButton(
             onPressed: _click,
+            heroTag: 'increment_tag',
             tooltip: 'Increment',
             child: Icon(Icons.add),
           ),
@@ -111,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> with UiLoggy {
           FloatingActionButton(
             onPressed: () => _click(increase: false),
             tooltip: 'Decrement',
+            heroTag: 'decrement_tag',
             child: Icon(Icons.remove),
           ),
         ],

@@ -22,6 +22,8 @@ class LogLevel {
   static const LogLevel warning = LogLevel('Warning', 8);
   static const LogLevel error = LogLevel('Error', 16);
 
+  static const List<LogLevel> values = [all, debug, info, warning, error, off];
+
   final int priority;
   final String name;
 

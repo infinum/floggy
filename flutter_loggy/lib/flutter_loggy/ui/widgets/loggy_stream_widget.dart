@@ -1,29 +1,29 @@
 part of flutter_loggy;
 
-class LogHistoryWidget extends StatelessWidget {
-  LogHistoryWidget({
-    this.showFilters = true,
+class LoggyStreamWidget extends StatelessWidget {
+  const LoggyStreamWidget({
+    this.logLevel = LogLevel.all,
     Key key,
   }) : super(key: key);
 
-  bool showFilters;
+  final LogLevel logLevel;
 
   @override
   Widget build(BuildContext context) {
-    HistoryPrinter _printer = Loggy.currentPrinter is HistoryPrinter ? Loggy.currentPrinter : null;
+    final StreamPrinter _printer = Loggy.currentPrinter is StreamPrinter ? Loggy.currentPrinter : null;
 
     if (_printer == null) {
       return Container(
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.warning),
-              SizedBox(
+            children: <Widget>[
+              const Icon(Icons.warning),
+              const SizedBox(
                 width: 12.0,
               ),
               Text(
-                'Printer is not set as HistoryLogger!',
+                'Printer is not set as StreamPrinter!',
                 style: Theme.of(context).textTheme.headline6,
               ),
             ],
@@ -49,7 +49,10 @@ class LogHistoryWidget extends StatelessWidget {
 
                 return ListView(
                   reverse: true,
-                  children: records.data.map((e) => LogItem(e)).toList(),
+                  children: records.data
+                      .where((element) => element.level.priority >= logLevel.priority)
+                      .map((e) => _LoggyItemWidget(e))
+                      .toList(),
                 );
               },
             ),
@@ -60,16 +63,16 @@ class LogHistoryWidget extends StatelessWidget {
   }
 }
 
-class LogItem extends StatelessWidget {
-  LogItem(this.record, {Key key}) : super(key: key);
+class _LoggyItemWidget extends StatelessWidget {
+  const _LoggyItemWidget(this.record, {Key key}) : super(key: key);
 
   final LogRecord record;
 
   @override
   Widget build(BuildContext context) {
-    Color logColor = _getLogColor();
-    final _time = record.time.toIso8601String().split('T')[1];
-    Color _dividerColor = ThemeData.dark().dividerColor;
+    final Color logColor = _getLogColor();
+    final String _time = record.time.toIso8601String().split('T')[1];
+    final Color _dividerColor = ThemeData.dark().dividerColor;
 
     return Container(
       color: Colors.transparent,
@@ -100,7 +103,7 @@ class LogItem extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 12.0,
           ),
           Text(
@@ -111,7 +114,7 @@ class LogItem extends StatelessWidget {
                   fontSize: 16.0,
                 ),
           ),
-          _LogItemStackWidget(record),
+          _LoggyItemStackWidget(record),
           Divider(
             color: _dividerColor,
           ),

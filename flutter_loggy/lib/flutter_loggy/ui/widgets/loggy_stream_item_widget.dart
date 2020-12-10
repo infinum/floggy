@@ -2,16 +2,16 @@ part of flutter_loggy;
 
 final List<LogRecord> _shownRecords = <LogRecord>[];
 
-class _LogItemStackWidget extends StatefulWidget {
-  _LogItemStackWidget(this.record, {Key key}) : super(key: key);
+class _LoggyItemStackWidget extends StatefulWidget {
+  _LoggyItemStackWidget(this.record, {Key key}) : super(key: key);
 
   final LogRecord record;
 
   @override
-  _LogItemStackWidgetState createState() => _LogItemStackWidgetState();
+  _LoggyItemStackWidgetState createState() => _LoggyItemStackWidgetState();
 }
 
-class _LogItemStackWidgetState extends State<_LogItemStackWidget> {
+class _LoggyItemStackWidgetState extends State<_LoggyItemStackWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.record.stackTrace == null) {

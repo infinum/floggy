@@ -4,7 +4,7 @@ part of flutter_loggy;
 class PrettyDeveloperPrinter extends LogPrinter {
   const PrettyDeveloperPrinter();
 
-  static final _levelPrefixes = {
+  static final Map<LogLevel, String> _levelPrefixes = {
     LogLevel.debug: '🐛 ',
     LogLevel.info: '👻 ',
     LogLevel.warning: '⚠️ ',
@@ -12,15 +12,15 @@ class PrettyDeveloperPrinter extends LogPrinter {
   };
 
   // For undefined log levels
-  static const _defaultPrefix = '🤔 ';
+  static const String _defaultPrefix = '🤔 ';
 
   @override
   void onLog(LogRecord record) {
-    final _time = record.time.toIso8601String().split('T')[1];
-    final _callerFrame = record.callerFrame == null ? '-' : '(${record.callerFrame.location})';
-    final _logLevel = record.level.toString().replaceAll('Level.', '').toUpperCase();
+    final String _time = record.time.toIso8601String().split('T')[1];
+    final String _callerFrame = record.callerFrame == null ? '-' : '(${record.callerFrame.location})';
+    final String _logLevel = record.level.toString().replaceAll('Level.', '').toUpperCase();
 
-    final _prefix = levelPrefix(record.level) ?? _defaultPrefix;
+    final String _prefix = levelPrefix(record.level) ?? _defaultPrefix;
 
     developer.log(
       '$_prefix$_time $_logLevel $_callerFrame ${record.message}',
