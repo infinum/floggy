@@ -4,7 +4,7 @@ part of flutter_loggy;
 class PrettyDeveloperPrinter extends LogPrinter {
   const PrettyDeveloperPrinter();
 
-  static final Map<LogLevel, String> _levelPrefixes = {
+  static final Map<LogLevel, String> _levelPrefixes = <LogLevel, String>{
     LogLevel.debug: '🐛 ',
     LogLevel.info: '👻 ',
     LogLevel.warning: '⚠️ ',

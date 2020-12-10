@@ -1,5 +1,13 @@
 part of flutter_loggy;
 
+/// This widget will display log from Loggy in a widget.
+/// Widget needs [StreamPrinter] set as printer on loggy.
+///
+/// ```dart
+/// Loggy.initLoggy(
+///   logPrinter: StreamPrinter(PrettyDeveloperPrinter()),
+/// );
+/// ```
 class LoggyStreamWidget extends StatelessWidget {
   const LoggyStreamWidget({
     this.logLevel = LogLevel.all,
@@ -23,7 +31,7 @@ class LoggyStreamWidget extends StatelessWidget {
                 width: 12.0,
               ),
               Text(
-                'Printer is not set as StreamPrinter!',
+                'ERROR: Loggy printer is not set as StreamPrinter!',
                 style: Theme.of(context).textTheme.headline6,
               ),
             ],
@@ -34,15 +42,11 @@ class LoggyStreamWidget extends StatelessWidget {
 
     return Container(
       child: Column(
-        children: [
-          // if (showFilters)
-          //   Row(
-          //     children: [],
-          //   ),
+        children: <Widget>[
           Expanded(
             child: StreamBuilder<List<LogRecord>>(
               stream: _printer.logRecord,
-              builder: (context, records) {
+              builder: (BuildContext context, AsyncSnapshot<List<LogRecord>> records) {
                 if (!records.hasData) {
                   return Container();
                 }
@@ -50,8 +54,8 @@ class LoggyStreamWidget extends StatelessWidget {
                 return ListView(
                   reverse: true,
                   children: records.data
-                      .where((element) => element.level.priority >= logLevel.priority)
-                      .map((e) => _LoggyItemWidget(e))
+                      .where((LogRecord record) => record.level.priority >= logLevel.priority)
+                      .map((LogRecord record) => _LoggyItemWidget(record))
                       .toList(),
                 );
               },
@@ -79,10 +83,10 @@ class _LoggyItemWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               Flexible(
                 child: Text(
                   '${record.level.name.toUpperCase()} - $_time',

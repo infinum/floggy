@@ -17,7 +17,7 @@ class _LoggyStreamScreenState extends State<LoggyStreamScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Log level: ${_level.name}'),
+          title: Text('${_level.name}'),
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 18.0),
