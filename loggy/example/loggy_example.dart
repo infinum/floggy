@@ -69,7 +69,7 @@ class ExampleWhatLoggyCanDo with ExampleLoggy {
     /// Changing levels for independent loggy only works if hierarchicalLogging is set to true.
     // _logger.level = LogOptions(LogLevel.warning);
     _childLoggy.debug(
-        'I\'m new logger called "${_childLoggy.name}" and my parent logger name is "${_childLoggy.parent.name}"');
+        'I\'m new logger called "${_childLoggy.name}" and my parent logger name is "${_childLoggy.parent!.name}"');
     _childLoggy.debug('Even if I\'m a new logger, I still share everything with my parent');
 
     final _detachedLoggy = detachedLoggy('Detached logger');

@@ -10,8 +10,8 @@ class AnsiColor {
   /// Reset all colors and options for current SGRs to terminal defaults.
   static const ansiDefault = '${ansiEsc}0m';
 
-  final int foregroundColor;
-  final int backgroundColor;
+  final int? foregroundColor;
+  final int? backgroundColor;
   final bool italic;
 
   bool get color => foregroundColor != null || backgroundColor != null;

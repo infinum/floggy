@@ -64,15 +64,15 @@ class LogRecord {
 
   final LogLevel level;
   final String message;
-  final Object object;
+  final Object? object;
   final String loggerName;
   final DateTime time;
   final int sequenceNumber;
   static int _nextNumber = 0;
-  final Object error;
-  final StackTrace stackTrace;
-  final Zone zone;
-  final Frame callerFrame;
+  final Object? error;
+  final StackTrace? stackTrace;
+  final Zone? zone;
+  final Frame? callerFrame;
 
   @override
   String toString() => '[${level.toString().substring(0, 1)}] $loggerName: $message';

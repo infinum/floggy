@@ -10,5 +10,7 @@ include: package:pedantic/analysis_options.yaml
 #     - camel_case_types
 
 analyzer:
+  enable-experiment:
+    - non-nullable
 #   exclude:
 #     - path/to/excluded/files/**

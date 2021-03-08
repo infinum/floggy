@@ -5,7 +5,7 @@ import 'test_customizations.dart';
 
 void main() {
   group('Loggy test', () {
-    LoggyType loggy;
+    late LoggyType loggy;
 
     setUp(() {
       Loggy.initLoggy();

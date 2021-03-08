@@ -3,7 +3,7 @@ part of flutter_loggy;
 final List<LogRecord> _shownRecords = <LogRecord>[];
 
 class _LoggyItemStackWidget extends StatefulWidget {
-  const _LoggyItemStackWidget(this.record, {Key key}) : super(key: key);
+  const _LoggyItemStackWidget(this.record, {Key? key}) : super(key: key);
 
   final LogRecord record;
 
@@ -55,7 +55,7 @@ class _LoggyItemStackWidgetState extends State<_LoggyItemStackWidget> {
 }
 
 class _StackList extends StatelessWidget {
-  const _StackList(this.record, {Key key}) : super(key: key);
+  const _StackList(this.record, {Key? key}) : super(key: key);
 
   final LogRecord record;
 
@@ -80,7 +80,7 @@ class _StackList extends StatelessWidget {
                 Text(
                   _value.first ?? '',
                   textAlign: TextAlign.start,
-                  style: Theme.of(context).textTheme.headline6.copyWith(
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
                         color: _isFlutter ? Colors.blueGrey : Colors.redAccent,
                         fontWeight: FontWeight.w600,
                         fontSize: 16.0,
@@ -89,7 +89,7 @@ class _StackList extends StatelessWidget {
                 Text(
                   _value.last ?? '',
                   textAlign: TextAlign.start,
-                  style: Theme.of(context).textTheme.subtitle1.copyWith(
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
                         color: _isFlutter ? Colors.blueGrey : Colors.redAccent,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.0,
@@ -108,7 +108,7 @@ class _StackList extends StatelessWidget {
 }
 
 class _CollapsableButton extends StatelessWidget {
-  const _CollapsableButton(this.record, {Key key}) : super(key: key);
+  const _CollapsableButton(this.record, {Key? key}) : super(key: key);
 
   final LogRecord record;
 
@@ -120,7 +120,7 @@ class _CollapsableButton extends StatelessWidget {
         child: Center(
           child: Text(
             '▼ ${MaterialLocalizations.of(context).collapsedIconTapHint.toUpperCase()} ▼',
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.bodyText2!.copyWith(
                   color: Colors.redAccent,
                   fontWeight: FontWeight.w900,
                   fontSize: 16.0,
@@ -133,7 +133,7 @@ class _CollapsableButton extends StatelessWidget {
         child: Center(
           child: Text(
             '▲ ${MaterialLocalizations.of(context).expandedIconTapHint.toUpperCase()} ▲',
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.bodyText2!.copyWith(
                   color: Colors.redAccent,
                   fontWeight: FontWeight.w900,
                   fontSize: 16.0,

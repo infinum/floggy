@@ -35,7 +35,7 @@ class PrettyDeveloperPrinter extends LogPrinter {
   }
 
   /// Get prefix for level
-  String levelPrefix(LogLevel level) {
+  String? levelPrefix(LogLevel level) {
     return _levelPrefixes[level];
   }
 }

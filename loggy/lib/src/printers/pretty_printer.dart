@@ -14,7 +14,7 @@ class PrettyPrinter extends LogPrinter {
     this.showColors,
   }) : super();
 
-  final bool showColors;
+  final bool? showColors;
 
   bool get _colorize => showColors ?? false;
 
@@ -37,7 +37,7 @@ class PrettyPrinter extends LogPrinter {
   @override
   void onLog(LogRecord record) {
     final _time = record.time.toIso8601String().split('T')[1];
-    final _callerFrame = record.callerFrame == null ? '-' : '(${record.callerFrame.location})';
+    final _callerFrame = record.callerFrame == null ? '-' : '(${record.callerFrame!.location})';
     final _logLevel = record.level.toString().replaceAll('Level.', '').toUpperCase().padRight(8);
 
     final _color = _colorize ? levelColor(record.level) ?? AnsiColor() : AnsiColor();
@@ -50,11 +50,11 @@ class PrettyPrinter extends LogPrinter {
     }
   }
 
-  String levelPrefix(LogLevel level) {
+  String? levelPrefix(LogLevel level) {
     return _levelPrefixes[level];
   }
 
-  AnsiColor levelColor(LogLevel level) {
+  AnsiColor? levelColor(LogLevel level) {
     return _levelColors[level];
   }
 }
