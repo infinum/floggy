@@ -17,8 +17,10 @@ class PrettyDeveloperPrinter extends LogPrinter {
   @override
   void onLog(LogRecord record) {
     final String _time = record.time.toIso8601String().split('T')[1];
-    final String _callerFrame = record.callerFrame == null ? '-' : '(${record.callerFrame.location})';
-    final String _logLevel = record.level.toString().replaceAll('Level.', '').toUpperCase();
+    final String _callerFrame =
+        record.callerFrame == null ? '-' : '(${record.callerFrame!.location})';
+    final String _logLevel =
+        record.level.toString().replaceAll('Level.', '').toUpperCase();
 
     final String _prefix = levelPrefix(record.level) ?? _defaultPrefix;
 

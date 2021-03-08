@@ -43,8 +43,9 @@ class _LoggyItemStackWidgetState extends State<_LoggyItemStackWidget> {
                 ),
                 secondChild: _StackList(widget.record),
                 duration: const Duration(milliseconds: 250),
-                crossFadeState:
-                    _shownRecords.contains(widget.record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                crossFadeState: _shownRecords.contains(widget.record)
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
               ),
             ],
           ),
@@ -68,17 +69,21 @@ class _StackList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: _stackLines.map(
           (String stackTraceLine) {
-            final List<String> _value = stackTraceLine.replaceAll(RegExp(' +'), '  ').replaceAll(')', '').split('(');
+            final List<String> _value = stackTraceLine
+                .replaceAll(RegExp(' +'), '  ')
+                .replaceAll(')', '')
+                .split('(');
 
             /// Lines that have no connection to the app will be different color.
             final bool _isFlutter =
-                (_value.last ?? '').startsWith('package:flutter') || (_value.last ?? '').startsWith('dart:');
+                (_value.last).startsWith('package:flutter') ||
+                    (_value.last).startsWith('dart:');
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  _value.first ?? '',
+                  _value.first,
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.headline6!.copyWith(
                         color: _isFlutter ? Colors.blueGrey : Colors.redAccent,
@@ -87,7 +92,7 @@ class _StackList extends StatelessWidget {
                       ),
                 ),
                 Text(
-                  _value.last ?? '',
+                  _value.last,
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.subtitle1!.copyWith(
                         color: _isFlutter ? Colors.blueGrey : Colors.redAccent,
@@ -142,7 +147,9 @@ class _CollapsableButton extends StatelessWidget {
         ),
       ),
       duration: const Duration(milliseconds: 250),
-      crossFadeState: _shownRecords.contains(record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      crossFadeState: _shownRecords.contains(record)
+          ? CrossFadeState.showSecond
+          : CrossFadeState.showFirst,
     );
   }
 }
