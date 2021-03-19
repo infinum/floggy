@@ -18,7 +18,8 @@ const defaultLevel = LogOptions(LogLevel.all);
 class Loggy<T extends LoggyType> {
   /// Singleton constructor. Calling `new Loggy(name)` will return the same
   /// actual instance whenever it is called with the same string name.
-  factory Loggy(String name) => _loggers.putIfAbsent(name, () => Loggy<T>._named(name)) as Loggy<T>;
+  factory Loggy(String name) =>
+      _loggers.putIfAbsent(name, () => Loggy<T>._named(name)) as Loggy<T>;
 
   /// Creates a new detached [Loggy].
   ///
@@ -28,7 +29,8 @@ class Loggy<T extends LoggyType> {
   ///
   /// It can be useful when you just need a local short-living logger,
   /// which you'd like to be garbage-collected later.
-  factory Loggy.detached(String name) => Loggy<T>._internal(name, null, <String, Loggy>{});
+  factory Loggy.detached(String name) =>
+      Loggy<T>._internal(name, null, <String, Loggy>{});
 
   factory Loggy._named(String name) {
     if (name.startsWith('.')) {
@@ -36,7 +38,7 @@ class Loggy<T extends LoggyType> {
     }
     // Split hierarchical names (separated with '.').
     final dot = name.lastIndexOf('.');
-    Loggy _parent;
+    Loggy? _parent;
     String thisName;
     if (dot == -1) {
       if (name != '') {
@@ -57,7 +59,7 @@ class Loggy<T extends LoggyType> {
     if (_parent == null) {
       _level = defaultLevel;
     } else {
-      _parent._children[name] = this;
+      _parent!._children[name] = this;
     }
   }
 
@@ -65,10 +67,12 @@ class Loggy<T extends LoggyType> {
   final String name;
 
   /// The full name of this logger, which includes the parent's full name.
-  String get fullName => (_parent == null || _parent.name == '') ? name : '${_parent.fullName}.$name';
+  String get fullName => (_parent == null || _parent!.name == '')
+      ? name
+      : '${_parent!.fullName}.$name';
 
   /// Parent of this logger in the hierarchy of loggers.
-  final Loggy _parent;
+  final Loggy? _parent;
 
   /// Logging [LogLevel] used for entries generated on this logger.
   LogOptions _level = defaultLevel;
@@ -82,11 +86,11 @@ class Loggy<T extends LoggyType> {
   final Map<String, Loggy> children;
 
   /// Controller used to notify when log entries are added to this logger.
-  StreamController<LogRecord> _controller;
+  StreamController<LogRecord>? _controller;
 
-  LogPrinter _printer;
+  LogPrinter? _printer;
 
-  Loggy get parent {
+  Loggy? get parent {
     if (_parent != null) {
       return _parent;
     }
@@ -94,10 +98,10 @@ class Loggy<T extends LoggyType> {
     return this;
   }
 
-  static LogPrinter get currentPrinter => _root._printer;
+  static LogPrinter? get currentPrinter => _root._printer;
 
   /// Set custom printer on logger.
-  set printer(LogPrinter printer) {
+  set printer(LogPrinter? printer) {
     if (printer == null) {
       return;
     }
@@ -105,7 +109,7 @@ class Loggy<T extends LoggyType> {
     clearListeners();
 
     _printer = printer;
-    parent._logStream.listen(_printer.onLog);
+    parent!._logStream.listen(_printer!.onLog);
   }
 
   /// Effective level considering the levels established in this logger's
@@ -118,17 +122,17 @@ class Loggy<T extends LoggyType> {
     } else if (!hierarchicalLoggingEnabled) {
       _effectiveLevel = _root._level;
     } else {
-      _effectiveLevel = _level ?? _parent.level;
+      _effectiveLevel = _level;
     }
 
-    assert(_effectiveLevel != null);
     return _effectiveLevel;
   }
 
   /// Override the level for this particular [Loggy] and its children.
   set level(LogOptions value) {
     if (!hierarchicalLoggingEnabled && _parent != null) {
-      throw UnsupportedError('Please set "hierarchicalLoggingEnabled" to true if you want to '
+      throw UnsupportedError(
+          'Please set "hierarchicalLoggingEnabled" to true if you want to '
           'change the level on a non-root logger.');
     }
     _level = value;
@@ -146,7 +150,7 @@ class Loggy<T extends LoggyType> {
   void clearListeners() {
     if (hierarchicalLoggingEnabled || _parent == null) {
       if (_controller != null) {
-        _controller.close();
+        _controller!.close();
         _controller = null;
       }
     } else {
@@ -160,7 +164,7 @@ class Loggy<T extends LoggyType> {
   /// This does not include [_root] as that logger doesn't have a Type
   Type _getRootType() {
     if (_parent != null && _parent != _root) {
-      return _parent._getRootType();
+      return _parent!._getRootType();
     }
 
     return T;
@@ -169,8 +173,10 @@ class Loggy<T extends LoggyType> {
   /// Return bool value whether this log should be shown or not
   bool _isLoggable(LogLevel value) {
     // Go through all filters passed and figure out if log should be shown
-    bool _foldFilters(List<LoggyFilter> filters) =>
-        filters.fold(true, (shouldLog, filter) => filter.shouldLog(value, _getRootType()) && shouldLog);
+    bool _foldFilters(List<LoggyFilter> filters) => filters.fold(
+        true,
+        (shouldLog, filter) =>
+            filter.shouldLog(value, _getRootType()) && shouldLog);
 
     if (value.priority >= level.logLevel.priority) {
       return _foldFilters(_parent == null ? _filters : _root._filters);
@@ -198,8 +204,9 @@ class Loggy<T extends LoggyType> {
   /// request if each HTTP request handler runs in it's own zone).
   ///
   /// Caller frame will be null unless [LogOptions.includeCallerInfo] was set to true.
-  void log(LogLevel logLevel, dynamic message, [Object error, StackTrace stackTrace, Zone zone, Frame callerFrame]) {
-    Object object;
+  void log(LogLevel logLevel, dynamic message,
+      [Object? error, StackTrace? stackTrace, Zone? zone, Frame? callerFrame]) {
+    Object? object;
     if (_isLoggable(logLevel)) {
       if (message is Function) {
         message = message();
@@ -213,7 +220,8 @@ class Loggy<T extends LoggyType> {
         object = message;
       }
 
-      if (stackTrace == null && logLevel.priority >= level.stackTraceLevel.priority) {
+      if (stackTrace == null &&
+          logLevel.priority >= level.stackTraceLevel.priority) {
         stackTrace = StackTrace.current;
         error ??= 'autogenerated stack trace for $logLevel $msg';
       }
@@ -221,14 +229,15 @@ class Loggy<T extends LoggyType> {
       zone ??= Zone.current;
       callerFrame ??= _getCallerFrame();
 
-      final record = LogRecord(logLevel, msg, fullName, error, stackTrace, zone, object, callerFrame);
+      final record = LogRecord(logLevel, msg, fullName, error, stackTrace, zone,
+          object, callerFrame);
 
       if (_parent == null) {
         _publish(record);
       } else if (!hierarchicalLoggingEnabled) {
         _root._publish(record);
       } else {
-        Loggy<dynamic> target = this;
+        Loggy<dynamic>? target = this;
         while (target != null) {
           target._publish(record);
           target = target._parent;
@@ -237,7 +246,7 @@ class Loggy<T extends LoggyType> {
     }
   }
 
-  Frame _getCallerFrame() {
+  Frame? _getCallerFrame() {
     if (!level.includeCallerInfo) {
       return null;
     }
@@ -248,16 +257,19 @@ class Loggy<T extends LoggyType> {
     return frames.isEmpty ? null : frames.first;
   }
 
-  void debug(dynamic message, [Object error, StackTrace stackTrace]) => log(LogLevel.debug, message, error, stackTrace);
-  void info(dynamic message, [Object error, StackTrace stackTrace]) => log(LogLevel.info, message, error, stackTrace);
-  void warning(dynamic message, [Object error, StackTrace stackTrace]) =>
+  void debug(dynamic message, [Object? error, StackTrace? stackTrace]) =>
+      log(LogLevel.debug, message, error, stackTrace);
+  void info(dynamic message, [Object? error, StackTrace? stackTrace]) =>
+      log(LogLevel.info, message, error, stackTrace);
+  void warning(dynamic message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.warning, message, error, stackTrace);
-  void error(dynamic message, [Object error, StackTrace stackTrace]) => log(LogLevel.error, message, error, stackTrace);
+  void error(dynamic message, [Object? error, StackTrace? stackTrace]) =>
+      log(LogLevel.error, message, error, stackTrace);
 
   Stream<LogRecord> _getStream() {
     if (hierarchicalLoggingEnabled || _parent == null) {
       _controller ??= StreamController<LogRecord>.broadcast(sync: true);
-      return _controller.stream;
+      return _controller!.stream;
     } else {
       return _root._getStream();
     }
@@ -265,7 +277,7 @@ class Loggy<T extends LoggyType> {
 
   void _publish(LogRecord record) {
     if (_controller != null) {
-      _controller.add(record);
+      _controller!.add(record);
     }
   }
 

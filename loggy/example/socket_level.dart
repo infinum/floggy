@@ -7,16 +7,16 @@ const LogLevel socketLevel = LogLevel('Socket', 32);
 
 /// We can also add short version of log for our newly created [LogLevel]
 extension SocketLoggy on Loggy {
-  void socket(dynamic message, [Object error, StackTrace stackTrace]) => log(socketLevel, message, error, stackTrace);
+  void socket(dynamic message, [Object? error, StackTrace? stackTrace]) => log(socketLevel, message, error, stackTrace);
 }
 
 /// We can also extend our [PrettyPrinter] and add our colors and prefix to
 /// new level, or even change the existing ones.
 class PrettySocketPrinter extends PrettyPrinter {
-  const PrettySocketPrinter({bool showColors}) : super(showColors: showColors);
+  const PrettySocketPrinter({bool? showColors}) : super(showColors: showColors);
 
   @override
-  AnsiColor levelColor(LogLevel level) {
+  AnsiColor? levelColor(LogLevel level) {
     if (level == socketLevel) {
       return AnsiColor(foregroundColor: 141);
     }
@@ -24,7 +24,7 @@ class PrettySocketPrinter extends PrettyPrinter {
   }
 
   @override
-  String levelPrefix(LogLevel level) {
+  String? levelPrefix(LogLevel level) {
     if (level == socketLevel) {
       return '👾 ';
     }

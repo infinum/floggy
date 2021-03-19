@@ -1,14 +1,14 @@
 part of flutter_loggy;
 
 class LoggyStreamScreen extends StatefulWidget {
-  const LoggyStreamScreen({Key key}) : super(key: key);
+  const LoggyStreamScreen({Key? key}) : super(key: key);
 
   @override
   _LoggyStreamScreenState createState() => _LoggyStreamScreenState();
 }
 
 class _LoggyStreamScreenState extends State<LoggyStreamScreen> {
-  LogLevel _level = LogLevel.all;
+  LogLevel? _level = LogLevel.all;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class _LoggyStreamScreenState extends State<LoggyStreamScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('${_level.name}'),
+          title: Text('${_level!.name}'),
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 18.0),
@@ -31,7 +31,7 @@ class _LoggyStreamScreenState extends State<LoggyStreamScreen> {
                         ),
                       )
                       .toList(),
-                  onChanged: (LogLevel level) {
+                  onChanged: (LogLevel? level) {
                     setState(() {
                       _level = level;
                     });

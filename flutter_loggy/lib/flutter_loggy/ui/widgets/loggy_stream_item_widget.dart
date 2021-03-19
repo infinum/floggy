@@ -3,7 +3,7 @@ part of flutter_loggy;
 final List<LogRecord> _shownRecords = <LogRecord>[];
 
 class _LoggyItemStackWidget extends StatefulWidget {
-  const _LoggyItemStackWidget(this.record, {Key key}) : super(key: key);
+  const _LoggyItemStackWidget(this.record, {Key? key}) : super(key: key);
 
   final LogRecord record;
 
@@ -43,8 +43,9 @@ class _LoggyItemStackWidgetState extends State<_LoggyItemStackWidget> {
                 ),
                 secondChild: _StackList(widget.record),
                 duration: const Duration(milliseconds: 250),
-                crossFadeState:
-                    _shownRecords.contains(widget.record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                crossFadeState: _shownRecords.contains(widget.record)
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
               ),
             ],
           ),
@@ -55,7 +56,7 @@ class _LoggyItemStackWidgetState extends State<_LoggyItemStackWidget> {
 }
 
 class _StackList extends StatelessWidget {
-  const _StackList(this.record, {Key key}) : super(key: key);
+  const _StackList(this.record, {Key? key}) : super(key: key);
 
   final LogRecord record;
 
@@ -68,28 +69,32 @@ class _StackList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: _stackLines.map(
           (String stackTraceLine) {
-            final List<String> _value = stackTraceLine.replaceAll(RegExp(' +'), '  ').replaceAll(')', '').split('(');
+            final List<String> _value = stackTraceLine
+                .replaceAll(RegExp(' +'), '  ')
+                .replaceAll(')', '')
+                .split('(');
 
             /// Lines that have no connection to the app will be different color.
             final bool _isFlutter =
-                (_value.last ?? '').startsWith('package:flutter') || (_value.last ?? '').startsWith('dart:');
+                (_value.last).startsWith('package:flutter') ||
+                    (_value.last).startsWith('dart:');
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  _value.first ?? '',
+                  _value.first,
                   textAlign: TextAlign.start,
-                  style: Theme.of(context).textTheme.headline6.copyWith(
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
                         color: _isFlutter ? Colors.blueGrey : Colors.redAccent,
                         fontWeight: FontWeight.w600,
                         fontSize: 16.0,
                       ),
                 ),
                 Text(
-                  _value.last ?? '',
+                  _value.last,
                   textAlign: TextAlign.start,
-                  style: Theme.of(context).textTheme.subtitle1.copyWith(
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
                         color: _isFlutter ? Colors.blueGrey : Colors.redAccent,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.0,
@@ -108,7 +113,7 @@ class _StackList extends StatelessWidget {
 }
 
 class _CollapsableButton extends StatelessWidget {
-  const _CollapsableButton(this.record, {Key key}) : super(key: key);
+  const _CollapsableButton(this.record, {Key? key}) : super(key: key);
 
   final LogRecord record;
 
@@ -120,7 +125,7 @@ class _CollapsableButton extends StatelessWidget {
         child: Center(
           child: Text(
             '▼ ${MaterialLocalizations.of(context).collapsedIconTapHint.toUpperCase()} ▼',
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.bodyText2!.copyWith(
                   color: Colors.redAccent,
                   fontWeight: FontWeight.w900,
                   fontSize: 16.0,
@@ -133,7 +138,7 @@ class _CollapsableButton extends StatelessWidget {
         child: Center(
           child: Text(
             '▲ ${MaterialLocalizations.of(context).expandedIconTapHint.toUpperCase()} ▲',
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.bodyText2!.copyWith(
                   color: Colors.redAccent,
                   fontWeight: FontWeight.w900,
                   fontSize: 16.0,
@@ -142,7 +147,9 @@ class _CollapsableButton extends StatelessWidget {
         ),
       ),
       duration: const Duration(milliseconds: 250),
-      crossFadeState: _shownRecords.contains(record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      crossFadeState: _shownRecords.contains(record)
+          ? CrossFadeState.showSecond
+          : CrossFadeState.showFirst,
     );
   }
 }
