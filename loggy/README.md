@@ -163,7 +163,9 @@ Loggy.initLoggy(
   logPrinter: PrettyDeveloperPrinter(),
 );
 ```
-This printer uses `dart:developer` and can write error messages in red, and it gives us more flexibility. This way you can modify this log a bit more and remove log prefixes (ex. `[        ] I/flutter (21157)`) 
+This printer uses `dart:developer` and can write error messages in red, and it gives us more flexibility. This way you can modify this log a bit more and remove log prefixes (ex. `[        ] I/flutter (21157)`)
+
+To see logs in-app you can use `StreamPrinter` and pass any other printer to it. Now you can use `LoggyStreamWidget` to show logs in a list. 
 
 ## Loggy 💙 Dio as well!
 Extension for loggy. Includes the interceptor and pretty printer to use with Dio.

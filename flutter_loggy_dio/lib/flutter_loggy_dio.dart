@@ -1,6 +1,5 @@
 library flutter_loggy_dio;
 
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';

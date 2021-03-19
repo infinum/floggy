@@ -36,14 +36,12 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
   final int maxWidth;
 
   @override
-  Future onRequest(RequestOptions options) async {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     _printRequestHeader(options);
     if (requestHeader) {
       _prettyPrintObject(options.queryParameters, header: 'Query Parameters');
-      final requestHeaders = <String, dynamic>{};
-      if (options.headers != null) {
-        requestHeaders.addAll(options.headers);
-      }
+      final Map<String, dynamic> requestHeaders = <String, dynamic>{};
+      requestHeaders.addAll(options.headers);
       requestHeaders['contentType'] = options.contentType?.toString();
       requestHeaders['responseType'] = options.responseType.toString();
       requestHeaders['followRedirects'] = options.followRedirects;
@@ -54,14 +52,11 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
       _prettyPrintObject(options.extra, header: 'Extras');
     }
     if (requestBody && options.method != 'GET') {
-      final dynamic data = options.data;
+      final Object? data = options.data;
       if (data != null) {
         if (data is FormData) {
-          final formDataMap = <String, dynamic>{}
-            ..addEntries(data.fields)
-            ..addEntries(data.files);
-          _prettyPrintObject(formDataMap,
-              header: 'Form data | ${data.boundary}');
+          final Map<String, Object> formDataMap = <String, Object>{}..addEntries(data.fields)..addEntries(data.files);
+          _prettyPrintObject(formDataMap, header: 'Form data | ${data.boundary}');
         } else {
           _prettyPrintObject(data, header: 'Body');
         }
@@ -69,33 +64,29 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     }
 
     _commit(requestLevel ?? LogLevel.info);
-    return options;
   }
 
   @override
-  Future onError(DioError err) async {
+  void onError(DioError err, ErrorInterceptorHandler handler) async {
     if (error) {
       if (err.type == DioErrorType.response) {
         logPrint(
-            '<<< DioError │ ${err.request?.method} │ ${err.response?.statusCode} ${err.response?.statusMessage} │ ${err.response?.request.uri.toString()}');
+            '<<< DioError │ ${err.requestOptions.method} │ ${err.response?.statusCode} ${err.response?.statusMessage} │ ${err.response?.requestOptions.uri.toString()}');
         if (err.response != null && err.response!.data != null) {
-          _prettyPrintObject(err.response!.data,
-              header: 'DioError │ ${err.type}');
+          _prettyPrintObject(err.response!.data, header: 'DioError │ ${err.type}');
         }
       } else {
-        logPrint(
-            '<<< DioError (No response) │ ${err.request?.method} │ ${err.request?.uri.toString()}');
+        logPrint('<<< DioError (No response) │ ${err.requestOptions.method} │ ${err.requestOptions.uri.toString()}');
         logPrint('╔ ERROR');
         logPrint('║  ${err.message.replaceAll('\n', '\n║  ')}');
         _printLine(pre: '╚');
       }
     }
     _commit(errorLevel ?? LogLevel.error);
-    return err;
   }
 
   @override
-  Future onResponse(Response response) async {
+  void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) async {
     _printResponseHeader(response);
     if (responseHeader) {
       _prettyPrintObject(response.headers, header: 'Headers');
@@ -106,23 +97,22 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     }
 
     _commit(responseLevel ?? LogLevel.info);
-    return response;
   }
 
-  void _printResponse(Response response) {
-    final dynamic data = response.data;
+  void _printResponse(Response<dynamic> response) {
+    final Object? data = response.data;
 
     if (data != null) {
       _prettyPrintObject(data, header: 'Body');
     }
   }
 
-  void _prettyPrintObject(dynamic data, {String? header}) {
+  void _prettyPrintObject(Object data, {String? header}) {
     String _value;
 
     try {
-      final dynamic object = JsonDecoder().convert(data.toString());
-      final json = JsonEncoder.withIndent('  ');
+      final Object object = const JsonDecoder().convert(data.toString());
+      const JsonEncoder json = JsonEncoder.withIndent('  ');
       _value = '║  ${json.convert(object).replaceAll('\n', '\n║  ')}';
     } catch (e) {
       _value = '║  ${data.toString().replaceAll('\n', '\n║  ')}';
@@ -135,16 +125,15 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     _printLine(pre: '╚');
   }
 
-  void _printResponseHeader(Response response) {
-    final uri = response.request.uri;
-    final method = response.request.method;
-    logPrint(
-        '<<< Response │ $method │ ${response.statusCode} ${response.statusMessage} │ ${uri.toString()}');
+  void _printResponseHeader(Response<dynamic> response) {
+    final Uri uri = response.requestOptions.uri;
+    final String method = response.requestOptions.method;
+    logPrint('<<< Response │ $method │ ${response.statusCode} ${response.statusMessage} │ ${uri.toString()}');
   }
 
   void _printRequestHeader(RequestOptions options) {
-    final uri = options.uri;
-    final method = options.method;
+    final Uri uri = options.uri;
+    final String method = options.method;
     logPrint('>>> Request │ $method │ ${uri.toString()}');
   }
 
@@ -164,9 +153,9 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
 
   void _commit(LogLevel level) {
     if (level.priority >= LogLevel.error.priority) {
-      final _valueError = _value.toString();
-      final _errorTitle = _valueError.substring(0, _valueError.indexOf('\n'));
-      final _errorBody = _valueError.substring(_errorTitle.length);
+      final String _valueError = _value.toString();
+      final String _errorTitle = _valueError.substring(0, _valueError.indexOf('\n'));
+      final String _errorBody = _valueError.substring(_errorTitle.length);
       loggy.log(level, _errorTitle, _errorBody);
     } else {
       loggy.log(level, _value.toString());

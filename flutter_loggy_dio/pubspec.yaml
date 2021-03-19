@@ -14,4 +14,4 @@ dependencies:
 
   loggy:
     path: ../loggy
-  dio: ^4.0.0-beta6
+  dio: ^4.0.0-prev2

@@ -2,7 +2,7 @@
 
 - implements null-safety
 
-## [1.0.3] - ##.##.####.
+## [1.0.3] - 19.01.2021.
 
 - Added `printer` setter and getter to loggy
 - Removed root loggy
