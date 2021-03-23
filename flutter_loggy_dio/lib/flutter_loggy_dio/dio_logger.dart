@@ -53,13 +53,15 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     }
     if (requestBody && options.method != 'GET') {
       final Object? data = options.data;
-      if (data != null) {
-        if (data is FormData) {
-          final Map<String, Object> formDataMap = <String, Object>{}..addEntries(data.fields)..addEntries(data.files);
-          _prettyPrintObject(formDataMap, header: 'Form data | ${data.boundary}');
-        } else {
-          _prettyPrintObject(data, header: 'Body');
-        }
+      if (data == null) {
+        return;
+      }
+
+      if (data is FormData) {
+        final Map<String, Object> formDataMap = <String, Object>{}..addEntries(data.fields)..addEntries(data.files);
+        _prettyPrintObject(formDataMap, header: 'Form data | ${data.boundary}');
+      } else {
+        _prettyPrintObject(data, header: 'Body');
       }
     }
 
@@ -68,20 +70,23 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
-    if (error) {
-      if (err.type == DioErrorType.response) {
-        logPrint(
-            '<<< DioError │ ${err.requestOptions.method} │ ${err.response?.statusCode} ${err.response?.statusMessage} │ ${err.response?.requestOptions.uri.toString()}');
-        if (err.response != null && err.response!.data != null) {
-          _prettyPrintObject(err.response!.data, header: 'DioError │ ${err.type}');
-        }
-      } else {
-        logPrint('<<< DioError (No response) │ ${err.requestOptions.method} │ ${err.requestOptions.uri.toString()}');
-        logPrint('╔ ERROR');
-        logPrint('║  ${err.message.replaceAll('\n', '\n║  ')}');
-        _printLine(pre: '╚');
-      }
+    if (!error) {
+      return;
     }
+
+    if (err.type == DioErrorType.response) {
+      logPrint(
+          '<<< DioError │ ${err.requestOptions.method} │ ${err.response?.statusCode} ${err.response?.statusMessage} │ ${err.response?.requestOptions.uri.toString()}');
+      if (err.response != null && err.response?.data != null) {
+        _prettyPrintObject(err.response?.data, header: 'DioError │ ${err.type}');
+      }
+    } else {
+      logPrint('<<< DioError (No response) │ ${err.requestOptions.method} │ ${err.requestOptions.uri.toString()}');
+      logPrint('╔ ERROR');
+      logPrint('║  ${err.message.replaceAll('\n', '\n║  ')}');
+      _printLine(pre: '╚');
+    }
+
     _commit(errorLevel ?? LogLevel.error);
   }
 
