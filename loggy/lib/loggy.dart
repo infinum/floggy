@@ -3,7 +3,6 @@ library loggy;
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:meta/meta.dart';
 import 'package:stack_trace/stack_trace.dart' show Trace, Frame;
 
 part 'src/filters/blacklist_filter.dart';
