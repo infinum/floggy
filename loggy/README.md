@@ -77,6 +77,17 @@ Loggy with **PrettyPrinter**:
 ‼️ 12:22:49.712458 ERROR    UI Loggy - DoSomeWork - This is error message
 ```
 
+One useful thing is specifying different printer for release that logs to Crashlytics/Sentry instead of console. 
+
+You could create your own `CrashlyticsPrinter` by extending `Printer` and use it like:
+
+```dart
+  Loggy.initLoggy(
+    logPrinter: (kReleaseMode) ? CrashlyticsPrinter() : PrettyPrinter(),
+    ...
+  );
+```
+
 ### Log options
 By providing **LogOptions** you need to specify **LogLevel** that will make sure only levels above what is specified will be shown.
 
