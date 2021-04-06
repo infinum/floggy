@@ -1,6 +1,6 @@
 name: flutter_loggy
 description: Loggy extension to use 'developer.log' with pretty printer in Flutter
-version: 1.0.2
+version: 2.0.0
 repository: https://github.com/infinum/flutter-logger
 homepage: https://github.com/infinum/flutter-logger
 
@@ -12,6 +12,5 @@ dependencies:
   flutter:
     sdk: flutter
 
-  loggy:
-    path: ../loggy
+  loggy: ^2.0.0
   rxdart: ">0.1.0 <1.0.0"
