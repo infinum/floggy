@@ -1,6 +1,6 @@
 name: flutter_loggy_dio
 description: Extension for loggy. Includes interactor and pretty printer for Dio.
-version: 2.0.0
+version: 2.0.0+1
 repository: https://github.com/infinum/flutter-logger
 homepage: https://github.com/infinum/flutter-logger
 
@@ -13,4 +13,4 @@ dependencies:
     sdk: flutter
 
   loggy: ^2.0.0
-  dio: ^4.0.0-prev2
+  dio: ^4.0.0
