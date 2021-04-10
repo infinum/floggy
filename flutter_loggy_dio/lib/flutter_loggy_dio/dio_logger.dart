@@ -37,6 +37,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    super.onRequest(options, handler);
     _printRequestHeader(options);
     if (requestHeader) {
       _prettyPrintObject(options.queryParameters, header: 'Query Parameters');
@@ -70,6 +71,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
+    super.onError(err, handler);
     if (!error) {
       return;
     }
@@ -92,6 +94,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
 
   @override
   void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) async {
+    super.onResponse(response, handler);
     _printResponseHeader(response);
     if (responseHeader) {
       _prettyPrintObject(response.headers, header: 'Headers');
