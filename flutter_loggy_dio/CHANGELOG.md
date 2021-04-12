@@ -1,3 +1,7 @@
+## [2.0.0+2] - 12.04.2021.
+
+- Call dio super on methods
+
 ## [2.0.0+1] - 09.04.2021.
 
 - Set dio version to ^4.0.0
