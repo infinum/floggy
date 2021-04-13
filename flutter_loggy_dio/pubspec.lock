@@ -28,7 +28,7 @@ packages:
       name: dio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0-prev2"
+    version: "4.0.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -44,9 +44,9 @@ packages:
   loggy:
     dependency: "direct main"
     description:
-      path: "../loggy"
-      relative: true
-    source: path
+      name: loggy
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "2.0.0"
   meta:
     dependency: transitive

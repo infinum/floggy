@@ -1,3 +1,15 @@
+## [2.0.0+2] - 12.04.2021.
+
+- Call dio super on methods
+
+## [2.0.0+1] - 09.04.2021.
+
+- Set dio version to ^4.0.0
+
+## [2.0.0] - 06.04.2021.
+
+- Null safety
+
 ## [1.0.2] - 13.11.2020.
 
 - Fix no content body

@@ -66,6 +66,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     }
 
     _commit(requestLevel ?? LogLevel.info);
+    super.onRequest(options, handler);
   }
 
   @override
@@ -88,6 +89,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     }
 
     _commit(errorLevel ?? LogLevel.error);
+    super.onError(err, handler);
   }
 
   @override
@@ -102,6 +104,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     }
 
     _commit(responseLevel ?? LogLevel.info);
+    super.onResponse(response, handler);
   }
 
   void _printResponse(Response<dynamic> response) {
