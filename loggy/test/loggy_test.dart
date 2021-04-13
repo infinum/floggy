@@ -26,6 +26,35 @@ void main() {
       expect(_detached.fullName.contains(loggy.loggy.fullName), isFalse);
     });
   });
+
+  group('Loggy with listener', () {
+    var loggy = TestBlocLoggy();
+    late TestPrinter _testPrinter;
+
+    setUp(() => _testPrinter = TestPrinter());
+
+    test('onRecord can be null', () {
+      Loggy.initLoggy(
+        logPrinter: _testPrinter,
+      );
+
+      loggy.loggy.info('test');
+      expect(_testPrinter.recordCalls, 1);
+    });
+
+    test('Making a log triggers onRecord listener', () {
+      var didListen = false;
+      Loggy.initLoggy(
+        logPrinter: _testPrinter,
+        onRecord: (record) => didListen = true,
+      );
+
+      loggy.loggy.info('test');
+      expect(_testPrinter.recordCalls, 1);
+      expect(didListen, equals(true));
+    });
+  });
+
   group('Detached Loggy', () {
     test('Detached loggy has separate printer', () {
       final _mainPrinter = TestPrinter();
@@ -34,7 +63,8 @@ void main() {
       final _log = TestBlocLoggy();
 
       final _testPrinter = TestPrinter();
-      final _detached = _log.detachedLoggy('detached', logPrinter: _testPrinter);
+      final _detached =
+          _log.detachedLoggy('detached', logPrinter: _testPrinter);
 
       _detached.info('Detached message');
 
@@ -48,7 +78,8 @@ void main() {
 
       final _log = TestBlocLoggy();
       final _testPrinter = TestPrinter();
-      final _detached = _log.detachedLoggy('detached', logPrinter: _testPrinter);
+      final _detached =
+          _log.detachedLoggy('detached', logPrinter: _testPrinter);
 
       _detached.info('Detached message');
 
@@ -58,11 +89,13 @@ void main() {
 
     test('Detached loggy is not following parent levels', () {
       final _mainPrinter = TestPrinter();
-      Loggy.initLoggy(logPrinter: _mainPrinter, logOptions: LogOptions(LogLevel.off));
+      Loggy.initLoggy(
+          logPrinter: _mainPrinter, logOptions: LogOptions(LogLevel.off));
 
       final _log = TestBlocLoggy();
       final _testPrinter = TestPrinter();
-      final _detached = _log.detachedLoggy('detached', logPrinter: _testPrinter);
+      final _detached =
+          _log.detachedLoggy('detached', logPrinter: _testPrinter);
 
       _detached.info('Detached message');
 
@@ -105,7 +138,8 @@ void main() {
 
     test('Named loggy is following parent levels', () {
       final _testPrinter = TestPrinter();
-      Loggy.initLoggy(logPrinter: _testPrinter, logOptions: LogOptions(LogLevel.off));
+      Loggy.initLoggy(
+          logPrinter: _testPrinter, logOptions: LogOptions(LogLevel.off));
       final _log = TestBlocLoggy();
       final _named = _log.newLoggy('namedLoggy');
 

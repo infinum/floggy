@@ -288,11 +288,13 @@ class Loggy<T extends LoggyType> {
     LogPrinter logPrinter = const DefaultPrinter(),
     LogOptions logOptions = defaultLevel,
     List<LoggyFilter> filters = const [],
+    void Function(LogRecord)? onRecord,
     bool hierarchicalLogging = false,
   }) {
     Loggy._root.level = logOptions;
     Loggy._root.filters = filters;
     Loggy._root.printer = logPrinter;
+    Loggy._root._getStream().listen(onRecord);
     hierarchicalLoggingEnabled = hierarchicalLogging;
   }
 }
