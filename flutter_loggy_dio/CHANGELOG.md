@@ -1,3 +1,7 @@
+## [2.0.0+3] - 16.04.2021.
+
+- Call dio super on onRequest in early return
+
 ## [2.0.0+2] - 12.04.2021.
 
 - Call dio super on methods

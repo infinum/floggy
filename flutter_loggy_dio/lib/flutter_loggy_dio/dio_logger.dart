@@ -54,6 +54,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     if (requestBody && options.method != 'GET') {
       final Object? data = options.data;
       if (data == null) {
+        super.onRequest(options, handler);
         return;
       }
 
