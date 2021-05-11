@@ -13,7 +13,7 @@ class StreamPrinter extends LogPrinter {
   @override
   void onLog(LogRecord record) {
     childPrinter.onLog(record);
-    logRecord.add(<LogRecord>[record, ...logRecord.value!]);
+    logRecord.add(<LogRecord>[record, ...logRecord.value]);
   }
 
   void dispose() {
