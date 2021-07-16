@@ -47,10 +47,12 @@ class LogOptions {
     this.logLevel, {
     this.stackTraceLevel = LogLevel.off,
     this.includeCallerInfo = false,
+    this.callerFrameDepthLevel = 3,
   });
 
   final LogLevel logLevel;
   final LogLevel stackTraceLevel;
+  final int callerFrameDepthLevel;
 
   final bool includeCallerInfo;
 }
