@@ -1,3 +1,8 @@
+## [2.0.0+1] - 08.03.2021
+
+- Added custom caller level depth
+- Fixed 
+
 ## [2.0.0] - 08.03.2021
 
 - implements null-safety
