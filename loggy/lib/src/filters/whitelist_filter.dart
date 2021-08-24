@@ -5,10 +5,10 @@ part of loggy;
 class WhitelistFilter extends LoggyFilter {
   const WhitelistFilter(this._types);
 
-  final List<Type> _types;
+  final List<Type>? _types;
 
   @override
   bool shouldLog(LogLevel level, Type type) {
-    return _types == null || _types.contains(type);
+    return _types == null || (_types?.contains(type) ?? false);
   }
 }

@@ -23,10 +23,10 @@ packages:
   loggy:
     dependency: "direct main"
     description:
-      name: loggy
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
+      path: "../loggy"
+      relative: true
+    source: path
+    version: "2.0.0+1"
   meta:
     dependency: transitive
     description:

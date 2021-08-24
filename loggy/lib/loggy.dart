@@ -9,6 +9,7 @@ part 'src/filters/blacklist_filter.dart';
 part 'src/filters/custom_level_filter.dart';
 part 'src/filters/loggy_filter.dart';
 part 'src/filters/whitelist_filter.dart';
+part 'src/global_loggy.dart';
 part 'src/loggy.dart';
 part 'src/printers/default_printer.dart';
 part 'src/printers/loggy_printer.dart';

@@ -17,7 +17,7 @@ mixin BlacklistLoggy implements LoggyType {
 }
 
 /// Custom printer for testing, don't care about printing, just get number of logs passed
-class TestPrinter extends LogPrinter {
+class TestPrinter extends LoggyPrinter {
   final List<LogRecord> _records = <LogRecord>[];
 
   @override

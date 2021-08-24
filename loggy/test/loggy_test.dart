@@ -12,10 +12,6 @@ void main() {
       loggy = TestBlocLoggy();
     });
 
-    test('Loggy has name', () {
-      expect(loggy.loggy.name != null, isTrue);
-    });
-
     test('New logger has parent name in title', () {
       final _extraLoggy = loggy.newLoggy('extra');
       expect(_extraLoggy.fullName.contains(loggy.loggy.fullName), isTrue);
@@ -34,7 +30,8 @@ void main() {
       final _log = TestBlocLoggy();
 
       final _testPrinter = TestPrinter();
-      final _detached = _log.detachedLoggy('detached', logPrinter: _testPrinter);
+      final _detached =
+          _log.detachedLoggy('detached', logPrinter: _testPrinter);
 
       _detached.info('Detached message');
 
@@ -48,7 +45,8 @@ void main() {
 
       final _log = TestBlocLoggy();
       final _testPrinter = TestPrinter();
-      final _detached = _log.detachedLoggy('detached', logPrinter: _testPrinter);
+      final _detached =
+          _log.detachedLoggy('detached', logPrinter: _testPrinter);
 
       _detached.info('Detached message');
 
@@ -58,11 +56,13 @@ void main() {
 
     test('Detached loggy is not following parent levels', () {
       final _mainPrinter = TestPrinter();
-      Loggy.initLoggy(logPrinter: _mainPrinter, logOptions: LogOptions(LogLevel.off));
+      Loggy.initLoggy(
+          logPrinter: _mainPrinter, logOptions: LogOptions(LogLevel.off));
 
       final _log = TestBlocLoggy();
       final _testPrinter = TestPrinter();
-      final _detached = _log.detachedLoggy('detached', logPrinter: _testPrinter);
+      final _detached =
+          _log.detachedLoggy('detached', logPrinter: _testPrinter);
 
       _detached.info('Detached message');
 
@@ -105,7 +105,8 @@ void main() {
 
     test('Named loggy is following parent levels', () {
       final _testPrinter = TestPrinter();
-      Loggy.initLoggy(logPrinter: _testPrinter, logOptions: LogOptions(LogLevel.off));
+      Loggy.initLoggy(
+          logPrinter: _testPrinter, logOptions: LogOptions(LogLevel.off));
       final _log = TestBlocLoggy();
       final _named = _log.newLoggy('namedLoggy');
 

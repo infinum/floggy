@@ -8,7 +8,8 @@ part of loggy;
 class LogLevel {
   const LogLevel(this.name, this.priority)
       : assert(name != null),
-        assert(priority > 0 && priority < 100, 'Priority level cannot be less than 1 or greater than 99');
+        assert(priority > 0 && priority < 100,
+            'Priority level cannot be less than 1 or greater than 99');
 
   const LogLevel._(this.name, this.priority);
 
@@ -57,7 +58,7 @@ class LogOptions {
   final bool includeCallerInfo;
 }
 
-/// This is sent to the [LogPrinter] and there printer can choose what and how to show it
+/// This is sent to the [LoggyPrinter] and there printer can choose what and how to show it
 class LogRecord {
   LogRecord(this.level, this.message, this.loggerName,
       [this.error, this.stackTrace, this.zone, this.object, this.callerFrame])
@@ -77,5 +78,6 @@ class LogRecord {
   final Frame? callerFrame;
 
   @override
-  String toString() => '[${level.toString().substring(0, 1)}] $loggerName: $message';
+  String toString() =>
+      '[${level.toString().substring(0, 1)}] $loggerName: $message';
 }

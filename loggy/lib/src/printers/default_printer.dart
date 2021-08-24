@@ -1,6 +1,6 @@
 part of loggy;
 
-class DefaultPrinter extends LogPrinter {
+class DefaultPrinter extends LoggyPrinter {
   const DefaultPrinter() : super();
 
   @override
