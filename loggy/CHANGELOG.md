@@ -1,3 +1,7 @@
+## [2.0.1] - xx.xx.2021
+- Added global loggy
+- Renamed LogPrinter to LoggyPrinter
+
 ## [2.0.0+1] - 08.03.2021
 
 - Added custom caller level depth
