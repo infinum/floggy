@@ -1,3 +1,7 @@
+## [2.0.1] - xx.xx.2021.
+
+- Fix error on startup
+
 ## [2.0.0] - 06.04.2021.
 
 - Null safety
