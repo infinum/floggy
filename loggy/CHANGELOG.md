@@ -1,4 +1,4 @@
-## [2.0.1] - xx.xx.2021
+## [2.0.1] - 01.09.2021
 - Added global loggy
 - Renamed LogPrinter to LoggyPrinter
 
