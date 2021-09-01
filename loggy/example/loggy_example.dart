@@ -5,10 +5,12 @@ import 'socket_level.dart';
 
 void main() {
   Loggy.initLoggy(
-    logPrinter: const PrettyPrinter(),
+    logPrinter: const PrettyPrinter(
+      showColors: true,
+    ),
     logOptions: const LogOptions(
       LogLevel.all,
-      stackTraceLevel: LogLevel.error,
+      stackTraceLevel: LogLevel.off,
     ),
     filters: [
       BlacklistFilter([BlacklistedLoggy]),
@@ -16,17 +18,29 @@ void main() {
   );
 
   ExampleNetworkLoggy();
+  print('');
   ExampleUiLoggy();
+  print('');
   ExampleBlackListedLoggy();
+  print('');
   ExampleWhatLoggyCanDo();
+
+  print('');
+  logDebug('I\'m a global loggy');
+  logInfo('Global loggy has less options but doesn\'t need mixins');
+  logError('I share properties set in initLoggy');
 }
 
 class ExampleNetworkLoggy with NetworkLoggy {
   ExampleNetworkLoggy() {
     loggy.debug('This is log from Network logger');
+    print('Test print statement, style should be reset!');
     loggy.info('This is log from Network logger');
+    print('Test print statement, style should be reset!');
     loggy.warning('This is log from Network logger');
+    print('Test print statement, style should be reset!');
     loggy.error('This is log from Network logger');
+    print('Test print statement, style should be reset!');
 
     loggy.socket('This is log with custom log level in Network logger');
   }
@@ -45,8 +59,10 @@ class ExampleUiLoggy with UiLoggy {
 
 class ExampleBlackListedLoggy with BlacklistedLoggy {
   ExampleBlackListedLoggy() {
-    loggy.info('This log is from Blacklisted logger and should not be visible!');
-    loggy.warning('This log is from Blacklisted logger and should not be visible!');
+    loggy
+        .info('This log is from Blacklisted logger and should not be visible!');
+    loggy.warning(
+        'This log is from Blacklisted logger and should not be visible!');
   }
 }
 
@@ -54,14 +70,17 @@ class ExampleWhatLoggyCanDo with ExampleLoggy {
   ExampleWhatLoggyCanDo() {
     /// This will evaluate only if line is actually logged
     loggy.info('Loggys can do some stuff:');
-    loggy.info('You can pass function to the logger, it will evaluate only if log gets shown');
+    loggy.info(
+        'You can pass function to the logger, it will evaluate only if log gets shown');
     loggy.debug(() {
       /// You can log in log
       loggy.warning('Using logger inside of the logger #WeNeedToGoDeeper');
 
       /// Do something here maybe? function returning something (list in this case)
       const _secret = 0 / 0;
-      return List.generate(8, (_) => _secret).fold<String>('', (value, e) => value += e.toString()) + ' Batman';
+      return List.generate(8, (_) => _secret)
+              .fold<String>('', (value, e) => value += e.toString()) +
+          ' Batman';
     });
 
     final _childLoggy = newLoggy('Test');
@@ -70,7 +89,8 @@ class ExampleWhatLoggyCanDo with ExampleLoggy {
     // _logger.level = LogOptions(LogLevel.warning);
     _childLoggy.debug(
         'I\'m new logger called "${_childLoggy.name}" and my parent logger name is "${_childLoggy.parent!.name}"');
-    _childLoggy.debug('Even if I\'m a new logger, I still share everything with my parent');
+    _childLoggy.debug(
+        'Even if I\'m a new logger, I still share everything with my parent');
 
     final _detachedLoggy = detachedLoggy('Detached logger');
     _detachedLoggy.level = const LogOptions(LogLevel.all);

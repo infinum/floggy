@@ -7,7 +7,7 @@ Highly customizable logger for dart that uses mixins to show all the needed info
 Add logger package to your project:
 ```yaml
 dependencies:
-    loggy: ^2.0.0+1
+    loggy: ^2.0.1
 ```
 
 ## Usage
@@ -20,7 +20,23 @@ main() {
 }
 ```
 
-Once loggy is initialized you can start using it through the app. Loggy is using mixins to access our logger, now I will show you how to use default types (**UiLoggy**, **NetworkLoggy**) and start logging. Later in the customizing loggy part, I will show you how you can easily add more types depending on the specific use case.
+In case you just want to log something without adding mixin you can use `GlobalLoggy` that is accessible everywhere, and it will follow the rules set in `initLoggy` method
+
+ ```dart
+ import 'package:loggy/loggy.dart';
+ 
+ class DoSomeWork {
+  DoSomeWork() {
+    logDebug('This is debug message');
+    logInfo('This is info message');
+    logWarning('This is warning message');
+    logError('This is error message');
+  }
+ }
+ ```
+While global loggy is easier to use, it cannot be easily filtered, and it cannot fetch the calling class.
+ 
+By using mixins to access our logger, you can get more info from loggy, now I will show you how to use default types (**UiLoggy**, **NetworkLoggy**). Later in the customizing loggy part, I will show you how you can easily add more types depending on the specific use case.
 ```dart
 import 'package:loggy/loggy.dart';
 
@@ -167,7 +183,7 @@ _logger.level = const LogOptions(LogLevel.all);
 ```
 
 ## Loggy 💙 Flutter
-Extensions that you can use in Flutter to make our logs look nicer.
+Extensions that you can use in Flutter to make our logs look nicer. In order to fully use Loggy features in flutter make sure you are importing `flutter_loggy` pub package. In it you can find printer for flutter console `PrettyDeveloperPrinter` and widget that can show you all the logs: `LoggyStreamWidget`
 ### Pretty developer printer
 ```
 Loggy.initLoggy(
@@ -180,6 +196,7 @@ To see logs in-app you can use `StreamPrinter` and pass any other printer to it.
 
 ## Loggy 💙 Dio as well!
 Extension for loggy. Includes the interceptor and pretty printer to use with Dio.
+In order to use Dio with Loggy you will have to import `flutter_loggy_dio` package, that will include an interceptor and new loggy type for Dio calls. 
 ### Usage
 For Dio you included special `DioLoggy` that can be filtered, and `LoggyDioInterceptor` that will connect to Dio and print out requests and responses.
 ```dart

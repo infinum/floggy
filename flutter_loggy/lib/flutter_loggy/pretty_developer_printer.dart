@@ -1,7 +1,7 @@
 part of flutter_loggy;
 
 /// Pretty printer that uses developer.log to show log messages
-class PrettyDeveloperPrinter extends LogPrinter {
+class PrettyDeveloperPrinter extends LoggyPrinter {
   const PrettyDeveloperPrinter();
 
   static final Map<LogLevel, String> _levelPrefixes = <LogLevel, String>{
@@ -18,7 +18,7 @@ class PrettyDeveloperPrinter extends LogPrinter {
   void onLog(LogRecord record) {
     final String _time = record.time.toIso8601String().split('T')[1];
     final String _callerFrame =
-        record.callerFrame == null ? '-' : '(${record.callerFrame!.location})';
+        record.callerFrame == null ? '-' : '(${record.callerFrame?.location})';
     final String _logLevel =
         record.level.toString().replaceAll('Level.', '').toUpperCase();
 
