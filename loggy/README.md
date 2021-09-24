@@ -162,7 +162,16 @@ loggy.socket('This is log with socket log level');
 ### Filtering
 Now you have a lot of different types and levels how to find what you need? You may need to filter some of them. We have **WhitelistFilter**, **BlacklistFilter** and **CustomLevelFilter**. 
 
-Filtering is a way to limit log output without actually changing or removing existing loggers. Whitelisting some logger types will make sure only logs from that specific type are shown. Blacklisting will do the exact opposite of disabling only specified types.
+Filtering is a way to limit log output without actually changing or removing existing loggers. Whitelisting some logger types will make sure only logs from that specific type are shown. Blacklisting will do the exact opposite of that. This is useful if your loggers log ton of data and pollute the console so it's hard to see valuable information.
+
+```dart
+  Loggy.initLoggy(
+    ... // other stuff
+    filters: [
+      BlacklistFilter([SocketLoggy]) // Don't log logs from SocketLoggy
+    ],
+  );
+```
 
 ### More loggers?
 Do you need more loggers? No problem!
