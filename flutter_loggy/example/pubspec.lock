@@ -77,11 +77,9 @@ packages:
   loggy:
     dependency: transitive
     description:
-      path: loggy
-      ref: HEAD
-      resolved-ref: "57badef28c8d304704700f055d36214dcd77d7b9"
-      url: "git://github.com/DebkanchanSamadder/floggy.git"
-    source: git
+      name: loggy
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "2.0.1"
   matcher:
     dependency: transitive

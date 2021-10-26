@@ -12,8 +12,5 @@ dependencies:
   flutter:
     sdk: flutter
 
-  loggy:
-    git:
-      url: git://github.com/DebkanchanSamadder/floggy.git
-      path: loggy
+  loggy: ^2.0.1
   rxdart: ">0.1.0 <1.0.0"
