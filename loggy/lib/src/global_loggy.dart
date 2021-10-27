@@ -12,7 +12,7 @@ class GlobalLoggy implements LoggyType {
 
 Loggy get _globalLoggy => Loggy<GlobalLoggy>('Global Loggy');
 
-void logDebug(String message) => _globalLoggy.debug(message);
-void logInfo(String message) => _globalLoggy.info(message);
-void logWarning(String message) => _globalLoggy.warning(message);
-void logError(String message) => _globalLoggy.error(message);
+final logDebug = _globalLoggy.debug;
+final logInfo = _globalLoggy.info;
+final logWarning = _globalLoggy.warning;
+final logError = _globalLoggy.error;
