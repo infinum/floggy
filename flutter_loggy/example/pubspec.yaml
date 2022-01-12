@@ -30,6 +30,10 @@ dependencies:
   cupertino_icons: ^1.0.0
   flutter_loggy:
     path: ../
+  flutter_loggy_dio:
+    path: ../../flutter_loggy_dio
+
+  dio:
 
 dev_dependencies:
   flutter_test:

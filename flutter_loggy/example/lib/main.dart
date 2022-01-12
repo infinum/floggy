@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_loggy/flutter_loggy.dart';
+import 'package:flutter_loggy_dio/flutter_loggy_dio.dart';
 import 'package:loggy/loggy.dart';
 
 void main() {
@@ -44,6 +45,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with UiLoggy {
   CounterLogic _counter;
+
+  final dio = Dio()
+    ..interceptors.add(
+      LoggyDioInterceptor(
+        request: true,
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: true,
+        responseBody: true,
+      ),
+    );
 
   @override
   void initState() {
@@ -103,6 +115,17 @@ class _MyHomePageState extends State<MyHomePage> with UiLoggy {
                 ),
               ],
             ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final response = await dio
+                  .post('https://jsonplaceholder.typicode.com/posts', data: {
+                "title": "foo",
+                "body": "bar",
+                "userId": 1,
+              });
+            },
+            child: Text("DIO POST"),
           ),
         ],
       ),
