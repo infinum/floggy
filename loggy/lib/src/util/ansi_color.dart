@@ -35,6 +35,7 @@ class AnsiColor {
     if (_sb.length == ansiEsc.length) {
       return '';
     } else {
+      _sb.write(ansiDefault);
       return _sb.toString();
     }
   }
