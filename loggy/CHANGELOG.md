@@ -1,3 +1,7 @@
+## [2.0.1+1] - 14.01.2022
+- Fixed global loggy to take dynamic
+- Escape colors on log messages
+
 ## [2.0.1] - 01.09.2021
 - Added global loggy
 - Renamed LogPrinter to LoggyPrinter
