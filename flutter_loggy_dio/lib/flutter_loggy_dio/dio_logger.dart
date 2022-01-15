@@ -161,16 +161,14 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
   void _printResponseHeader(Response response) {
     final uri = response.requestOptions.uri;
     final method = response.requestOptions.method;
-    _printBoxed(
-        header:
-            'Response ║ $method ║ Status: ${response.statusCode} ${response.statusMessage}',
-        text: uri.toString());
+    logPrint(
+        '<<< Response │ $method │ ${response.statusCode} ${response.statusMessage} │ ${uri.toString()}');
   }
 
   void _printRequestHeader(RequestOptions options) {
     final uri = options.uri;
     final method = options.method;
-    _printBoxed(header: 'Request ║ $method ', text: uri.toString());
+    logPrint('>>> Request │ $method │ ${uri.toString()}');
   }
 
   void _printLine([String pre = '', String suf = '╝']) =>
