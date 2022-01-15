@@ -95,11 +95,8 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
   void onError(DioError err, ErrorInterceptorHandler handler) {
     if (error) {
       if (err.type == DioErrorType.response) {
-        final uri = err.response?.requestOptions.uri;
-        _printBoxed(
-            header:
-                'DioError ║ Status: ${err.response?.statusCode} ${err.response?.statusMessage}',
-            text: uri.toString());
+        logPrint(
+            '<<< DioError │ ${err.requestOptions.method} │ ${err.response?.statusCode} ${err.response?.statusMessage} │ ${err.response?.requestOptions.uri.toString()}');
         if (err.response != null && err.response?.data != null) {
           logPrint('╔ ${err.type.toString()}');
           _printResponse(err.response!);
