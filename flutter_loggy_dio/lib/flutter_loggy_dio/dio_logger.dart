@@ -75,6 +75,12 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
           _printPrettyMap(options.data as Map);
           logPrint('║');
           _printLine('╚');
+        } else if (data is List) {
+          logPrint('╔ Body');
+          logPrint('║${_indent()}[');
+          _printList(data);
+          logPrint('║${_indent()}[');
+          _printLine('╚');
         } else if (data is FormData) {
           final formDataMap = <String, dynamic>{}
             ..addEntries(data.fields)
