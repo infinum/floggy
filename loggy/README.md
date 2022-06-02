@@ -229,3 +229,12 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 [loggy_image]: https://github.com/infinum/floggy/raw/master/assets/loggy_image.png
 [show_body]: https://github.com/infinum/floggy/raw/master/assets/2020-10-28%2010.38.39.gif 
 [settings]: https://github.com/infinum/floggy/raw/master/assets/screenshot_settings.png
+
+<p align="center">
+  <a href='https://infinum.com'>
+    <picture>
+        <source srcset="https://assets.infinum.com/brand/logo/static/white.svg" media="(prefers-color-scheme: dark)">
+        <img src="https://assets.infinum.com/brand/logo/static/default.svg">
+    </picture>
+  </a>
+</p>
