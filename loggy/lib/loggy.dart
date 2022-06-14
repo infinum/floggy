@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:stack_trace/stack_trace.dart' show Trace, Frame;
+import 'package:universal_io/io.dart' show stderr;
 
 part 'src/filters/blacklist_filter.dart';
 part 'src/filters/custom_level_filter.dart';
@@ -14,6 +15,8 @@ part 'src/loggy.dart';
 part 'src/printers/default_printer.dart';
 part 'src/printers/loggy_printer.dart';
 part 'src/printers/pretty_printer.dart';
+part 'src/printers/stderr_pretty_printer.dart';
+part 'src/printers/stderr_printer.dart';
 part 'src/types/loggy_type.dart';
 part 'src/types/types.dart';
 part 'src/util/ansi_color.dart';
