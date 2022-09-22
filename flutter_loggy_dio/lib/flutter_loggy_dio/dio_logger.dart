@@ -161,7 +161,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
   }
 
   void _commit(LogLevel level) {
-    if (level.priority >= LogLevel.error.priority) {
+    if (level.priority >= LogLevel.error.priority && _value.toString().contains('\n')) {
       final String _valueError = _value.toString();
       final String _errorTitle = _valueError.substring(0, _valueError.indexOf('\n'));
       final String _errorBody = _valueError.substring(_errorTitle.length);
