@@ -1,3 +1,8 @@
+## [2.0.1] - 07.11.2022.
+
+- Update dependencies
+- Add linting rules from `lints`
+
 ## [2.0.0+3] - 16.04.2021.
 
 - Call dio super on onRequest in early return

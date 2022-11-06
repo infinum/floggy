@@ -59,7 +59,9 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
       }
 
       if (data is FormData) {
-        final Map<String, Object> formDataMap = <String, Object>{}..addEntries(data.fields)..addEntries(data.files);
+        final Map<String, Object> formDataMap = <String, Object>{}
+          ..addEntries(data.fields)
+          ..addEntries(data.files);
         _prettyPrintObject(formDataMap, header: 'Form data | ${data.boundary}');
       } else {
         _prettyPrintObject(data, header: 'Body');
@@ -117,19 +119,19 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
   }
 
   void _prettyPrintObject(Object data, {String? header}) {
-    String _value;
+    String value;
 
     try {
       final Object object = const JsonDecoder().convert(data.toString());
       const JsonEncoder json = JsonEncoder.withIndent('  ');
-      _value = '║  ${json.convert(object).replaceAll('\n', '\n║  ')}';
+      value = '║  ${json.convert(object).replaceAll('\n', '\n║  ')}';
     } catch (e) {
-      _value = '║  ${data.toString().replaceAll('\n', '\n║  ')}';
+      value = '║  ${data.toString().replaceAll('\n', '\n║  ')}';
     }
 
     logPrint('╔  $header');
     logPrint('║');
-    logPrint(_value);
+    logPrint(value);
     logPrint('║');
     _printLine(pre: '╚');
   }
@@ -162,10 +164,10 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
 
   void _commit(LogLevel level) {
     if (level.priority >= LogLevel.error.priority) {
-      final String _valueError = _value.toString();
-      final String _errorTitle = _valueError.substring(0, _valueError.indexOf('\n'));
-      final String _errorBody = _valueError.substring(_errorTitle.length);
-      loggy.log(level, _errorTitle, _errorBody);
+      final String valueError = _value.toString();
+      final String errorTitle = valueError.substring(0, valueError.indexOf('\n'));
+      final String errorBody = valueError.substring(errorTitle.length);
+      loggy.log(level, errorTitle, errorBody);
     } else {
       loggy.log(level, _value.toString());
     }
