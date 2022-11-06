@@ -6,19 +6,19 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   Loggy.initLoggy(
-    logPrinter: StreamPrinter(
-      PrettyDeveloperPrinter(),
-    ),
-    logOptions: LogOptions(
+    logPrinter: StreamPrinter(const PrettyDeveloperPrinter()),
+    logOptions: const LogOptions(
       LogLevel.all,
       stackTraceLevel: LogLevel.error,
     ),
   );
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,18 +27,18 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  const MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> with UiLoggy {
@@ -80,22 +80,19 @@ class _MyHomePageState extends State<MyHomePage> with UiLoggy {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push<void>(context,
-                  MaterialPageRoute(builder: (_) => LoggyStreamScreen()));
+              Navigator.push<void>(context, MaterialPageRoute(builder: (_) => const LoggyStreamScreen()));
             },
             child: Container(
               color: ThemeData.dark().scaffoldBackgroundColor,
               height: MediaQuery.of(context).size.height * 0.4,
-              child: LoggyStreamWidget(),
+              child: const LoggyStreamWidget(),
             ),
           ),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  'You have pushed the button this many times:',
-                ),
+                const Text('You have pushed the button this many times:'),
                 Text(
                   '${_counter.value}',
                   style: Theme.of(context).textTheme.headline4,
@@ -112,16 +109,14 @@ class _MyHomePageState extends State<MyHomePage> with UiLoggy {
             onPressed: _click,
             heroTag: 'increment_tag',
             tooltip: 'Increment',
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
-          SizedBox(
-            height: 12.0,
-          ),
+          const SizedBox(height: 12.0),
           FloatingActionButton(
             onPressed: () => _click(increase: false),
             tooltip: 'Decrement',
             heroTag: 'decrement_tag',
-            child: Icon(Icons.remove),
+            child: const Icon(Icons.remove),
           ),
         ],
       ),
