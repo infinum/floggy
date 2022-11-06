@@ -43,9 +43,8 @@ class _LoggyItemStackWidgetState extends State<_LoggyItemStackWidget> {
                 ),
                 secondChild: _StackList(widget.record),
                 duration: const Duration(milliseconds: 250),
-                crossFadeState: _shownRecords.contains(widget.record)
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
+                crossFadeState:
+                    _shownRecords.contains(widget.record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
               ),
             ],
           ),
@@ -62,40 +61,35 @@ class _StackList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> _stackLines = record.stackTrace.toString().split('\n');
+    final List<String> stackLines = record.stackTrace.toString().split('\n');
 
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: _stackLines.map(
+        children: stackLines.map(
           (String stackTraceLine) {
-            final List<String> _value = stackTraceLine
-                .replaceAll(RegExp(' +'), '  ')
-                .replaceAll(')', '')
-                .split('(');
+            final List<String> value = stackTraceLine.replaceAll(RegExp(' +'), '  ').replaceAll(')', '').split('(');
 
             /// Lines that have no connection to the app will be different color.
-            final bool _isFlutter =
-                (_value.last).startsWith('package:flutter') ||
-                    (_value.last).startsWith('dart:');
+            final bool isFlutter = (value.last).startsWith('package:flutter') || (value.last).startsWith('dart:');
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  _value.first,
+                  value.first,
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.headline6!.copyWith(
-                        color: _isFlutter ? Colors.blueGrey : Colors.redAccent,
+                        color: isFlutter ? Colors.blueGrey : Colors.redAccent,
                         fontWeight: FontWeight.w600,
                         fontSize: 16.0,
                       ),
                 ),
                 Text(
-                  _value.last,
+                  value.last,
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color: _isFlutter ? Colors.blueGrey : Colors.redAccent,
+                        color: isFlutter ? Colors.blueGrey : Colors.redAccent,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.0,
                       ),
@@ -147,9 +141,7 @@ class _CollapsableButton extends StatelessWidget {
         ),
       ),
       duration: const Duration(milliseconds: 250),
-      crossFadeState: _shownRecords.contains(record)
-          ? CrossFadeState.showSecond
-          : CrossFadeState.showFirst,
+      crossFadeState: _shownRecords.contains(record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
     );
   }
 }

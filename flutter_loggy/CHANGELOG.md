@@ -1,3 +1,8 @@
+## [2.0.2] - 07.11.2022.
+
+- Update dependencies
+- Add linting rules from `lints`
+
 ## [2.0.1] - 01.09.2021.
 
 - Fix error on startup

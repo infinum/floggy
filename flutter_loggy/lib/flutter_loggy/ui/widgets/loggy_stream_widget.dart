@@ -27,9 +27,10 @@ class LoggyStreamWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final StreamPrinter? _printer = Loggy.currentPrinter is StreamPrinter ? Loggy.currentPrinter as StreamPrinter? : null;
+    final StreamPrinter? printer =
+        Loggy.currentPrinter is StreamPrinter ? Loggy.currentPrinter as StreamPrinter? : null;
 
-    if (_printer == null) {
+    if (printer == null) {
       throw WrongPrinterException();
     }
 
@@ -38,7 +39,7 @@ class LoggyStreamWidget extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: StreamBuilder<List<LogRecord>>(
-              stream: _printer.logRecord,
+              stream: printer.logRecord,
               builder: (BuildContext context, AsyncSnapshot<List<LogRecord>> records) {
                 if (!records.hasData) {
                   return Container();
@@ -68,8 +69,8 @@ class _LoggyItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color logColor = _getLogColor();
-    final String _time = record.time.toIso8601String().split('T')[1];
-    final Color _dividerColor = ThemeData.dark().dividerColor;
+    final String time = record.time.toIso8601String().split('T')[1];
+    final Color dividerColor = ThemeData.dark().dividerColor;
 
     return Container(
       color: Colors.transparent,
@@ -82,7 +83,7 @@ class _LoggyItemWidget extends StatelessWidget {
             children: <Widget>[
               Flexible(
                 child: Text(
-                  '${record.level.name.toUpperCase()} - $_time',
+                  '${record.level.name.toUpperCase()} - $time',
                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
                         color: logColor,
                         fontWeight: FontWeight.w700,
@@ -100,9 +101,7 @@ class _LoggyItemWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(
-            height: 12.0,
-          ),
+          const SizedBox(height: 12.0),
           Text(
             record.message,
             style: Theme.of(context).textTheme.bodyText2!.copyWith(
@@ -112,9 +111,7 @@ class _LoggyItemWidget extends StatelessWidget {
                 ),
           ),
           _LoggyItemStackWidget(record),
-          Divider(
-            color: _dividerColor,
-          ),
+          Divider(color: dividerColor),
         ],
       ),
     );
