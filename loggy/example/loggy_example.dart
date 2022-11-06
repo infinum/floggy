@@ -59,8 +59,10 @@ class ExampleUiLoggy with UiLoggy {
 
 class ExampleBlackListedLoggy with BlacklistedLoggy {
   ExampleBlackListedLoggy() {
-    loggy.info('This log is from Blacklisted logger and should not be visible!');
-    loggy.warning('This log is from Blacklisted logger and should not be visible!');
+    loggy
+        .info('This log is from Blacklisted logger and should not be visible!');
+    loggy.warning(
+        'This log is from Blacklisted logger and should not be visible!');
   }
 }
 
@@ -68,7 +70,8 @@ class ExampleWhatLoggyCanDo with ExampleLoggy {
   ExampleWhatLoggyCanDo() {
     /// This will evaluate only if line is actually logged
     loggy.info('Loggy can do some stuff:');
-    loggy.info('You can pass function to the logger, it will evaluate only if log gets shown');
+    loggy.info(
+        'You can pass function to the logger, it will evaluate only if log gets shown');
     loggy.debug(() {
       /// You can log in log
       loggy.warning('Using logger inside of the logger #WeNeedToGoDeeper');
@@ -82,9 +85,10 @@ class ExampleWhatLoggyCanDo with ExampleLoggy {
 
     /// Changing levels for independent loggy only works if hierarchicalLogging is set to true.
     // _logger.level = LogOptions(LogLevel.warning);
-    childLoggy
-        .debug('I\'m new logger called "${childLoggy.name}" and my parent logger name is "${childLoggy.parent!.name}"');
-    childLoggy.debug('Even if I\'m a new logger, I still share everything with my parent');
+    childLoggy.debug(
+        'I\'m new logger called "${childLoggy.name}" and my parent logger name is "${childLoggy.parent!.name}"');
+    childLoggy.debug(
+        'Even if I\'m a new logger, I still share everything with my parent');
 
     final detached = detachedLoggy('Detached logger');
     detached.level = const LogOptions(LogLevel.all);

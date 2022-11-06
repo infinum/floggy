@@ -8,7 +8,8 @@ class StreamPrinter extends LoggyPrinter {
   StreamPrinter(this.childPrinter) : super();
 
   final LoggyPrinter childPrinter;
-  final BehaviorSubject<List<LogRecord>> logRecord = BehaviorSubject<List<LogRecord>>.seeded(<LogRecord>[]);
+  final BehaviorSubject<List<LogRecord>> logRecord =
+      BehaviorSubject<List<LogRecord>>.seeded(<LogRecord>[]);
 
   @override
   void onLog(LogRecord record) {

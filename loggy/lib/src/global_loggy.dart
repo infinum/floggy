@@ -6,7 +6,8 @@ part of loggy;
 /// without adding mixins to the class.
 class GlobalLoggy implements LoggyType {
   @override
-  Loggy<GlobalLoggy> get loggy => Loggy<GlobalLoggy>('Global Loggy - ${runtimeType.toString()}');
+  Loggy<GlobalLoggy> get loggy =>
+      Loggy<GlobalLoggy>('Global Loggy - ${runtimeType.toString()}');
 }
 
 Loggy get _globalLoggy => Loggy<GlobalLoggy>('Global Loggy');

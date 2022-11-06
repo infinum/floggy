@@ -80,7 +80,8 @@ class _MyHomePageState extends State<MyHomePage> with UiLoggy {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push<void>(context, MaterialPageRoute(builder: (_) => const LoggyStreamScreen()));
+              Navigator.push<void>(context,
+                  MaterialPageRoute(builder: (_) => const LoggyStreamScreen()));
             },
             child: Container(
               color: ThemeData.dark().scaffoldBackgroundColor,

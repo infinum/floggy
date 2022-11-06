@@ -7,7 +7,8 @@ part of loggy;
 /// [priority] can go from 1 - 99 inclusive. 0 is reserved for `All` and 100 is reserved for `Off`
 class LogLevel {
   const LogLevel(this.name, this.priority)
-      : assert(priority > 0 && priority < 100, 'Priority level cannot be less than 1 or greater than 99');
+      : assert(priority > 0 && priority < 100,
+            'Priority level cannot be less than 1 or greater than 99');
 
   const LogLevel._(this.name, this.priority);
 
@@ -76,5 +77,6 @@ class LogRecord {
   final Frame? callerFrame;
 
   @override
-  String toString() => '[${level.toString().substring(0, 1)}] $loggerName: $message';
+  String toString() =>
+      '[${level.toString().substring(0, 1)}] $loggerName: $message';
 }

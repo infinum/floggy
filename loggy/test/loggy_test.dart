@@ -54,7 +54,8 @@ void main() {
 
     test('Detached loggy is not following parent levels', () {
       final mainPrinter = TestPrinter();
-      Loggy.initLoggy(logPrinter: mainPrinter, logOptions: LogOptions(LogLevel.off));
+      Loggy.initLoggy(
+          logPrinter: mainPrinter, logOptions: LogOptions(LogLevel.off));
 
       final log = TestBlocLoggy();
       final testPrinter = TestPrinter();
@@ -101,7 +102,8 @@ void main() {
 
     test('Named loggy is following parent levels', () {
       final testPrinter = TestPrinter();
-      Loggy.initLoggy(logPrinter: testPrinter, logOptions: LogOptions(LogLevel.off));
+      Loggy.initLoggy(
+          logPrinter: testPrinter, logOptions: LogOptions(LogLevel.off));
       final log = TestBlocLoggy();
       final named = log.newLoggy('namedLoggy');
 

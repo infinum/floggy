@@ -43,8 +43,9 @@ class _LoggyItemStackWidgetState extends State<_LoggyItemStackWidget> {
                 ),
                 secondChild: _StackList(widget.record),
                 duration: const Duration(milliseconds: 250),
-                crossFadeState:
-                    _shownRecords.contains(widget.record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                crossFadeState: _shownRecords.contains(widget.record)
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
               ),
             ],
           ),
@@ -67,10 +68,14 @@ class _StackList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: stackLines.map(
         (String stackTraceLine) {
-          final List<String> value = stackTraceLine.replaceAll(RegExp(' +'), '  ').replaceAll(')', '').split('(');
+          final List<String> value = stackTraceLine
+              .replaceAll(RegExp(' +'), '  ')
+              .replaceAll(')', '')
+              .split('(');
 
           /// Lines that have no connection to the app will be different color.
-          final bool isFlutter = (value.last).startsWith('package:flutter') || (value.last).startsWith('dart:');
+          final bool isFlutter = (value.last).startsWith('package:flutter') ||
+              (value.last).startsWith('dart:');
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,7 +144,9 @@ class _CollapsableButton extends StatelessWidget {
         ),
       ),
       duration: const Duration(milliseconds: 250),
-      crossFadeState: _shownRecords.contains(record) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      crossFadeState: _shownRecords.contains(record)
+          ? CrossFadeState.showSecond
+          : CrossFadeState.showFirst,
     );
   }
 }

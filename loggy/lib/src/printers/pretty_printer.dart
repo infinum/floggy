@@ -19,7 +19,8 @@ class PrettyPrinter extends LoggyPrinter {
   bool get _colorize => showColors ?? false;
 
   static final _levelColors = {
-    LogLevel.debug: AnsiColor(foregroundColor: AnsiColor.grey(0.5), italic: true),
+    LogLevel.debug:
+        AnsiColor(foregroundColor: AnsiColor.grey(0.5), italic: true),
     LogLevel.info: AnsiColor(foregroundColor: 35),
     LogLevel.warning: AnsiColor(foregroundColor: 214),
     LogLevel.error: AnsiColor(foregroundColor: 196),
@@ -37,13 +38,20 @@ class PrettyPrinter extends LoggyPrinter {
   @override
   void onLog(LogRecord record) {
     final time = record.time.toIso8601String().split('T')[1];
-    final callerFrame = record.callerFrame == null ? '-' : '(${record.callerFrame?.location})';
-    final logLevel = record.level.toString().replaceAll('Level.', '').toUpperCase().padRight(8);
+    final callerFrame =
+        record.callerFrame == null ? '-' : '(${record.callerFrame?.location})';
+    final logLevel = record.level
+        .toString()
+        .replaceAll('Level.', '')
+        .toUpperCase()
+        .padRight(8);
 
-    final color = _colorize ? levelColor(record.level) ?? AnsiColor() : AnsiColor();
+    final color =
+        _colorize ? levelColor(record.level) ?? AnsiColor() : AnsiColor();
     final prefix = levelPrefix(record.level) ?? _defaultPrefix;
 
-    print(color('$prefix$time $logLevel ${record.loggerName} $callerFrame ${record.message}'));
+    print(color(
+        '$prefix$time $logLevel ${record.loggerName} $callerFrame ${record.message}'));
 
     if (record.stackTrace != null) {
       print(record.stackTrace);

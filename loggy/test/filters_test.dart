@@ -8,7 +8,8 @@ void main() {
     group('Whitelist filter', () {
       test('Empty filter', () async {
         final testPrinter = TestPrinter();
-        Loggy.initLoggy(logPrinter: testPrinter, filters: [WhitelistFilter([])]);
+        Loggy.initLoggy(
+            logPrinter: testPrinter, filters: [WhitelistFilter([])]);
         final whitelistEmpty = TestBlocLoggy();
 
         whitelistEmpty.loggy.info('Test log');
@@ -38,7 +39,8 @@ void main() {
     group('Blacklist filter', () {
       test('Empty filter', () async {
         final testPrinter = TestPrinter();
-        Loggy.initLoggy(logPrinter: testPrinter, filters: [BlacklistFilter([])]);
+        Loggy.initLoggy(
+            logPrinter: testPrinter, filters: [BlacklistFilter([])]);
         final blacklistEmpty = TestBlocLoggy();
 
         blacklistEmpty.loggy.info('Test log');
@@ -67,7 +69,9 @@ void main() {
     group('Custom level filter', () {
       test('Empty filter', () async {
         final testPrinter = TestPrinter();
-        Loggy.initLoggy(logPrinter: testPrinter, filters: [CustomLevelFilter(LogLevel.error, [])]);
+        Loggy.initLoggy(
+            logPrinter: testPrinter,
+            filters: [CustomLevelFilter(LogLevel.error, [])]);
         final customLevelFilter = TestBlocLoggy();
 
         customLevelFilter.loggy.info('Test log');
