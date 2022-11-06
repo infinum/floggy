@@ -20,23 +20,23 @@ class AnsiColor {
   /// https://en.wikipedia.org/wiki/ANSI_escape_code
   @override
   String toString() {
-    final StringBuffer _sb = StringBuffer(ansiEsc);
+    final StringBuffer sb = StringBuffer(ansiEsc);
 
     if (italic) {
-      _sb.write('3;');
+      sb.write('3;');
     }
 
     if (foregroundColor != null) {
-      _sb.write('38;5;${foregroundColor}m');
+      sb.write('38;5;${foregroundColor}m');
     } else if (backgroundColor != null) {
-      _sb.write('48;5;${backgroundColor}m');
+      sb.write('48;5;${backgroundColor}m');
     }
 
-    if (_sb.length == ansiEsc.length) {
+    if (sb.length == ansiEsc.length) {
       return '';
     } else {
-      _sb.write(ansiDefault);
-      return _sb.toString();
+      sb.write(ansiDefault);
+      return sb.toString();
     }
   }
 
