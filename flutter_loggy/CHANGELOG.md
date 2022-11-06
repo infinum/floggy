@@ -1,7 +1,7 @@
 ## [2.0.2] - 07.11.2022.
 
 - Update dependencies
-- Add linting rules from `lints`
+- Add linting rules from `flutter_lints`
 
 ## [2.0.1] - 01.09.2021.
 

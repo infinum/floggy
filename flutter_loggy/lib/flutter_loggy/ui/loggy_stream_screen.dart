@@ -43,11 +43,7 @@ class _LoggyStreamScreenState extends State<LoggyStreamScreen> {
             )
           ],
         ),
-        body: Container(
-          child: LoggyStreamWidget(
-            logLevel: _level,
-          ),
-        ),
+        body: LoggyStreamWidget(logLevel: _level),
       ),
     );
   }

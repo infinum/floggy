@@ -63,45 +63,43 @@ class _StackList extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<String> stackLines = record.stackTrace.toString().split('\n');
 
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: stackLines.map(
-          (String stackTraceLine) {
-            final List<String> value = stackTraceLine.replaceAll(RegExp(' +'), '  ').replaceAll(')', '').split('(');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: stackLines.map(
+        (String stackTraceLine) {
+          final List<String> value = stackTraceLine.replaceAll(RegExp(' +'), '  ').replaceAll(')', '').split('(');
 
-            /// Lines that have no connection to the app will be different color.
-            final bool isFlutter = (value.last).startsWith('package:flutter') || (value.last).startsWith('dart:');
+          /// Lines that have no connection to the app will be different color.
+          final bool isFlutter = (value.last).startsWith('package:flutter') || (value.last).startsWith('dart:');
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  value.first,
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                        color: isFlutter ? Colors.blueGrey : Colors.redAccent,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.0,
-                      ),
-                ),
-                Text(
-                  value.last,
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color: isFlutter ? Colors.blueGrey : Colors.redAccent,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.0,
-                      ),
-                ),
-                const SizedBox(
-                  height: 4.0,
-                ),
-              ],
-            );
-          },
-        ).toList(),
-      ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                value.first,
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: isFlutter ? Colors.blueGrey : Colors.redAccent,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.0,
+                    ),
+              ),
+              Text(
+                value.last,
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                      color: isFlutter ? Colors.blueGrey : Colors.redAccent,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12.0,
+                    ),
+              ),
+              const SizedBox(
+                height: 4.0,
+              ),
+            ],
+          );
+        },
+      ).toList(),
     );
   }
 }
@@ -114,7 +112,7 @@ class _CollapsableButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
-      firstChild: Container(
+      firstChild: SizedBox(
         height: 32.0,
         child: Center(
           child: Text(
@@ -127,7 +125,7 @@ class _CollapsableButton extends StatelessWidget {
           ),
         ),
       ),
-      secondChild: Container(
+      secondChild: SizedBox(
         height: 32.0,
         child: Center(
           child: Text(

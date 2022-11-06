@@ -34,29 +34,27 @@ class LoggyStreamWidget extends StatelessWidget {
       throw WrongPrinterException();
     }
 
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: StreamBuilder<List<LogRecord>>(
-              stream: printer.logRecord,
-              builder: (BuildContext context, AsyncSnapshot<List<LogRecord>> records) {
-                if (!records.hasData) {
-                  return Container();
-                }
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: StreamBuilder<List<LogRecord>>(
+            stream: printer.logRecord,
+            builder: (BuildContext context, AsyncSnapshot<List<LogRecord>> records) {
+              if (!records.hasData) {
+                return Container();
+              }
 
-                return ListView(
-                  reverse: true,
-                  children: records.data!
-                      .where((LogRecord record) => record.level.priority >= logLevel!.priority)
-                      .map((LogRecord record) => _LoggyItemWidget(record))
-                      .toList(),
-                );
-              },
-            ),
+              return ListView(
+                reverse: true,
+                children: records.data!
+                    .where((LogRecord record) => record.level.priority >= logLevel!.priority)
+                    .map((LogRecord record) => _LoggyItemWidget(record))
+                    .toList(),
+              );
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
