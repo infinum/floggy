@@ -27,7 +27,7 @@ void main() {
 
   print('');
   logDebug('I\'m a global loggy');
-  logInfo('Global loggy has less options but doesn\'t need mixins');
+  logInfo('Global loggy has less options but does not need mixins');
   logError('I share properties set in initLoggy');
 }
 
@@ -69,7 +69,7 @@ class ExampleBlackListedLoggy with BlacklistedLoggy {
 class ExampleWhatLoggyCanDo with ExampleLoggy {
   ExampleWhatLoggyCanDo() {
     /// This will evaluate only if line is actually logged
-    loggy.info('Loggys can do some stuff:');
+    loggy.info('Loggy can do some stuff:');
     loggy.info(
         'You can pass function to the logger, it will evaluate only if log gets shown');
     loggy.debug(() {
@@ -77,25 +77,23 @@ class ExampleWhatLoggyCanDo with ExampleLoggy {
       loggy.warning('Using logger inside of the logger #WeNeedToGoDeeper');
 
       /// Do something here maybe? function returning something (list in this case)
-      const _secret = 0 / 0;
-      return List.generate(8, (_) => _secret)
-              .fold<String>('', (value, e) => value += e.toString()) +
-          ' Batman';
+      const secret = 0 / 0;
+      return '${List.generate(8, (_) => secret).fold<String>('', (value, e) => value += e.toString())} Batman';
     });
 
-    final _childLoggy = newLoggy('Test');
+    final childLoggy = newLoggy('Test');
 
     /// Changing levels for independent loggy only works if hierarchicalLogging is set to true.
     // _logger.level = LogOptions(LogLevel.warning);
-    _childLoggy.debug(
-        'I\'m new logger called "${_childLoggy.name}" and my parent logger name is "${_childLoggy.parent!.name}"');
-    _childLoggy.debug(
+    childLoggy.debug(
+        'I\'m new logger called "${childLoggy.name}" and my parent logger name is "${childLoggy.parent!.name}"');
+    childLoggy.debug(
         'Even if I\'m a new logger, I still share everything with my parent');
 
-    final _detachedLoggy = detachedLoggy('Detached logger');
-    _detachedLoggy.level = const LogOptions(LogLevel.all);
-    _detachedLoggy.printer = DefaultPrinter();
-    _detachedLoggy.debug(
+    final detached = detachedLoggy('Detached logger');
+    detached.level = const LogOptions(LogLevel.all);
+    detached.printer = DefaultPrinter();
+    detached.debug(
         'I\'m a detached logger. I don\'t have a parent and I have no connection or shared info with root logger!');
   }
 }

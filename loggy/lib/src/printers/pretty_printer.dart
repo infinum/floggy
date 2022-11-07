@@ -37,21 +37,21 @@ class PrettyPrinter extends LoggyPrinter {
 
   @override
   void onLog(LogRecord record) {
-    final _time = record.time.toIso8601String().split('T')[1];
-    final _callerFrame =
+    final time = record.time.toIso8601String().split('T')[1];
+    final callerFrame =
         record.callerFrame == null ? '-' : '(${record.callerFrame?.location})';
-    final _logLevel = record.level
+    final logLevel = record.level
         .toString()
         .replaceAll('Level.', '')
         .toUpperCase()
         .padRight(8);
 
-    final _color =
+    final color =
         _colorize ? levelColor(record.level) ?? AnsiColor() : AnsiColor();
-    final _prefix = levelPrefix(record.level) ?? _defaultPrefix;
+    final prefix = levelPrefix(record.level) ?? _defaultPrefix;
 
-    print(_color(
-        '$_prefix$_time $_logLevel ${record.loggerName} $_callerFrame ${record.message}'));
+    print(color(
+        '$prefix$time $logLevel ${record.loggerName} $callerFrame ${record.message}'));
 
     if (record.stackTrace != null) {
       print(record.stackTrace);

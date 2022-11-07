@@ -4,7 +4,7 @@ class LoggyStreamScreen extends StatefulWidget {
   const LoggyStreamScreen({Key? key}) : super(key: key);
 
   @override
-  _LoggyStreamScreenState createState() => _LoggyStreamScreenState();
+  State createState() => _LoggyStreamScreenState();
 }
 
 class _LoggyStreamScreenState extends State<LoggyStreamScreen> {
@@ -43,11 +43,7 @@ class _LoggyStreamScreenState extends State<LoggyStreamScreen> {
             )
           ],
         ),
-        body: Container(
-          child: LoggyStreamWidget(
-            logLevel: _level,
-          ),
-        ),
+        body: LoggyStreamWidget(logLevel: _level),
       ),
     );
   }

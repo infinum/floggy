@@ -1,3 +1,10 @@
+## [2.0.3] - 07.11.2022
+- Use version `^1.10.0` of `stack_trace` 
+
+## [2.0.2] - 07.11.2022
+- Add linting rules from `lints`
+- Update dependencies
+
 ## [2.0.1+1] - 14.01.2022
 - Fixed global loggy to take dynamic
 - Escape colors on log messages

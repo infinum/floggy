@@ -7,7 +7,8 @@ const LogLevel socketLevel = LogLevel('Socket', 32);
 
 /// We can also add short version of log for our newly created [LogLevel]
 extension SocketLoggy on Loggy {
-  void socket(dynamic message, [Object? error, StackTrace? stackTrace]) => log(socketLevel, message, error, stackTrace);
+  void socket(dynamic message, [Object? error, StackTrace? stackTrace]) =>
+      log(socketLevel, message, error, stackTrace);
 }
 
 /// We can also extend our [PrettyPrinter] and add our colors and prefix to

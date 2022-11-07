@@ -7,20 +7,21 @@ void main() {
   group('Loggy filters test', () {
     group('Whitelist filter', () {
       test('Empty filter', () async {
-        final _testPrinter = TestPrinter();
-        Loggy.initLoggy(logPrinter: _testPrinter, filters: [WhitelistFilter([])]);
+        final testPrinter = TestPrinter();
+        Loggy.initLoggy(
+            logPrinter: testPrinter, filters: [WhitelistFilter([])]);
         final whitelistEmpty = TestBlocLoggy();
 
         whitelistEmpty.loggy.info('Test log');
 
         // Nothing was whitelisted, we shouldn't see our log in the stream
-        expect(_testPrinter.recordCalls, equals(0));
+        expect(testPrinter.recordCalls, equals(0));
       });
 
       test('WhitelistLoggy', () async {
-        final _testPrinter = TestPrinter();
+        final testPrinter = TestPrinter();
 
-        Loggy.initLoggy(logPrinter: _testPrinter, filters: [
+        Loggy.initLoggy(logPrinter: testPrinter, filters: [
           WhitelistFilter([WhitelistLoggy])
         ]);
 
@@ -32,24 +33,25 @@ void main() {
         whiteListLoggy.loggy.info('Whitelist log');
 
         // Only whitelist loggy should be shown
-        expect(_testPrinter.recordCalls, equals(1));
+        expect(testPrinter.recordCalls, equals(1));
       });
     });
     group('Blacklist filter', () {
       test('Empty filter', () async {
-        final _testPrinter = TestPrinter();
-        Loggy.initLoggy(logPrinter: _testPrinter, filters: [BlacklistFilter([])]);
+        final testPrinter = TestPrinter();
+        Loggy.initLoggy(
+            logPrinter: testPrinter, filters: [BlacklistFilter([])]);
         final blacklistEmpty = TestBlocLoggy();
 
         blacklistEmpty.loggy.info('Test log');
 
         // Nothing was blacklisted, we should see our log in the stream
-        expect(_testPrinter.recordCalls, equals(1));
+        expect(testPrinter.recordCalls, equals(1));
       });
 
       test('BlacklistLoggy', () async {
-        final _testPrinter = TestPrinter();
-        Loggy.initLoggy(logPrinter: _testPrinter, filters: [
+        final testPrinter = TestPrinter();
+        Loggy.initLoggy(logPrinter: testPrinter, filters: [
           BlacklistFilter([BlacklistLoggy])
         ]);
 
@@ -61,23 +63,25 @@ void main() {
         blacklistLoggy.loggy.info('Blacklist log');
 
         // Only test loggy should be shown
-        expect(_testPrinter.recordCalls, equals(1));
+        expect(testPrinter.recordCalls, equals(1));
       });
     });
     group('Custom level filter', () {
       test('Empty filter', () async {
-        final _testPrinter = TestPrinter();
-        Loggy.initLoggy(logPrinter: _testPrinter, filters: [CustomLevelFilter(LogLevel.error, [])]);
+        final testPrinter = TestPrinter();
+        Loggy.initLoggy(
+            logPrinter: testPrinter,
+            filters: [CustomLevelFilter(LogLevel.error, [])]);
         final customLevelFilter = TestBlocLoggy();
 
         customLevelFilter.loggy.info('Test log');
 
-        expect(_testPrinter.recordCalls, equals(1));
+        expect(testPrinter.recordCalls, equals(1));
       });
 
       test('Custom level', () async {
-        final _testPrinter = TestPrinter();
-        Loggy.initLoggy(logPrinter: _testPrinter, filters: [
+        final testPrinter = TestPrinter();
+        Loggy.initLoggy(logPrinter: testPrinter, filters: [
           CustomLevelFilter(LogLevel.warning, [BlacklistLoggy])
         ]);
 
@@ -89,7 +93,7 @@ void main() {
         customLevel.loggy.warning('Custom level log');
         customLevel.loggy.info('Custom level log');
 
-        expect(_testPrinter.recordCalls, equals(3));
+        expect(testPrinter.recordCalls, equals(3));
       });
     });
   });

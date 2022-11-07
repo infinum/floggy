@@ -13,12 +13,17 @@ class StreamPrinter extends LoggyPrinter {
 
   @override
   void onLog(LogRecord record) {
-    final List<LogRecord>? _existingRecord = logRecord.value;
+    late List<LogRecord> existingRecord;
+    try {
+      existingRecord = logRecord.value;
+    } on ValueStreamError {
+      existingRecord = <LogRecord>[];
+    }
 
     childPrinter.onLog(record);
     logRecord.add(<LogRecord>[
       record,
-      ..._existingRecord ?? <LogRecord>[],
+      ...existingRecord,
     ]);
   }
 
