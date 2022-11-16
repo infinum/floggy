@@ -11,6 +11,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     this.requestLevel,
     this.responseLevel,
     this.errorLevel,
+    this.convert,
   });
 
   final LogLevel? requestLevel;
@@ -34,6 +35,9 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
 
   /// Width size per logPrint
   final int maxWidth;
+
+  DioLoggyConvert? convert;
+  DioLoggyConvert get dataConvert => convert ??= DioLoggyConvert();
 
   @override
   void onRequest(
@@ -126,9 +130,9 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     String value;
 
     try {
-      final Object object = const JsonDecoder().convert(data.toString());
-      const JsonEncoder json = JsonEncoder.withIndent('  ');
-      value = '║  ${json.convert(object).replaceAll('\n', '\n║  ')}';
+      final Object object = const JsonDecoder().convert(dataConvert.convertData(data));
+      const JsonEncoder jsonEncoder = JsonEncoder.withIndent('  ');
+      value = '║  ${jsonEncoder.convert(object).replaceAll('\n', '\n║  ')}';
     } catch (e) {
       value = '║  ${data.toString().replaceAll('\n', '\n║  ')}';
     }
