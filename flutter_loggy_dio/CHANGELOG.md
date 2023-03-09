@@ -1,3 +1,7 @@
+## [3.0.0] - 14.02.2023.
+
+- Support dio version: ^5.0.0
+
 ## [2.0.1] - 07.11.2022.
 
 - Update dependencies
