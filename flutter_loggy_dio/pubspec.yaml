@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   loggy: ^2.0.3
-  dio: ^4.0.6
+  dio: ^5.0.1
 
 dev_dependencies:
   lints: ^2.0.1
