@@ -170,9 +170,8 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
   void _commit(LogLevel level) {
     if (level.priority >= LogLevel.error.priority) {
       final String valueError = _value.toString();
-      final String errorTitle =
-          valueError.substring(0, valueError.indexOf('\n'));
-      final String errorBody = valueError.substring(errorTitle.length);
+      final String errorTitle = valueError.contains('\n') ? valueError.substring(0, valueError.indexOf('\n')) : valueError;
+      final String errorBody =  valueError.contains('\n') ? valueError.substring(errorTitle.length) : '';
       loggy.log(level, errorTitle, errorBody);
     } else {
       loggy.log(level, _value.toString());
