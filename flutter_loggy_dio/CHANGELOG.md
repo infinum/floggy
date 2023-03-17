@@ -1,3 +1,7 @@
+## [3.0.1] - 17.03.2023.
+
+- Fix when response in one-line
+
 ## [3.0.0] - 14.02.2023.
 
 - Support dio version: ^5.0.0
