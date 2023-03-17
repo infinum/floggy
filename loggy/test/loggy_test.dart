@@ -13,107 +13,104 @@ void main() {
     });
 
     test('New logger has parent name in title', () {
-      final _extraLoggy = loggy.newLoggy('extra');
-      expect(_extraLoggy.fullName.contains(loggy.loggy.fullName), isTrue);
+      final extraLoggy = loggy.newLoggy('extra');
+      expect(extraLoggy.fullName.contains(loggy.loggy.fullName), isTrue);
     });
 
     test('Detached logger has no parent', () {
-      final _detached = loggy.detachedLoggy('detached');
-      expect(_detached.fullName.contains(loggy.loggy.fullName), isFalse);
+      final detached = loggy.detachedLoggy('detached');
+      expect(detached.fullName.contains(loggy.loggy.fullName), isFalse);
     });
   });
   group('Detached Loggy', () {
     test('Detached loggy has separate printer', () {
-      final _mainPrinter = TestPrinter();
-      Loggy.initLoggy(logPrinter: _mainPrinter);
+      final mainPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: mainPrinter);
 
-      final _log = TestBlocLoggy();
+      final log = TestBlocLoggy();
 
-      final _testPrinter = TestPrinter();
-      final _detached =
-          _log.detachedLoggy('detached', logPrinter: _testPrinter);
+      final testPrinter = TestPrinter();
+      final detached = log.detachedLoggy('detached', logPrinter: testPrinter);
 
-      _detached.info('Detached message');
+      detached.info('Detached message');
 
-      expect(_testPrinter.recordCalls, 1);
-      expect(_mainPrinter.recordCalls, 0);
+      expect(testPrinter.recordCalls, 1);
+      expect(mainPrinter.recordCalls, 0);
     });
 
     test('Detached loggy is not following parent filters', () {
-      final _mainPrinter = TestPrinter();
-      Loggy.initLoggy(logPrinter: _mainPrinter, filters: [WhitelistFilter([])]);
+      final mainPrinter = TestPrinter();
+      Loggy.initLoggy(logPrinter: mainPrinter, filters: [WhitelistFilter([])]);
 
-      final _log = TestBlocLoggy();
-      final _testPrinter = TestPrinter();
-      final _detached =
-          _log.detachedLoggy('detached', logPrinter: _testPrinter);
+      final log = TestBlocLoggy();
+      final testPrinter = TestPrinter();
+      final detached = log.detachedLoggy('detached', logPrinter: testPrinter);
 
-      _detached.info('Detached message');
+      detached.info('Detached message');
 
-      expect(_testPrinter.recordCalls, 1);
-      expect(_mainPrinter.recordCalls, 0);
+      expect(testPrinter.recordCalls, 1);
+      expect(mainPrinter.recordCalls, 0);
     });
 
     test('Detached loggy is not following parent levels', () {
-      final _mainPrinter = TestPrinter();
+      final mainPrinter = TestPrinter();
       Loggy.initLoggy(
-          logPrinter: _mainPrinter, logOptions: LogOptions(LogLevel.off));
+          logPrinter: mainPrinter, logOptions: LogOptions(LogLevel.off));
 
-      final _log = TestBlocLoggy();
-      final _testPrinter = TestPrinter();
-      final _detached =
-          _log.detachedLoggy('detached', logPrinter: _testPrinter);
+      final log = TestBlocLoggy();
+      final testPrinter = TestPrinter();
+      final detached = log.detachedLoggy('detached', logPrinter: testPrinter);
 
-      _detached.info('Detached message');
+      detached.info('Detached message');
 
-      expect(_testPrinter.recordCalls, 1);
-      expect(_mainPrinter.recordCalls, 0);
+      expect(testPrinter.recordCalls, 1);
+      expect(mainPrinter.recordCalls, 0);
     });
   });
   group('Named Loggy test', () {
     test('Named loggy uses same printer as parent', () {
-      final _testPrinter = TestPrinter();
+      final testPrinter = TestPrinter();
       Loggy.initLoggy(
-        logPrinter: _testPrinter,
+        logPrinter: testPrinter,
       );
-      final _log = TestBlocLoggy();
-      final _named = _log.newLoggy('namedLoggy');
+      final log = TestBlocLoggy();
+      final named = log.newLoggy('namedLoggy');
 
-      _named.info('Named message');
-      _log.loggy.info('Named message');
+      named.info('Named message');
+      log.loggy.info('Named message');
 
-      expect(_testPrinter.recordCalls, 2);
+      expect(testPrinter.recordCalls, 2);
     });
 
     test('Named loggy is following parent filters', () {
-      final _testPrinter = TestPrinter();
+      final testPrinter = TestPrinter();
       Loggy.initLoggy(
-        logPrinter: _testPrinter,
+        logPrinter: testPrinter,
         filters: [
           BlacklistFilter([UiLoggy])
         ],
       );
 
-      final _log = TestBlocLoggy();
-      final _named = _log.newLoggy('namedLoggy');
+      final log = TestBlocLoggy();
+      final named = log.newLoggy('namedLoggy');
 
-      _named.info('Named message');
-      _log.loggy.info('Named message');
+      named.info('Named message');
+      log.loggy.info('Named message');
 
-      expect(_testPrinter.recordCalls, 0);
+      expect(testPrinter.recordCalls, 0);
     });
 
     test('Named loggy is following parent levels', () {
-      final _testPrinter = TestPrinter();
+      final testPrinter = TestPrinter();
       Loggy.initLoggy(
-          logPrinter: _testPrinter, logOptions: LogOptions(LogLevel.off));
-      final _log = TestBlocLoggy();
-      final _named = _log.newLoggy('namedLoggy');
+          logPrinter: testPrinter, logOptions: LogOptions(LogLevel.off));
+      final log = TestBlocLoggy();
+      final named = log.newLoggy('namedLoggy');
 
-      _named.info('Named message');
-      _log.loggy.info('Named message');
+      named.info('Named message');
+      log.loggy.info('Named message');
 
-      expect(_testPrinter.recordCalls, 0);
+      expect(testPrinter.recordCalls, 0);
     });
   });
 }

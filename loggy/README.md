@@ -7,7 +7,7 @@ Highly customizable logger for dart that uses mixins to show all the needed info
 Add logger package to your project:
 ```yaml
 dependencies:
-    loggy: ^2.0.1+1
+    loggy: ^2.0.2
 ```
 
 ## Usage

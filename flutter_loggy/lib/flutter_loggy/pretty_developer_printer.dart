@@ -16,16 +16,16 @@ class PrettyDeveloperPrinter extends LoggyPrinter {
 
   @override
   void onLog(LogRecord record) {
-    final String _time = record.time.toIso8601String().split('T')[1];
-    final String _callerFrame =
+    final String time = record.time.toIso8601String().split('T')[1];
+    final String callerFrame =
         record.callerFrame == null ? '-' : '(${record.callerFrame?.location})';
-    final String _logLevel =
+    final String logLevel =
         record.level.toString().replaceAll('Level.', '').toUpperCase();
 
-    final String _prefix = levelPrefix(record.level) ?? _defaultPrefix;
+    final String prefix = levelPrefix(record.level) ?? _defaultPrefix;
 
     developer.log(
-      '$_prefix$_time $_logLevel $_callerFrame ${record.message}',
+      '$prefix$time $logLevel $callerFrame ${record.message}',
       name: record.loggerName,
       error: record.error,
       stackTrace: record.stackTrace,

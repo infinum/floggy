@@ -38,19 +38,19 @@ class Loggy<T extends LoggyType> {
     }
     // Split hierarchical names (separated with '.').
     final dot = name.lastIndexOf('.');
-    Loggy? _parent;
+    Loggy? parent;
     String thisName;
     if (dot == -1) {
       if (name != '') {
-        _parent = Loggy('');
+        parent = Loggy('');
       }
 
       thisName = name;
     } else {
-      _parent = Loggy(name.substring(0, dot));
+      parent = Loggy(name.substring(0, dot));
       thisName = name.substring(dot + 1);
     }
-    return Loggy<T>._internal(thisName, _parent, <String, Loggy>{});
+    return Loggy<T>._internal(thisName, parent, <String, Loggy>{});
   }
 
   Loggy._internal(this.name, this._parent, Map<String, Loggy> children)
@@ -115,17 +115,17 @@ class Loggy<T extends LoggyType> {
   /// Effective level considering the levels established in this logger's
   /// parents (when [hierarchicalLoggingEnabled] is true).
   LogOptions get level {
-    LogOptions _effectiveLevel;
+    LogOptions effectiveLevel;
 
     if (_parent == null) {
-      _effectiveLevel = _level;
+      effectiveLevel = _level;
     } else if (!hierarchicalLoggingEnabled) {
-      _effectiveLevel = _root._level;
+      effectiveLevel = _root._level;
     } else {
-      _effectiveLevel = _level;
+      effectiveLevel = _level;
     }
 
-    return _effectiveLevel;
+    return effectiveLevel;
   }
 
   /// Override the level for this particular [Loggy] and its children.
@@ -173,13 +173,13 @@ class Loggy<T extends LoggyType> {
   /// Return bool value whether this log should be shown or not
   bool _isLoggable(LogLevel value) {
     // Go through all filters passed and figure out if log should be shown
-    bool _foldFilters(List<LoggyFilter> filters) => filters.fold(
+    bool foldFilters(List<LoggyFilter> filters) => filters.fold(
         true,
         (shouldLog, filter) =>
             filter.shouldLog(value, _getRootType()) && shouldLog);
 
     if (value.priority >= level.logLevel.priority) {
-      return _foldFilters(_parent == null ? _filters : _root._filters);
+      return foldFilters(_parent == null ? _filters : _root._filters);
     }
 
     return false;
@@ -258,10 +258,13 @@ class Loggy<T extends LoggyType> {
 
   void debug(dynamic message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.debug, message, error, stackTrace);
+
   void info(dynamic message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.info, message, error, stackTrace);
+
   void warning(dynamic message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.warning, message, error, stackTrace);
+
   void error(dynamic message, [Object? error, StackTrace? stackTrace]) =>
       log(LogLevel.error, message, error, stackTrace);
 
