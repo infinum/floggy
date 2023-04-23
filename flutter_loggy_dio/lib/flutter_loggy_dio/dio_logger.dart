@@ -1,5 +1,175 @@
 part of flutter_loggy_dio;
 
+class DioLogMessage {
+  DioLogMessage._({
+    required this.type,
+    required this.uri,
+    required this.method,
+    this.statusCode,
+    this.statusMessage,
+    this.queryParameters,
+    this.headers,
+    this.extra,
+    this.errorMessage,
+    this.errorType,
+    this.data,
+    DioLogPrintOptions? printOptions,
+  }) : printOptions = printOptions ?? const DioLogPrintOptions();
+
+  factory DioLogMessage.request(
+    RequestOptions options, {
+    DioLogPrintOptions? printOptions,
+  }) =>
+      DioLogMessage._(
+        type: DioLogMessageType.request,
+        uri: options.uri,
+        method: options.method,
+        queryParameters: options.queryParameters,
+        headers: {
+          ...options.headers,
+          'contentType': options.contentType?.toString(),
+          'responseType': options.responseType.toString(),
+          'followRedirects': options.followRedirects,
+          'connectTimeout': options.connectTimeout,
+          'receiveTimeout': options.receiveTimeout,
+        },
+        extra: options.extra,
+        data: options.data,
+        printOptions: printOptions,
+      );
+
+  factory DioLogMessage.response(
+    Response<dynamic> response, {
+    DioLogPrintOptions? printOptions,
+  }) =>
+      DioLogMessage._(
+        type: DioLogMessageType.response,
+        uri: response.requestOptions.uri,
+        method: response.requestOptions.method,
+        headers: response.headers.map,
+        statusCode: response.statusCode,
+        statusMessage: response.statusMessage,
+        data: response.data,
+        printOptions: printOptions,
+      );
+
+  factory DioLogMessage.error(
+    DioError err, {
+    DioLogPrintOptions? printOptions,
+  }) =>
+      DioLogMessage._(
+        type: DioLogMessageType.error,
+        uri: err.requestOptions.uri,
+        method: err.requestOptions.method,
+        statusCode: err.response?.statusCode,
+        statusMessage: err.response?.statusMessage,
+        errorType: err.type,
+        errorMessage: err.message,
+        printOptions: printOptions,
+      );
+
+  final DioLogMessageType type;
+  final Uri uri;
+  final String method;
+  final int? statusCode;
+  final Map<String, dynamic>? queryParameters;
+  final Map<String, dynamic>? headers;
+  final Map<String, dynamic>? extra;
+  final String? statusMessage;
+  final String? errorMessage;
+  final DioErrorType? errorType;
+  final Object? data;
+
+  final DioLogPrintOptions printOptions;
+
+  @override
+  String toString() {
+    StringBuffer buffer = StringBuffer();
+    switch (type) {
+      case DioLogMessageType.request:
+        buffer.writeln('>>> Request │ $method │ $uri');
+        if (printOptions.requestHeader) {
+          _prettyPrintObject(buffer, headers!, header: 'Headers');
+          _prettyPrintObject(buffer, extra!, header: 'Extras');
+        }
+        if (printOptions.requestBody && method != 'GET') {
+          Object? data = this.data;
+          if (data == null) {
+            break;
+          }
+
+          if (data is FormData) {
+            final Map<String, Object> formDataMap = <String, Object>{}
+              ..addEntries(data.fields)
+              ..addEntries(data.files);
+            _prettyPrintObject(buffer, formDataMap,
+                header: 'Form data | ${data.boundary}');
+          } else {
+            _prettyPrintObject(buffer, data, header: 'Body');
+          }
+        }
+        break;
+      case DioLogMessageType.response:
+        buffer.writeln(
+            '<<< Response │ $method │ $statusCode $statusMessage │ $uri');
+        if (printOptions.responseHeader) {
+          _prettyPrintObject(buffer, headers!, header: 'Headers');
+        }
+
+        if (printOptions.responseBody && data != null) {
+          _prettyPrintObject(buffer, data!, header: 'Body');
+        }
+        break;
+      case DioLogMessageType.error:
+        buffer.write('<<< DioError');
+        if (statusCode != null || statusMessage != null) {
+          buffer.write(' | $method');
+          buffer.write(' | $statusCode ');
+          if (statusMessage != null) {
+            buffer.write('$statusMessage');
+          }
+        } else {
+          buffer.write(' (No  response)');
+          buffer.write(' | $method');
+        }
+        buffer.write(' | $uri');
+        buffer.writeln();
+        if (data != null) {
+          _prettyPrintObject(buffer, data!, header: 'DioError │ $errorType');
+        }
+        if (errorMessage != null) {
+          _prettyPrintObject(buffer, errorMessage!, header: 'ERROR');
+        }
+        break;
+    }
+    return buffer.toString().trim();
+  }
+
+  void _prettyPrintObject(StringBuffer buffer, Object data, {String? header}) {
+    String value;
+
+    try {
+      final Object object = const JsonDecoder().convert(data.toString());
+      const JsonEncoder json = JsonEncoder.withIndent('  ');
+      value = '║  ${json.convert(object).replaceAll('\n', '\n║  ')}';
+    } on Exception {
+      value = '║  ${data.toString().replaceAll('\n', '\n║  ')}';
+    }
+
+    buffer.writeln('╔  $header');
+    buffer.writeln('║');
+    buffer.writeln(value);
+    buffer.writeln('║');
+    buffer.writeln('╚${'═' * printOptions.maxWidth}╝');
+  }
+}
+
+enum DioLogMessageType {
+  request,
+  response,
+  error,
+}
+
 class LoggyDioInterceptor extends Interceptor with DioLoggy {
   LoggyDioInterceptor({
     this.requestHeader = false,
@@ -35,41 +205,19 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
   /// Width size per logPrint
   final int maxWidth;
 
+  DioLogPrintOptions get _printOptions => DioLogPrintOptions(
+        requestHeader: requestHeader,
+        requestBody: requestBody,
+        responseHeader: responseHeader,
+        responseBody: responseBody,
+        maxWidth: maxWidth,
+      );
+
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    _printRequestHeader(options);
-    if (requestHeader) {
-      _prettyPrintObject(options.queryParameters, header: 'Query Parameters');
-      final Map<String, dynamic> requestHeaders = <String, dynamic>{};
-      requestHeaders.addAll(options.headers);
-      requestHeaders['contentType'] = options.contentType?.toString();
-      requestHeaders['responseType'] = options.responseType.toString();
-      requestHeaders['followRedirects'] = options.followRedirects;
-      requestHeaders['connectTimeout'] = options.connectTimeout;
-      requestHeaders['receiveTimeout'] = options.receiveTimeout;
-
-      _prettyPrintObject(requestHeaders, header: 'Headers');
-      _prettyPrintObject(options.extra, header: 'Extras');
-    }
-    if (requestBody && options.method != 'GET') {
-      final Object? data = options.data;
-      if (data == null) {
-        super.onRequest(options, handler);
-        return;
-      }
-
-      if (data is FormData) {
-        final Map<String, Object> formDataMap = <String, Object>{}
-          ..addEntries(data.fields)
-          ..addEntries(data.files);
-        _prettyPrintObject(formDataMap, header: 'Form data | ${data.boundary}');
-      } else {
-        _prettyPrintObject(data, header: 'Body');
-      }
-    }
-
-    _commit(requestLevel ?? LogLevel.info);
+    loggy.log(requestLevel ?? LogLevel.info,
+        DioLogMessage.request(options, printOptions: _printOptions));
     super.onRequest(options, handler);
   }
 
@@ -79,105 +227,32 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
       return;
     }
 
-    if (err.type == DioErrorType.badResponse) {
-      logPrint(
-          '<<< DioError │ ${err.requestOptions.method} │ ${err.response?.statusCode} ${err.response?.statusMessage} │ ${err.response?.requestOptions.uri.toString()}');
-      if (err.response != null && err.response?.data != null) {
-        _prettyPrintObject(err.response?.data,
-            header: 'DioError │ ${err.type}');
-      }
-    } else if (err.message != null) {
-      logPrint(
-          '<<< DioError (No response) │ ${err.requestOptions.method} │ ${err.requestOptions.uri.toString()}');
-      logPrint('╔ ERROR');
-      logPrint('║  ${err.message!.replaceAll('\n', '\n║  ')}');
-      _printLine(pre: '╚');
-    }
-
-    _commit(errorLevel ?? LogLevel.error);
+    loggy.log(errorLevel ?? LogLevel.error,
+        DioLogMessage.error(err, printOptions: _printOptions));
     super.onError(err, handler);
   }
 
   @override
   void onResponse(
       Response<dynamic> response, ResponseInterceptorHandler handler) async {
-    _printResponseHeader(response);
-    if (responseHeader) {
-      _prettyPrintObject(response.headers, header: 'Headers');
-    }
-
-    if (responseBody) {
-      _printResponse(response);
-    }
-
-    _commit(responseLevel ?? LogLevel.info);
+    loggy.log(responseLevel ?? LogLevel.info,
+        DioLogMessage.response(response, printOptions: _printOptions));
     super.onResponse(response, handler);
   }
+}
 
-  void _printResponse(Response<dynamic> response) {
-    final Object? data = response.data;
+class DioLogPrintOptions {
+  const DioLogPrintOptions({
+    this.requestHeader = false,
+    this.requestBody = false,
+    this.responseHeader = false,
+    this.responseBody = true,
+    this.maxWidth = 90,
+  });
 
-    if (data != null) {
-      _prettyPrintObject(data, header: 'Body');
-    }
-  }
-
-  void _prettyPrintObject(Object data, {String? header}) {
-    String value;
-
-    try {
-      final Object object = const JsonDecoder().convert(data.toString());
-      const JsonEncoder json = JsonEncoder.withIndent('  ');
-      value = '║  ${json.convert(object).replaceAll('\n', '\n║  ')}';
-    } catch (e) {
-      value = '║  ${data.toString().replaceAll('\n', '\n║  ')}';
-    }
-
-    logPrint('╔  $header');
-    logPrint('║');
-    logPrint(value);
-    logPrint('║');
-    _printLine(pre: '╚');
-  }
-
-  void _printResponseHeader(Response<dynamic> response) {
-    final Uri uri = response.requestOptions.uri;
-    final String method = response.requestOptions.method;
-    logPrint(
-        '<<< Response │ $method │ ${response.statusCode} ${response.statusMessage} │ ${uri.toString()}');
-  }
-
-  void _printRequestHeader(RequestOptions options) {
-    final Uri uri = options.uri;
-    final String method = options.method;
-    logPrint('>>> Request │ $method │ ${uri.toString()}');
-  }
-
-  void _printLine({String pre = '', String suf = '╝'}) => logPrint(
-        '$pre${'═' * maxWidth}$suf',
-      );
-
-  final StringBuffer _value = StringBuffer();
-
-  void logPrint(String value) {
-    if (_value.isEmpty) {
-      _value.write(value);
-    } else {
-      _value.write('\n$value');
-    }
-  }
-
-  void _commit(LogLevel level) {
-    if (level.priority >= LogLevel.error.priority &&
-        _value.toString().contains('\n')) {
-      final String valueError = _value.toString();
-      final String errorTitle =
-          valueError.substring(0, valueError.indexOf('\n'));
-      final String errorBody = valueError.substring(errorTitle.length);
-      loggy.log(level, errorTitle, errorBody);
-    } else {
-      loggy.log(level, _value.toString());
-    }
-    _value.clear();
-  }
+  final bool requestHeader;
+  final bool requestBody;
+  final bool responseHeader;
+  final bool responseBody;
+  final int maxWidth;
 }
