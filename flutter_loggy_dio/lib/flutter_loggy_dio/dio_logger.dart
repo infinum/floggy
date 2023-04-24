@@ -133,7 +133,7 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
       value = '║  ${data.toString().replaceAll('\n', '\n║  ')}';
     }
 
-    logPrint('╔  $header');
+    _printLine(pre: '╔', header: header != null ? ' $header ' : '', suf: '╗');
     logPrint('║');
     logPrint(value);
     logPrint('║');
@@ -153,8 +153,8 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     logPrint('>>> Request │ $method │ ${uri.toString()}');
   }
 
-  void _printLine({String pre = '', String suf = '╝'}) => logPrint(
-        '$pre${'═' * maxWidth}$suf',
+  void _printLine({String pre = '', String header = '', String suf = '╝'}) => logPrint(
+        '$pre$header${'═' * maxWidth - header.length}$suf',
       );
 
   final StringBuffer _value = StringBuffer();
