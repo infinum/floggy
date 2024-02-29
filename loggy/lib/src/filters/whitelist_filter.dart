@@ -1,4 +1,4 @@
-part of loggy;
+part of '../../loggy.dart';
 
 /// White list filter will log only [Type] of loggy that is passed.
 /// You should pass only [Type] that is from [LoggyType] otherwise no effect will take place.

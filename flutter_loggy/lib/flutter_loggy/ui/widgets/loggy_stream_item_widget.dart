@@ -1,4 +1,4 @@
-part of flutter_loggy;
+part of '../../../flutter_loggy.dart';
 
 final List<LogRecord> _shownRecords = <LogRecord>[];
 
@@ -83,7 +83,7 @@ class _StackList extends StatelessWidget {
               Text(
                 value.first,
                 textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.headline6!.copyWith(
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: isFlutter ? Colors.blueGrey : Colors.redAccent,
                       fontWeight: FontWeight.w600,
                       fontSize: 16.0,
@@ -92,7 +92,7 @@ class _StackList extends StatelessWidget {
               Text(
                 value.last,
                 textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       color: isFlutter ? Colors.blueGrey : Colors.redAccent,
                       fontWeight: FontWeight.w400,
                       fontSize: 12.0,
@@ -122,7 +122,7 @@ class _CollapsableButton extends StatelessWidget {
         child: Center(
           child: Text(
             '▼ ${MaterialLocalizations.of(context).collapsedIconTapHint.toUpperCase()} ▼',
-            style: Theme.of(context).textTheme.bodyText2!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: Colors.redAccent,
                   fontWeight: FontWeight.w900,
                   fontSize: 16.0,
@@ -135,7 +135,7 @@ class _CollapsableButton extends StatelessWidget {
         child: Center(
           child: Text(
             '▲ ${MaterialLocalizations.of(context).expandedIconTapHint.toUpperCase()} ▲',
-            style: Theme.of(context).textTheme.bodyText2!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: Colors.redAccent,
                   fontWeight: FontWeight.w900,
                   fontSize: 16.0,

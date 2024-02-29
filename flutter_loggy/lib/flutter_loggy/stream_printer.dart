@@ -1,4 +1,4 @@
-part of flutter_loggy;
+part of '../flutter_loggy.dart';
 
 /// Stream printer will take another [LoggyPrinter] as it's [childPrinter] all logs will
 /// pass through [childPrinter] as well.

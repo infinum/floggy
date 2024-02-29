@@ -1,4 +1,4 @@
-part of loggy;
+part of '../../loggy.dart';
 
 /// Different logger types must be mixins and they have to implement [LoggyType]
 /// This will make sure that each mixin is using it's own [Loggy] and that will be useful

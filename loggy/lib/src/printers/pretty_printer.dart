@@ -1,3 +1,4 @@
+// ignore: use_string_in_part_of_directives
 part of loggy;
 
 /// Format log and add emoji to represent the color.

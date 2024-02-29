@@ -1,4 +1,4 @@
-part of loggy;
+part of '../../loggy.dart';
 
 /// Define custom levels for logging custom types, [LoggyType]s added here can define higher level for logging.
 ///

@@ -1,4 +1,4 @@
-part of flutter_loggy;
+part of '../../flutter_loggy.dart';
 
 class LoggyStreamScreen extends StatefulWidget {
   const LoggyStreamScreen({Key? key}) : super(key: key);

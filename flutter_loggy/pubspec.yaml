@@ -5,7 +5,7 @@ repository: https://github.com/infinum/flutter-logger
 homepage: https://github.com/infinum/flutter-logger
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.12.0 <4.0.0'
   flutter: '>=2.0.0'
 
 dependencies:
@@ -15,4 +15,4 @@ dependencies:
   rxdart: ^0.27.5
 
 dev_dependencies:
-  flutter_lints: ^2.0.1
+  flutter_lints: ^3.0.1

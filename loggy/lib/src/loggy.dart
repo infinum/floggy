@@ -1,4 +1,4 @@
-part of loggy;
+part of '../loggy.dart';
 
 /// Whether to allow fine-grain logging and configuration of loggers in a
 /// hierarchy.

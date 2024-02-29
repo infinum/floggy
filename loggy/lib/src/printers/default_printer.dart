@@ -1,4 +1,4 @@
-part of loggy;
+part of '../../loggy.dart';
 
 class DefaultPrinter extends LoggyPrinter {
   const DefaultPrinter() : super();
