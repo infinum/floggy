@@ -1,3 +1,7 @@
+## [3.1.0]
+
+- Removed flutter dependency
+
 ## [3.0.1] - 17.03.2023.
 
 - Fix when response in one-line
