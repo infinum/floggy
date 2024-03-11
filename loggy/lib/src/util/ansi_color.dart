@@ -35,14 +35,13 @@ class AnsiColor {
     if (sb.length == ansiEsc.length) {
       return '';
     } else {
-      sb.write(ansiDefault);
       return sb.toString();
     }
   }
 
   String call(String msg) {
     if (color) {
-      return '${this}$msg$ansiDefault';
+      return '$this$msg$ansiDefault';
     } else {
       return msg;
     }

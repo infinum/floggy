@@ -83,18 +83,18 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
       return;
     }
 
-    if (err.type == DioErrorType.response) {
+    if (err.type == DioErrorType.badResponse) {
       logPrint(
           '<<< DioError │ ${err.requestOptions.method} │ ${err.response?.statusCode} ${err.response?.statusMessage} │ ${err.response?.requestOptions.uri.toString()}');
       if (err.response != null && err.response?.data != null) {
         _prettyPrintObject(err.response?.data,
             header: 'DioError │ ${err.type}');
       }
-    } else {
+    } else if (err.message != null) {
       logPrint(
           '<<< DioError (No response) │ ${err.requestOptions.method} │ ${err.requestOptions.uri.toString()}');
       logPrint('╔ ERROR');
-      logPrint('║  ${err.message.replaceAll('\n', '\n║  ')}');
+      logPrint('║  ${err.message!.replaceAll('\n', '\n║  ')}');
       _printLine(pre: '╚');
     }
 
@@ -172,7 +172,8 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
   }
 
   void _commit(LogLevel level) {
-    if (level.priority >= LogLevel.error.priority) {
+    if (level.priority >= LogLevel.error.priority &&
+        _value.toString().contains('\n')) {
       final String valueError = _value.toString();
       final String errorTitle =
           valueError.substring(0, valueError.indexOf('\n'));
