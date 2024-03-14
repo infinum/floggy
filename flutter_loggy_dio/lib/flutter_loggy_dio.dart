@@ -1,6 +1,7 @@
 library flutter_loggy_dio;
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:loggy/loggy.dart';

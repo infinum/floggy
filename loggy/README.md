@@ -219,7 +219,7 @@ In IntelliJ/Studio you can collapse the request/response body:
 ![Gif showing collapsible body][show_body]
 
 
-Set up this is by going to `Preferences -> Editor -> General -> Console` and under `Fold console lines that contain` add these 3 rules: `║`, `╔` and `╚`.
+Set up this is by going to `Preferences -> Editor -> General -> Console` and under `Fold console lines that contain` add these 4 rules: `║`, `╟`, `╔` and `╚`.
 ![Settings][settings]
  
 ## Features and bugs

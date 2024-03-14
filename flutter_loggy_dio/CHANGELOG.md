@@ -1,6 +1,7 @@
-## [3.1.0]
+## [3.1.0] - 07.03.2024
 
 - Removed flutter dependency
+- Prettier logs
 
 ## [3.0.1] - 17.03.2023.
 

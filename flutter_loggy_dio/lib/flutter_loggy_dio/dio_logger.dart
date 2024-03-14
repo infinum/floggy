@@ -8,14 +8,14 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
     this.responseBody = true,
     this.error = true,
     this.maxWidth = 90,
-    this.requestLevel,
-    this.responseLevel,
-    this.errorLevel,
+    this.requestLevel = LogLevel.info,
+    this.responseLevel = LogLevel.info,
+    this.errorLevel = LogLevel.error,
   });
 
-  final LogLevel? requestLevel;
-  final LogLevel? responseLevel;
-  final LogLevel? errorLevel;
+  final LogLevel requestLevel;
+  final LogLevel responseLevel;
+  final LogLevel errorLevel;
 
   /// Print request header [Options.headers]
   final bool requestHeader;
@@ -23,11 +23,11 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
   /// Print request data [Options.data]
   final bool requestBody;
 
-  /// Print [Response.data]
-  final bool responseBody;
-
   /// Print [Response.headers]
   final bool responseHeader;
+
+  /// Print [Response.data]
+  final bool responseBody;
 
   /// Print error message
   final bool error;
@@ -38,146 +38,216 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    _printRequestHeader(options);
-    if (requestHeader) {
-      _prettyPrintObject(options.queryParameters, header: 'Query Parameters');
-      final Map<String, dynamic> requestHeaders = <String, dynamic>{};
-      requestHeaders.addAll(options.headers);
-      requestHeaders['contentType'] = options.contentType?.toString();
-      requestHeaders['responseType'] = options.responseType.toString();
-      requestHeaders['followRedirects'] = options.followRedirects;
-      requestHeaders['connectTimeout'] = options.connectTimeout;
-      requestHeaders['receiveTimeout'] = options.receiveTimeout;
+    final builder = _LogBuilder(maxWidth);
 
-      _prettyPrintObject(requestHeaders, header: 'Headers');
-      _prettyPrintObject(options.extra, header: 'Extras');
+    builder.addTitle('>>> Request │ ${options.method} │ ${options.uri}');
+
+    if (requestHeader) {
+      builder.startSection('Query parameters');
+      builder.addMap(options.queryParameters);
+      builder.endSection();
+
+      builder.startSection('Headers');
+      final headers = {
+        'contentType': options.contentType,
+        'responseType': options.responseType,
+        'followRedirects': options.followRedirects,
+        'connectTimeout': options.connectTimeout,
+        'receiveTimeout': options.receiveTimeout,
+        ...options.headers,
+      };
+      builder.addMap(headers);
+      builder.endSection();
+
+      builder.startSection('Extra');
+      builder.addMap(options.extra);
+      builder.endSection();
     }
+
     if (requestBody && options.method != 'GET') {
-      final Object? data = options.data;
-      if (data == null) {
-        super.onRequest(options, handler);
-        return;
-      }
+      final data = options.data;
 
       if (data is FormData) {
-        final Map<String, Object> formDataMap = <String, Object>{}
+        builder.startSection('Form data │ ${data.boundary}');
+        final formDataMap = {}
           ..addEntries(data.fields)
           ..addEntries(data.files);
-        _prettyPrintObject(formDataMap, header: 'Form data | ${data.boundary}');
+        builder.addMap(formDataMap);
+        builder.endSection();
       } else {
-        _prettyPrintObject(data, header: 'Body');
+        builder.startSection('Body');
+        builder.addBodyData(data);
+        builder.endSection();
       }
     }
 
-    _commit(requestLevel ?? LogLevel.info);
+    loggy.log(requestLevel, builder.build());
     super.onRequest(options, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (!error) {
-      return;
-    }
+    final builder = _LogBuilder(maxWidth);
 
-    if (err.type == DioExceptionType.badResponse) {
-      logPrint(
-          '<<< DioError │ ${err.requestOptions.method} │ ${err.response?.statusCode} ${err.response?.statusMessage} │ ${err.response?.requestOptions.uri.toString()}');
-      if (err.response != null && err.response?.data != null) {
-        _prettyPrintObject(err.response?.data,
-            header: 'DioError │ ${err.type}');
+    final response = err.response;
+    if (response != null) {
+      builder.addTitle('<<< DioError │ ${err.requestOptions.method} │ '
+          '${response.statusCode} ${response.statusMessage} │ '
+          '${response.requestOptions.uri}');
+
+      if (error) {
+        builder.startSection('Headers');
+        builder.addMap(response.headers.map);
+        builder.endSection();
+
+        builder.startSection('Body');
+        builder.addBodyData(response.data);
+        builder.endSection();
       }
-    } else if (err.message != null) {
-      logPrint(
-          '<<< DioError (No response) │ ${err.requestOptions.method} │ ${err.requestOptions.uri.toString()}');
-      logPrint('╔ ERROR');
-      logPrint('║  ${err.message!.replaceAll('\n', '\n║  ')}');
-      _printLine(pre: '╚');
+    } else {
+      builder.addTitle('<<< DioError (${err.type}) │ '
+          '${err.requestOptions.method} │ ${err.requestOptions.uri}');
+
+      final message = err.message;
+      if (error && message != null) {
+        builder.startSection('Message');
+        builder.addMessage(message);
+        builder.endSection();
+      }
     }
 
-    _commit(errorLevel ?? LogLevel.error);
+    loggy.log(errorLevel, builder.build());
     super.onError(err, handler);
   }
 
   @override
   void onResponse(
       Response<dynamic> response, ResponseInterceptorHandler handler) async {
-    _printResponseHeader(response);
+    final builder = _LogBuilder(maxWidth);
+
+    builder.addTitle('<<< Response │ ${response.requestOptions.method} │ '
+        '${response.statusCode} ${response.statusMessage} │ '
+        ' ${response.requestOptions.uri}');
+
     if (responseHeader) {
-      _prettyPrintObject(response.headers, header: 'Headers');
+      builder.startSection('Headers');
+      builder.addMap(response.headers.map);
+      builder.endSection();
     }
 
     if (responseBody) {
-      _printResponse(response);
+      builder.startSection('Body');
+      builder.addBodyData(response.data);
+      builder.endSection();
     }
 
-    _commit(responseLevel ?? LogLevel.info);
+    loggy.log(responseLevel, builder.build());
     super.onResponse(response, handler);
   }
+}
 
-  void _printResponse(Response<dynamic> response) {
-    final Object? data = response.data;
+class _LogBuilder {
+  _LogBuilder(this._maxWidth);
+  final int _maxWidth;
 
-    if (data != null) {
-      _prettyPrintObject(data, header: 'Body');
-    }
+  final _buffer = StringBuffer();
+
+  void startSection(String name) {
+    _buffer.writeln('╔ $name');
   }
 
-  void _prettyPrintObject(Object data, {String? header}) {
-    String value;
-
-    try {
-      final Object object = const JsonDecoder().convert(data.toString());
-      const JsonEncoder json = JsonEncoder.withIndent('  ');
-      value = '║  ${json.convert(object).replaceAll('\n', '\n║  ')}';
-    } catch (e) {
-      value = '║  ${data.toString().replaceAll('\n', '\n║  ')}';
-    }
-
-    logPrint('╔  $header');
-    logPrint('║');
-    logPrint(value);
-    logPrint('║');
-    _printLine(pre: '╚');
+  void endSection() {
+    _buffer.writeln('╚${'═' * (_maxWidth - 2)}╝');
   }
 
-  void _printResponseHeader(Response<dynamic> response) {
-    final Uri uri = response.requestOptions.uri;
-    final String method = response.requestOptions.method;
-    logPrint(
-        '<<< Response │ $method │ ${response.statusCode} ${response.statusMessage} │ ${uri.toString()}');
+  void addTitle(String title) {
+    _buffer.writeln(title);
   }
 
-  void _printRequestHeader(RequestOptions options) {
-    final Uri uri = options.uri;
-    final String method = options.method;
-    logPrint('>>> Request │ $method │ ${uri.toString()}');
+  void addMessage(String message) {
+    var string = '║ ${message.replaceAll('\n', '\n║')}';
+    string = _squeezeToMaxWidth(string);
+    _buffer.write(string);
   }
 
-  void _printLine({String pre = '', String suf = '╝'}) => logPrint(
-        '$pre${'═' * maxWidth}$suf',
-      );
-
-  final StringBuffer _value = StringBuffer();
-
-  void logPrint(String value) {
-    if (_value.isEmpty) {
-      _value.write(value);
+  void addMap(Map map) {
+    final buffer = StringBuffer();
+    if (map.isEmpty) {
+      buffer.writeln('║');
     } else {
-      _value.write('\n$value');
+      for (final entry in map.entries) {
+        buffer.writeln('╟ ${entry.key}: ${entry.value}');
+      }
     }
+    final string = _squeezeToMaxWidth(buffer.toString());
+    _buffer.write(string);
   }
 
-  void _commit(LogLevel level) {
-    if (level.priority >= LogLevel.error.priority &&
-        _value.toString().contains('\n')) {
-      final String valueError = _value.toString();
-      final String errorTitle =
-          valueError.substring(0, valueError.indexOf('\n'));
-      final String errorBody = valueError.substring(errorTitle.length);
-      loggy.log(level, errorTitle, errorBody);
-    } else {
-      loggy.log(level, _value.toString());
+  void addBodyData(dynamic data) {
+    if (data == null) {
+      _buffer.writeln('║');
+      return;
     }
-    _value.clear();
+
+    dynamic json;
+    if (data is String) {
+      try {
+        json = jsonDecode(data);
+      } catch (_) {}
+    } else if (data is num ||
+        data is Map<String, dynamic> ||
+        data is List<dynamic> ||
+        data is bool) {
+      json = data;
+    }
+
+    late String string;
+    if (json != null) {
+      const jsonEncoder = JsonEncoder.withIndent('  ');
+      string = jsonEncoder.convert(json);
+    } else {
+      string = data.toString();
+    }
+
+    string = '║ ${string.replaceAll('\n', '\n║ ')}';
+    string = _squeezeToMaxWidth(string);
+    _buffer.write(string);
+  }
+
+  String build() {
+    final string = _buffer.toString();
+    return string.substring(0, string.length - 1); // removes last '\n'
+  }
+
+  String _squeezeToMaxWidth(String string) {
+    if (string.isEmpty) return string;
+
+    final buffer = StringBuffer();
+
+    var lines = string.split('\n');
+    if (lines.last.isEmpty) {
+      lines = lines.sublist(0, lines.length - 1);
+    }
+
+    for (final line in lines) {
+      final squeezedLineLength = min(line.length, _maxWidth);
+      buffer.writeln(line.substring(0, squeezedLineLength));
+
+      final hasOverflow = line.length > squeezedLineLength;
+      if (!hasOverflow) continue;
+
+      var overflow = line.substring(squeezedLineLength);
+      while (overflow.isNotEmpty) {
+        const overflowIndicator = '║';
+        final maxOverflowedLineLength = _maxWidth - overflowIndicator.length;
+        final overflowedLineLength =
+            min(overflow.length, maxOverflowedLineLength);
+
+        buffer.writeln(
+            overflowIndicator + overflow.substring(0, overflowedLineLength));
+        overflow = overflow.substring(overflowedLineLength);
+      }
+    }
+    return buffer.toString();
   }
 }
