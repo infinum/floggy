@@ -1,4 +1,4 @@
-part of flutter_loggy;
+part of '../../../flutter_loggy.dart';
 
 class WrongPrinterException implements Exception {
   WrongPrinterException();
@@ -85,7 +85,7 @@ class _LoggyItemWidget extends StatelessWidget {
               Flexible(
                 child: Text(
                   '${record.level.name.toUpperCase()} - $time',
-                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: logColor,
                         fontWeight: FontWeight.w700,
                         fontSize: 12.0,
@@ -94,7 +94,7 @@ class _LoggyItemWidget extends StatelessWidget {
               ),
               Text(
                 record.loggerName,
-                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: logColor,
                       fontWeight: FontWeight.w400,
                       fontSize: 12.0,
@@ -105,7 +105,7 @@ class _LoggyItemWidget extends StatelessWidget {
           const SizedBox(height: 12.0),
           Text(
             record.message,
-            style: Theme.of(context).textTheme.bodyText2!.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: logColor,
                   fontWeight: _getTextWeight(),
                   fontSize: 16.0,

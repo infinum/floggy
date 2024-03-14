@@ -1,4 +1,4 @@
-part of loggy;
+part of '../../loggy.dart';
 
 /// Black list filter, opposite of [WhitelistFilter]
 class BlacklistFilter extends WhitelistFilter {

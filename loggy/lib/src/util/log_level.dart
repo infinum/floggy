@@ -1,4 +1,4 @@
-part of loggy;
+part of '../../loggy.dart';
 
 /// Level class.
 /// Name is used printed out to console, and priority is used as level to

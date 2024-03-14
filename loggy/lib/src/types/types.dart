@@ -1,4 +1,4 @@
-part of loggy;
+part of '../../loggy.dart';
 
 mixin NetworkLoggy implements LoggyType {
   @override

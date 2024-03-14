@@ -1,4 +1,4 @@
-part of loggy;
+part of '../../loggy.dart';
 
 /// Printer used to show logs, this can be easily swapped or replaced
 abstract class LoggyPrinter {

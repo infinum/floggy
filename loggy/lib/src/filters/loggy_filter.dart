@@ -1,4 +1,4 @@
-part of loggy;
+part of '../../loggy.dart';
 
 /// Filter for loggy, everytime new log is added, [Loggy] will go thorough all the filters
 /// and if any of them is false, that log will not be displayed.

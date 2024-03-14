@@ -1,4 +1,4 @@
-part of loggy;
+part of '../loggy.dart';
 
 /// Separate class for Global loggy.
 ///

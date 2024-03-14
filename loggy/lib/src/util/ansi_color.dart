@@ -1,4 +1,4 @@
-part of loggy;
+part of '../../loggy.dart';
 
 /// This class handles colorizing of terminal output.
 class AnsiColor {

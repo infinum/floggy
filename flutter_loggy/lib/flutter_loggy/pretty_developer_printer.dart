@@ -1,4 +1,4 @@
-part of flutter_loggy;
+part of '../flutter_loggy.dart';
 
 /// Pretty printer that uses developer.log to show log messages
 class PrettyDeveloperPrinter extends LoggyPrinter {

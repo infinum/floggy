@@ -1,4 +1,4 @@
-part of flutter_loggy_dio;
+part of '../flutter_loggy_dio.dart';
 
 class LoggyDioInterceptor extends Interceptor with DioLoggy {
   LoggyDioInterceptor({
@@ -74,12 +74,12 @@ class LoggyDioInterceptor extends Interceptor with DioLoggy {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) async {
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (!error) {
       return;
     }
 
-    if (err.type == DioErrorType.badResponse) {
+    if (err.type == DioExceptionType.badResponse) {
       logPrint(
           '<<< DioError │ ${err.requestOptions.method} │ ${err.response?.statusCode} ${err.response?.statusMessage} │ ${err.response?.requestOptions.uri.toString()}');
       if (err.response != null && err.response?.data != null) {
