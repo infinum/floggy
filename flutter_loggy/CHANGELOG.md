@@ -1,3 +1,7 @@
+## [2.0.3] - 24.05.2024.
+
+- Update dependencies
+
 ## [2.0.2] - 07.11.2022.
 
 - Update dependencies
