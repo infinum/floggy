@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   loggy: ^2.0.3
-  rxdart: ^0.27.5
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_lints: ^3.0.1
