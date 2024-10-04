@@ -27,9 +27,8 @@ class LoggyStreamWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final StreamPrinter? printer = Loggy.currentPrinter is StreamPrinter
-        ? Loggy.currentPrinter as StreamPrinter?
-        : null;
+    final StreamPrinter? printer =
+        Loggy.currentPrinter is StreamPrinter ? Loggy.currentPrinter as StreamPrinter? : null;
 
     if (printer == null) {
       throw WrongPrinterException();
@@ -38,19 +37,13 @@ class LoggyStreamWidget extends StatelessWidget {
     return Column(
       children: <Widget>[
         Expanded(
-          child: StreamBuilder<List<LogRecord>>(
-            stream: printer.logRecord,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<LogRecord>> records) {
-              if (!records.hasData) {
-                return Container();
-              }
-
+          child: ValueListenableBuilder<List<LogRecord>>(
+            valueListenable: printer.logRecord,
+            builder: (BuildContext context, records, _) {
               return ListView(
                 reverse: true,
-                children: records.data!
-                    .where((LogRecord record) =>
-                        record.level.priority >= logLevel!.priority)
+                children: records
+                    .where((LogRecord record) => record.level.priority >= logLevel!.priority)
                     .map((LogRecord record) => _LoggyItemWidget(record))
                     .toList(),
               );
