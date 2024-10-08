@@ -8,26 +8,21 @@ class StreamPrinter extends LoggyPrinter {
   StreamPrinter(this.childPrinter) : super();
 
   final LoggyPrinter childPrinter;
-  final BehaviorSubject<List<LogRecord>> logRecord =
-      BehaviorSubject<List<LogRecord>>.seeded(<LogRecord>[]);
+  final ValueNotifier<List<LogRecord>> logRecord = ValueNotifier<List<LogRecord>>(<LogRecord>[]);
 
   @override
   void onLog(LogRecord record) {
     late List<LogRecord> existingRecord;
-    try {
-      existingRecord = logRecord.value;
-    } on ValueStreamError {
-      existingRecord = <LogRecord>[];
-    }
+    existingRecord = logRecord.value;
 
     childPrinter.onLog(record);
-    logRecord.add(<LogRecord>[
+    logRecord.value = [
       record,
       ...existingRecord,
-    ]);
+    ];
   }
 
   void dispose() {
-    logRecord.close();
+    logRecord.dispose();
   }
 }
