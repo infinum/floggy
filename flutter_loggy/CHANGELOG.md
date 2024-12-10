@@ -1,3 +1,8 @@
+## [2.0.3+1] - 08.10.2024
+
+- Removed rxdart dependency
+
+
 ## [2.0.3] - 24.05.2024.
 
 - Update dependencies
